@@ -31,7 +31,7 @@ The following are the specifications of the system which I have will be using to
 
 CasADi, is an opensource numerical/symbolic optimization and automatic differentiation package which enables a streamlined matlab or python implementation of complex optimization problems. It has the desired effect of abstracting the complicated optimization algorithms into an easy to use syntax which in turn is used to define the optimization problem symbollically. This reduces the size of boiler-plate code as well as enabling this project to focus on the MPC and not the optimization details. 
 
-### Installing CasADi; 
+## Installing CasADi:
 
 The tentative language which this project will most likely use is MATLAB as there are variety of well documented implementations of the control, optimization, and visualization elements which are not nearly as straightforward in python. 
 
