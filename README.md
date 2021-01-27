@@ -17,8 +17,8 @@ The following are the specifications of the system which I have will be using to
 
 - [ ] Design CAD of Robot  
 - [ ] Import CAD to MATLAB 
-- [ ] Learn how to animate robot model in MATLAB 
-- [ ] Develop MPC implementation (using CasADi) of inverted pendulum, cart pole, and Inverted Double-Pendulum 
+- [x] Learn how to animate robot model in MATLAB 
+- [x] Develop MPC implementation (using CasADi) of inverted pendulum, cart pole, and Inverted Double-Pendulum 
 - [ ] Develop the model for the Robot 
 - [ ] Discretize Model 
 - [ ] Manually feed pre-defined tracjectories to model for testing model and visualization. 
