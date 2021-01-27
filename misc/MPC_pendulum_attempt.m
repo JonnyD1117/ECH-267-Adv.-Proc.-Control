@@ -15,8 +15,8 @@ b = .25; % Damping Const.
 L = 1; % Pendulum Length 
 
 % Control Input Saturation Limits
-tau_max = 10; % N*m
-tau_min = -10; %N*m
+tau_max = 20; % N*m
+tau_min = -20; %N*m
 
 % Define Symbolic Variables
 x1 = SX.sym('x1'); x2 = SX.sym('x2'); tau = SX.sym('tau'); 
@@ -28,11 +28,11 @@ ctrl_input = [tau]; n_ctrl = length(ctrl_input);
 rhs = [x2; (-(g/L)*sin(x1) - b*x2 +tau)]; 
 
 % Define Symbolic CasADi function for state dynamics 
-f = Function('f', {states, ctrl_input}, {rhs}); 
+f = Function('f', {states, ctrl_input}, {rhs}, {'state','input'}, {'dynamics'}); % This function enables us to numerically evaluate the symbolic graph given numerical inputs
 
 % Define Symbolic Matrix for Inputs & Params for each step of Time Horizon 
 U = SX.sym('U', n_ctrl, N); % Inputs at each step K in horizon N 
-P = SX.sym('P', 2*n_states);% Params at each step K in horizon N
+P = SX.sym('P', 2*n_states);% Params at each step K in horizon N, P = (x1_0, x2_0, x1_ref, x2_ref)
 X = SX.sym('X', n_states, (N+1)); % States at each step K in horizon N
 
 % Initialize the State initial state vector using Parameter vector 
@@ -40,18 +40,14 @@ X(:,1) = P(1:2);
 
 % Using forward recursion, populate X matrix symbollically (Computational Graph)  
 for k = 1:N
-    
     st = X(:,k); con = U(:,k); % Define the current state and input    
     f_value = f(st, con); % Use 'st' & 'con' to compute the state derivatives
     st_new = st + (T*f_value); % Update Dynamics using Euler Integration
     X(:,k+1) = st_new;    % Update state at next time step K+1
-    
 end 
 
-% Using this symbolic representation of the State Update process, create a
-% function to implement this behavior 
-
-ff = Function('ff',{U,P},{X}); % This function accepts inputs from U, and reference states from P(1:3) to output the next state
+% Using this symbolic representation of the State Update process, create a function to implement this behavior 
+ff = Function('ff',{U,P},{X}, {'Input','Reference '},{'New State'}); % This enables evaluation of symbolic graph give numerical inputs
 
 % Define Objective & Constraints Vector 
 obj = 0; % Initialize the Objective Func. to zero
@@ -69,6 +65,7 @@ for k=1:N
     obj = obj + (st - ref)'*Q*(st - ref) + con*R*con;   
 end 
 
+
 % % Compute the Constraints Vector 
 % for k=1:N+1
 %     g = [g; X(1,k)]; % States X 
@@ -77,7 +74,7 @@ end
 
 
 % Define Nonlinear Programming Structure 
-OPT_variables = U; 
+OPT_variables = U;  % Via Single Shooting only the Control Input set is used as the decision variable
 nlp_prob = struct('f', obj, 'x', OPT_variables, 'g', g, 'p', P);
 opts = struct; 
 
@@ -104,7 +101,6 @@ args.ubx(1:1:N,1) = tau_max;
 
 
 % SIMULATION LOOP 
-
 t0 = 0; 
 x0 = [(5*pi/4); 0] ;
 x_ref = [pi;0] ;
@@ -121,6 +117,8 @@ u_cl = [ ];
 
 
 % Main Loop 
+main_loop = tic;
+
 while(norm((x0 - x_ref),2) > 1e-2 && mpc_iter < sim_time/T)
     
     args.p = [x0;x_ref];
@@ -139,8 +137,18 @@ while(norm((x0 - x_ref),2) > 1e-2 && mpc_iter < sim_time/T)
     
     
 end 
-plot(t, u_cl)
+main_loop_time = toc(main_loop)
+
+
+figure
+grid on
+
+stairs(t,u_cl(:),'k','linewidth',1.5); axis([0 t(end) -0.35 0.75])
+xlabel('time (seconds)')
+ylabel('Torque (N*m)')
 disp("DONE");
+
+Animate_pendulum(x_list, T, sim_time)
 
 
 function [t0, x0, u0] = shift(T, t0, x0, u, f)
@@ -155,3 +163,34 @@ u0 = [u(2:size(u,1),:); u(size(u,1),:) ];
 
 
 end
+
+function Animate_pendulum(x_traj, dt, sim_time)
+
+v = VideoWriter('pendulum.avi'); 
+v.FrameRate = 30;
+open(v); 
+
+x1 = x_traj(1,:); 
+
+sim_len = (sim_time / dt);
+
+disp(sim_len)
+
+    for k=2:length(x1)
+        %Plot for Video 
+        hold  on
+        fill([-1-0.2*1 1+0.2*1 1+0.2*1 -1-0.2*1], [-1-0.2*1 -1-0.2*1 1+0.2*1 1+0.2*1], 'w'); % Clears Background
+        plot([0 sin(x1(k-1))],[0 -cos(x1(k-1))], 'b', 'LineWidth', 3); % Plots Rod
+    %     plot(,'Marker','o', 'MarkerSize', 20, 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r'); % Plots Bob 
+
+        xlim([-1-0.2*1 1+0.2*1]); 
+        ylim([-1-0.2*1 1+0.2*1]);
+        title('Simple Pendulum');
+        frame=getframe(gcf); 
+        writeVideo(v, frame);
+
+        disp(k)
+    end 
+
+
+end 

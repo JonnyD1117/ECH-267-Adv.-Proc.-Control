@@ -42,7 +42,6 @@ end
 % This function to get the optimal trajectory knowning the optimal solution
 ff = Function('ff', {U,P},{X});
 
-
 obj = 0;  % objective function 
 g = []; % constraints vector 
 
