@@ -11,12 +11,12 @@ clc
 T = .2; % Sampling Period 
 N = 10; % Time Horizon 
 g = -9.81; % Acceleration due to Gravity
-b = .25; % Damping Const.
+b = .1; % Damping Const.
 L = 1; % Pendulum Length 
 
 % Control Input Saturation Limits
-tau_max = 20; % N*m
-tau_min = -20; %N*m
+tau_max = 10; % N*m
+tau_min = -10; %N*m
 
 % Define Symbolic Variables
 x1 = SX.sym('x1'); x2 = SX.sym('x2'); tau = SX.sym('tau'); 
@@ -79,7 +79,7 @@ nlp_prob = struct('f', obj, 'x', OPT_variables, 'g', g, 'p', P);
 opts = struct; 
 
 % Define Solver Options 
-opts.ipopt.max_iter =100; 
+opts.ipopt.max_iter =200; 
 opts.ipopt.print_level=0; % 0 - 3
 opts.print_time  = 0 ; 
 opts.ipopt.acceptable_tol = 1e-8; 
@@ -102,7 +102,8 @@ args.ubx(1:1:N,1) = tau_max;
 
 % SIMULATION LOOP 
 t0 = 0; 
-x0 = [(5*pi/4); 0] ;
+% x0 = [(5*pi/4); 0] ;
+x0 = [0.5; 0] ;
 x_ref = [pi;0] ;
 
 x_list(:,1) = x0; 
@@ -119,7 +120,7 @@ u_cl = [ ];
 % Main Loop 
 main_loop = tic;
 
-while(norm((x0 - x_ref),2) > 1e-2 && mpc_iter < sim_time/T)
+while(norm((x0 - x_ref),2) > 1e-4 && mpc_iter < sim_time/T)
     
     args.p = [x0;x_ref];
     args.x0 =  u0;
@@ -139,8 +140,18 @@ while(norm((x0 - x_ref),2) > 1e-2 && mpc_iter < sim_time/T)
 end 
 main_loop_time = toc(main_loop)
 
+figure(1)
+subplot(211) 
+plot(x_list(1,:));
+ylabel('Theta [rads]'); 
 
-figure
+subplot(212)
+plot(x_list(1,:)); 
+ylabel('Angular Velocity [rad/s]'); 
+xlabel('Time [seconds]');
+
+
+figure(2)
 grid on
 
 stairs(t,u_cl(:),'k','linewidth',1.5); axis([0 t(end) -0.35 0.75])
@@ -175,7 +186,7 @@ x1 = x_traj(1,:);
 sim_len = (sim_time / dt);
 
 disp(sim_len)
-
+figure(3)
     for k=2:length(x1)
         %Plot for Video 
         hold  on
@@ -185,11 +196,10 @@ disp(sim_len)
 
         xlim([-1-0.2*1 1+0.2*1]); 
         ylim([-1-0.2*1 1+0.2*1]);
-        title('Simple Pendulum');
+        title('MPC Inverted Pendulum using CasADi');
         frame=getframe(gcf); 
         writeVideo(v, frame);
 
-        disp(k)
     end 
 
 
