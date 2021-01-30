@@ -130,8 +130,7 @@ while(norm((x0 - x_ref),2) > 1e-4 && mpc_iter < sim_time/T)
     t(mpc_iter +1) = t0; 
     [t0, x0, u0] = shift(T, t0, x0, u, f);
     x_list(:,mpc_iter+2) = x0; 
-    mpc_iter = mpc_iter +1 ; 
-    
+    mpc_iter = mpc_iter +1 ;     
     
 end 
 main_loop_time = toc(main_loop)
