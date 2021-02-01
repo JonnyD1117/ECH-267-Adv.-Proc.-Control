@@ -1,2 +1,7 @@
 *.avi
 *.asv
+*.aux
+*.synctex
+*.fls
+*.fdb_latexmk
+*.txt
