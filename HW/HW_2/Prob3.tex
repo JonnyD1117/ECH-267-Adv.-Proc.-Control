@@ -9,6 +9,73 @@ Given the following systems, use a quadratic Lyapunov function candidate to show
   & \dot{x}_2 = -x_2
 \end{flalign*}
 
+\subsubsection*{Part 1 - Asymptotic Stability}
+
+
+\noindent Since the first section of this question is asking to verify that the equilibrium point is asymptotically stable, it will suffice to find the local domain $D$ where the conditions $V(0)=0$ and $\dot{V}(x) < 0$ $\forall x \in D -\{0\}$.\\
+
+\noindent Assuming a quadratic function, we can compute the Lyapunov Function as...
+
+\begin{flalign*}
+& V(x)=\frac{1}{2} x_{1}^{2}+\frac{1}{2} x_{2}^{2} \\
+& \dot{V}(x)=x_{1} \dot{x}_{1}+x_{2} \dot{x}_{2} \\
+& \text{such that...}\\
+& \\
+& \dot{V}(x)=-x_{1}^{2}+x_{1}^{2} x_{2}-x_{2}^{2}\\
+&
+\end{flalign*}
+
+\noindent To show that function, $V(x)$ is asymptotically stable, we can show that (1) $V(0) = 0$ and that (2) $\dot{V}(x) < 0, \: \: \forall x \in D - \{ 0 \},$ according to Lyapunov Theorem. It is trivial to show that the function $V(0) = 0$, and that $V(x)>0$, since the function candidate is given as quadratic. Therefore the problem is to demonstrate that the time derivative of $V$ is \textbf{negative definite}.\\
+
+\noindent In order to establish asymptotical stability, we only need to demonstrate that the stability exists for some domain $D \subset \R^2$. To test the function in domain $D$ we can assume that there exists a ball such that... \\
+
+$$
+B_r = \{ x \in \R^2 | \left\Vert x \right\Vert < r\}
+$$
+
+\noindent If we can show that if there exists a radius of $r$ for which $\dot{V}(x)$ is negative definite, then have have effectively shown that the domain $D$ exists and proven asymptotic stability via Lyapunov Theorem.
+
+\indent Given the condition...
+
+$$
+\dot{V}(x)=-x_{1}^{2}+x_{1}^{2} x_{2}-x_{2}^{2} < 0
+$$
+
+\noindent For the inequality to hold...
+
+$$
+x_{1}^{2} x_{2} < x_{1}^{2} + x_{2}^{2}
+$$
+
+\noindent By using the definition of the ball $B_r$, we can show that for a given radius $r$, $\left\Vert x_1 \right\Vert < r$ \& $\left\Vert x_2 \right\Vert < r$, for which we can rewrite the inequality as ...
+
+$$
+r^3 < r^2 + r^2
+$$
+
+\noindent After simplification we find that...
+
+$$
+r < 2
+$$
+
+\noindent Therefore for a given radius of $r < 2$ the system is \textbf{asymptotically stable}.
+
+
+\subsubsection*{Part 1 - Global Stability}
+
+\noindent In order to demonstrate Globally Asymptotic Stability, we can use the Lyapunov Theorem for Global Stability which can be stated as follows.
+
+\begin{equation}
+\begin{array}{c}
+V(0)=0 \text { and } V(x)>0, \quad \forall x \neq 0 \\
+\|x\| \rightarrow \infty \Rightarrow V(x) \rightarrow \infty \\
+\dot{V}(x)<0, \quad \forall x \neq 0
+\end{array}
+\end{equation}
+
+\noindent We have shown in the previous problem that there exist conditions where $\dot{V}$ is negative definite $\dot{V}(x) < -x_{1}^2 - x_{2}^2 + r|x_1||x_2| < 0$, when $r<2$ and by inspection we can see that the Lyapunov candiate function is `radially unbounded'. By demonstrating these condition, we can use the theorem and say that the function must be globally asymptotically stable.
+
 \subsection*{Part 2}
 
 \begin{flalign*}
@@ -16,12 +83,81 @@ Given the following systems, use a quadratic Lyapunov function candidate to show
   & \dot{x}_2 = x_1 - x_2(1 - x_1^2-x_2^2)
 \end{flalign*}
 
+
+\subsubsection*{Part 2 - Asymptotic Stability}
+
+\noindent The Lyapunov function candidate and its time derivate can be given by...
+
+\begin{equation}
+\begin{array}{l}
+V(x)=\frac{1}{2} x_{1}^{2}+\frac{1}{2} x_{2}^{2} \\
+\dot{V}(x)=x_{1} \dot{x}_{1}+x_{2} \dot{x}_{2}=x_{1}\left(-x_{2}-x_{1}\left[1-x_{1}^{2}-x_{2}^{2}\right]\right)+\ldots \\
+\ldots+x_{2}\left(x_{1}-x_{2}\left[1-x_{1}^{2}-x_{2}^{2}\right]\right)
+\end{array}
+\end{equation}
+
+\noindent When simplifed this functions yield the expression....
+
+$$\dot{V}(x) = \left( -x_1^2 - x_2^2 \right)\left[ 1 - x_1^2 - x_2^2\right]$$
+
+\noindent The first expression in this term is always negative definite due to the coefficients in front of $x_1$ and $x_2$. This implies that in order for the function to be negative definite the term $ 1 - x_1^2 - x_2^2 > 0 $ since the multiplicitive negative would negate the previous term. This means that we need to show the second term is positive definite, for the complete inequality to hold.
+
+\noindent By rearrangement...
+
+$$
+x_1^2 + x_2^2 < 1 \: \: \forall x \in \R^{+}
+$$
+
+\noindent The only way for this to be true is if the values of $x_1$ and $x_2$ are bounded from above by $\sqrt{.5}$. This can also be shown by using the definition of the function $V$ and substituting it into the expression for $\dot{V}(x)$. Which yields.
+
+
+$$
+\dot{V}(x) = -2\cdot{V}\left[ 1 - 2\cdot V \right] < 0
+$$
+
+\noindent By simplification the result must be that the value of $V < \frac{1}{2}$. This is equivalent to the bound placed on $x_1$ and $x_2$ above.
+
+\subsubsection*{Part 2 - Global Stability}
+
+\noindent By the very definition of the previous stability result, we showed that $V \ngeq \frac{1}{2}$. Since this is the requirement for obtaining the negative definite $\dot{V}$. Therefore the solution is \textbf{not} globally asymptotically stable, since it is not radially unbounded on $\R^2$.
+
 \subsection*{Part 3}
 
 \begin{flalign*}
   & \dot{x}_1 = x_2(1-x_2^2) \\
   & \dot{x}_2 = -(x_1+x_2)(1-x_2^2)
 \end{flalign*}
+
+\subsubsection*{Part 3 - Asymptotic Stability}
+
+\noindent Given the quadratic Lyapunov function, and its corresponding time derivative, we obtain the following expression for the given system.
+
+\begin{equation}
+\begin{array}{l}
+\dot{V}(x) =x_{1} \dot{x}_{1}+x_{2} \dot{x}_{2} \\
+\quad \quad \:\: =x_{1}\left(x_{2}\left[1-x_{1}^{2}\right]\right)+x_{2}\left(-\left(x_{1}+x_{2}\right)\left[1-x_{1}^{2}\right]\right)
+\end{array}
+\end{equation}
+
+
+\noindent This expression can be reduced to..
+
+$$
+\dot{V(x)}=-x_2^2\left[ 1 - x_1^2 \right]
+$$
+
+\noindent Since this first part of this expression is always negative definite $x\in \R^2$, we know that the second term must therefore be positive definite for the function to remain negative due to the multiplicitive negative. This requires...
+
+$$
+1 - x_1^2 > 0
+$$
+
+\noindent Which futher simplies to the fact that $x_1 < 1$ for the function to remain negative definite. Under this condition, the Lyapunov function candiate follows all of the conditions for given in Lyapunov's Stability Theorem and therefore is \textbf{asymptotically stable}.
+
+\subsubsection*{Part 3 - Global Stability}
+
+\noindent Since the time derivate of $V$ is not negative definite for $x \in \R^2$, due to the restriction that $x_1 <1$. The system is \textbf{not globally asymptotically stable}.
+
 
 \subsection*{Part 4}
 
