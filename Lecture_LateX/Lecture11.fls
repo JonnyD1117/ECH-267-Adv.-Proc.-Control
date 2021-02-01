@@ -1,6 +1,0 @@
-PWD C:/Users/Indy-Windows/Desktop/Winter 2021/ECH_267/Lecture_LateX
-INPUT c:/texlive/2019/texmf.cnf
-INPUT c:/texlive/2019/texmf-dist/web2c/texmf.cnf
-INPUT c:/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT Lecture11.tex
-OUTPUT Lecture11.log
