@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2020.3.1)  31 JAN 2021 02:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/W32TeX) (preloaded format=pdflatex 2020.4.3)  1 FEB 2021 15:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -269,7 +269,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 30--31
 (./Prob1.aux) (./Prob2.aux) (./Prob3.aux) (./Prob4.aux) (./Prob5.aux)) ) 
 Here is how much of TeX's memory you used:
  2420 strings out of 480994
- 31042 string characters out of 5916033
+ 31042 string characters out of 5916048
  269516 words of memory out of 5000000
  17891 multiletter control sequences out of 15000+600000
  540201 words of font info for 55 fonts, out of 8000000 for 9000
@@ -286,7 +286,7 @@ ts/cm/cmr10.pfb><c:/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
 texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/201
 9/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2019/texmf-d
 ist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on HW_2.pdf (13 pages, 185140 bytes).
+Output written on HW_2.pdf (13 pages, 185276 bytes).
 PDF statistics:
  96 PDF objects out of 1000 (max. 8388607)
  64 compressed objects within 1 object stream
