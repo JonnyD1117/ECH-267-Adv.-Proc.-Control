@@ -8,6 +8,19 @@ $$
 \end{array}
 $$
 
+\noindent In order to show that the given system is unstable, according the Lyapunov Stability Theorem, it is sufficient to show that conditions for stability do not hold in the domain about the origin. This can be seen computing the time derivate of the Lyapunov function and substituting in the state equations.
+$$
+V=x_{1}\left(x_{1}^{3}+x_{1}^{2} x_{2}\right)+x_{2}\left(-x_{2}+x_{2}^{2}+x_{1} x_{2}-x_{1}^{3}\right)
+$$
+
+\noindent Given this formulation, we know that according to Lyapunov's stability theorem that the function must be negative semi definite for the system to be stable. Under this condition, the previous equations simplifies to the following expression.
+
+$$
+x_{1}^{4}-x_{2}^{2}+x_{2}^{3}+x_{1} x_{2}^{2} \leq 0
+$$
+
+\noindent Since it is rather difficult to analytically show the regions where this inequality holds, we can show numerically that there does not since exist a neighborhood around the origin, such that the ball $B_r = \{ x \in D \subset \R^2 | \left\Vert x \right\Vert < r \}$ maintains the previous inequality. This is the case for point $x = (.5, .5)$ for $r <1$. When evaluated at this point the inequality does not hold. Since we cannot define a ball around the origin such that the equality holds for \textbf{all} points contained inside of that ball, we must conclude that the system is \underline{unstable}.  In particular, I believe that the points in the 1st quadrant of the of statespace do not hold for the inequality. 
+
 \subsection*{Part 2}
 
 

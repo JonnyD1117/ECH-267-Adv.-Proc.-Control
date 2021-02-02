@@ -1,0 +1,173 @@
+\section*{Lecture \#7: Lyapunov Direct Method Stability}
+
+
+\subsection*{Definition of Stability($\epsilon - \delta$ )}
+Recall that we can a \underline{stable} system to be one in where
+
+$$
+\forall \epsilon > 0 \text{, } \exists \; \delta = \delta(\epsilon) > 0
+$$
+
+\noindent Such that for a given
+
+$$
+\left\Vert x(0) \right\Vert < \delta
+$$
+
+\noindent There exists a $\epsilon$ such that
+
+$$
+\left\Vert x(t) \right\Vert < \epsilon
+$$
+
+\subsection*{Definition of Asymptoticlly Stable}
+ Further, recall that we can classify a system as asymptotically stable when ...
+
+ $$
+x(t) \rightarrow 0 \text{, } t \rightarrow \infty
+ $$
+
+\noindent This is the condition that the system is \underline{attractive}.
+
+
+
+\subsection*{Example: Pendulum with Friction}
+
+$$
+E(x) = \frac{f}{l}[a - Cos(x_1)] + \frac{1}{2}x_2^2
+$$
+
+\noindent \textbf{Properties}
+
+\begin{enumerate}
+  \item $E(0,0) = 0 \quad \quad \text{Function is lower bounded by zero} $
+  \item $E(x_1, x_2) \geq 0 $
+\end{enumerate}
+
+$$
+\frac{dE}{dt} < 0 \quad \forall t \rightarrow \infty \quad x =0 \text{ (Asymptoticlly Stable)}
+$$
+
+$$
+\frac{dE}{dt} = \frac{\partial E}{\partial x_1} \frac{d x_1}{dt} + \frac{\partial E}{\partial x_2} \frac{d x_2}{dt}
+$$
+
+\noindent Where $\dot{x_1}$ and $\dot{x_2}$ are the state equations of the system.
+
+$$
+\therefore \frac{dE}{dt} = - \frac{k}{m}d_2^2 \leq 0 \; \forall x \in \R^2
+$$
+
+\noindent Since $\frac{dE}{dt} \leq 0$, show that $x =0 $ is stable...
+
+\subsubsection*{Remarks on Pendulum:}
+
+\begin{enumerate}
+  \item This energy function is nonincreasing but not necessarily decreasing over time.
+  \item From physics, we know that the origin is \textbf{asymptotically stable}.
+\end{enumerate}
+
+\subsection*{Lyapunov Direction Method for Assessing Stability}
+
+Given the system...
+
+$$
+\dot{x} = f(x) \quad \quad f:D \rightarrow \R^n \text{ at, } f(0) = 0
+$$
+
+\noindent is locally Lipschitz (solution exists \& is unique), let's define
+
+$$
+V:D \rightarrow \R^{+} \quad \text{where } D \subset \R^n
+$$
+
+\noindent The time derivative of the $V$ is given by
+
+$$
+\frac{dV}{dt} = \frac{\partial V}{\partial x} \frac{d x}{dt} = \frac{\partial V}{\partial x} \cdot f(x)$$
+
+\noindent \underline{NOTE}: $\frac{dV}{dx} = \left[ \frac{\partial V}{\partial x_1} \cdots \frac{\partial V}{\partial x_n} \right]$
+
+\subsubsection*{Lie Derivative Notation}
+
+The Lie derivative notation for the Lyapunov Function is given by
+
+$$
+\dot{V} = \frac{\partial V}{\partial x} f(x) = L_f V
+$$
+
+
+\subsection*{Lyapunov Stability Theorem:}
+
+\newtheorem{theorem}{}
+
+\begin{theorem}
+Let $x =0$ be an equilibrium point of $\dot{x} = f(x)$ and let $V$ be a function $V:D \rightarrow \R$, $V \in C_1$ [continuously differentiable] on $D$ (a neighborhood of $X =0$), $V(0) = 0$, $V(x)>0$, $\forall x \in D - \{ 0 \}$
+\end{theorem}
+
+
+\begin{enumerate}
+  \item If $\dot{V} = \frac{\partial V}{\partial x}f(x) \leq 0$, $\forall x \in D$, then $x =0$ is \underline{stable}.
+  \item If $\dot{V} \leq 0$, $\forall x \in D$, then $x =0$ is \underline{asymptotically stable}.
+\end{enumerate}
+
+\subsubsection*{Remarks of Lyapunov's Theorem:}
+
+\begin{itemize}
+  \item This theorem does not prove ``necessary condition'', its only provides sufficient condition for proving $x =0 $ is stable or A.S.
+  \item No connection between the domain $D$ and the $\epsilon-\delta$ definition of stability.
+\end{itemize}
+
+\subsection*{Pendulum with Friction}
+
+Goal: Show that $x =0$ is asymptotically stable.
+
+$$
+V(x) = \frac{1}{2} x^TPx + \frac{g}{x}(1 - Cos(x_1))
+$$
+
+\noindent Where $P$ is a positive definite matrix
+
+$$
+\therefore \quad P =
+\begin{bmatrix}
+P_{11} & P_{12} \\
+P_{21} & P_{22}
+\end{bmatrix}  =P^T \succ 0
+$$
+
+\noindent Such that $P_{22} = 1$, $P_{11} = \frac{k}{m}\cdot P_{12}$, $P_{12} = P_{21} = .5\frac{k}{m}$, which define the Lyapunov Candidate function. After taking the time derivative of this function, we obtain that
+
+$$
+\dot{V}(x) = -.5 \frac{g}{l}\frac{k}{m}x_1 Sin(x_1) - .5 \frac{k}{m}x_2^2
+$$
+
+\noindent Which is the function that we want to verify is negative semidefinite(stable) or negative definite (asymptotically stable).
+
+$$
+x_1sin(x_1)> 0 \quad \text{ for } 0<|x_1|< \pi
+$$
+
+\noindent Such that
+
+$$
+D = \{ x \in \R^2 | \left\Vert x_1 \right\Vert < \pi \}
+$$
+
+
+\begin{enumerate}
+  \item $V$ is a positive definite function
+  \item $\dot{V}$ is a negative definite function over the specified domain. Since $x =0 $ the system is asymptotically stable, via the Lyapunov Theorem.
+\end{enumerate}
+
+\subsection*{Important Definitions}
+
+\begin{enumerate}
+  \item \underline{Lyapunov function candidate}:
+  $V: D \rightarrow \R$, $V \in C_1$ on D, $V(0) = 0$, $V(x)>0$, $\forall x \in D - \{ 0 \}$
+  \item \underline{Lyapunov Function}: $\dot{V}\leq 0 $, $\forall x \in D$
+  \item \underline{Level Set of $V$}: $\Omega_c := \{ x \in D | V(x) \leq C \}$
+\end{enumerate}
+
+
+\subsection*{Proof of Lyapunov Stability:}
