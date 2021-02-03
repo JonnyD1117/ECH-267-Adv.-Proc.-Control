@@ -1,0 +1,60 @@
+
+\section*{Problem \#13}
+
+\[
+u_T(t) =
+\begin{cases}
+    0 & \text{if $t<T $} \\
+    1 & \text{if $t\geq T$}
+\end{cases}
+\]
+
+\subsection*{Part 13.A}
+
+The unit step function $u_T(t)$ is piecewise continuous if it is continuous on each piecewise segment, of the function, withonly a finite number of discontinuities. \\
+
+In order to prove this the limit (defined from both the positive and negative approach) much exist for each value on the function segment. \\
+
+Since the unit step function is piecewise, all that needs to be done is to prove the continuity for both segments of the function, with the exception of the jump discontinuity that is known to exist at $t = T$.
+
+\begin{flalign*}
+    & \lim_{t\to t^{+}} u_T(t) = 0 \hspace{2cm}\forall t<T \\
+    & \lim_{t\to t^{-}} u_T(t) = 0
+\end{flalign*}
+
+\noindent This is true for any point on the first segment of the unit step. This is also valid for the second segment of the unit step as follows.
+
+\begin{flalign*}
+    & \lim_{t\to t^{+}} u_T(t) = 1 \hspace{2cm}\forall t\geq T \\
+    & \lim_{t\to t^{-}} u_T(t) = 1
+\end{flalign*}
+
+\noindent \textbf{Solution:} Since we have shown the unit step function is continuous on each segement, with the known exception of the ``jump discontinuity,'' we can state that this function is piecewise continuous.
+
+
+\subsection*{Part 13.B}
+
+Show that $f(t) = g(t)u_T(t)$, for any continuous function $g(t)$ is piecewise continuous. \\
+
+Similar to the previous problem, we can demonstrate that $U_T(t)$ is know to be peicewise continuous. Given the fact that $g(t)$ is known to be continuous, we can exploit these two known characteristics to state that the product of these functions must be piecewise continuous. This is due to the fact that piecewise continuity is a weaker condition than the general continuity of a function and therefore the product of continuous and piecewise continuous function must also retain this weaker form of continuity. \\
+
+This can be shown using the existance of the limit of the product of the functions, such that if the limit exists (from both the positive and negative approach) for each segment of the Unit step function, then the product of the unit step function with the continuous function, must also be piecewise continuous. \\
+
+\begin{flalign*}
+    & \lim_{t\to t^{+}} g(t) \cdot u_T(t) = 0 \hspace{2cm}\forall t <  T \\
+    & \lim_{t\to t^{-}} g(t) \cdot u_T(t) = 0
+\end{flalign*}
+
+\begin{flalign*}
+    & \lim_{t\to t^{+}} g(t) \cdot u_T(t) = 1 \cdot g(t) \hspace{2cm}\forall t \geq T \\
+    & \lim_{t\to t^{-}} g(t) \cdot u_T(t) = 1 \cdot g(t)
+\end{flalign*}
+
+\noindent \textbf{Solution:} Since the value of $g(t)$ for any valid $t$ on that peicewise linesegment must be continuous, the product of $1$ times $g(t)$ must be continuous, and since we have already shown that $u_T(t)$ is continuous on its defined interval, the piecewise agregation of these segments into function $f(t)$ must also be piecewise continuous.
+
+
+\subsection*{Part 13.C}
+
+Since a periodic square waveform is a piecewise assembly of many unit step functions $u_T(t)$ defined for different values of $T$ defined as $T = n \cdot P \: \text{where} \: n= 0, 1,2,3 \cdots$ and where $P$ is the prescribed period of the waveform.  \\
+
+By observation is should be clear that the piecewise assembly of a piecewise continuous functions itself should be piecewise continuous, with the exception of the jump discontinuities of the original step function. This can be shown by repeating the proof for the existance of the limit for each segment of the piecewise assembly of functions; however is skipped for brevity.

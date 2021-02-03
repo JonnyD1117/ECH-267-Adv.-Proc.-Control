@@ -1,14 +1,41 @@
 \section*{Lecture 8}
 
-\subsection*{Lyapunov Stability of Equilibrium}
+% \subsection*{Lyapunov Stability of Equilibrium}
+%
+% Given...
+% \begin{gather*}
+%   \dot{x} = f(x, u) \text{ and } u = k(x) \text{ such that... } \\
+%   \\
+%   \dot{x} = f(x) \text{ where } f:D \rightarrow \R^n \text{ is locally Lipschitz Continuous } \\
+%   \left\Vert f(x) - f(y) \right\Vert \leq L \left\Vert x - y \right\Vert
+% \end{gather*}
 
-Given...
-\begin{gather*}
-  \dot{x} = f(x, u) \text{ and } u = k(x) \text{ such that... } \\
-  \\
-  \dot{x} = f(x) \text{ where } f:D \rightarrow \R^n \text{ is locally Lipschitz Continuous } \\
-  \left\Vert f(x) - f(y) \right\Vert \leq L \left\Vert x - y \right\Vert
-\end{gather*}
+
+\subsection*{Proof of Lyapunov Stability Theorem}
+
+In order to begin prove Lyapunov Stability, it helps to first review a few salient definitions.
+
+\begin{enumerate}
+  \item \underline{\textbf{Stability}}
+
+  $$
+\left\Vert  \right\Vert , \delta \Rightarrow x(t) \in \Omega_C \forall t \geq 0
+  $$
+
+  \noindent Such that there exists...
+
+  $$
+  \left\Vert x(t) \right\Vert < \epsilon
+  $$
 
 
-\
+  \item \underline{\textbf{Asymptotic Stability}}
+
+  $$
+lim_{t \to \infty} \: x(t) \rightarrow 0 \Rightarrow \forall a > 0
+  $$
+
+  $$
+\exists T > 0 \text{  s.t } \left\Vert x(t) \right\Vert < a \forall f \geq T
+  $$
+\end{enumerate}

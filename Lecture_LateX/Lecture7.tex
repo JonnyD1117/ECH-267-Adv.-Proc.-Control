@@ -171,3 +171,39 @@ $$
 
 
 \subsection*{Proof of Lyapunov Stability:}
+
+\begin{enumerate}
+  \item \textbf{Stability:} \\
+  Given $\epsilon > 0$, choose $r \in (0, \epsilon)$ s.t. $B_r := \{ x \in \R^n | \left\Vert x \right\Vert < r\}$, where $B_r \subset D$.
+  \item Let $\alpha = min_{\left\Vert x \right\Vert  = r} V(x) \Rightarrow \alpha > 0$
+  \item Choos $\beta \in (0, \alpha)$ such that we have level set $\Omega_{\beta}$ such that $\Omega \subset B_r$
+  \item Any trajectory starting in $\Omega_{\beta}$ at $t = 0$, staus in $\Omega_{\beta}$ for $t \geq 0$.
+
+  $$
+\dot{V}(x) \leq 0 \Rightarrow V(x(t)) \leq V(x(0)) \leq \beta \quad \quad \forall \geq 0
+  $$
+\end{enumerate}
+
+\noindent $\Omega_{\beta}$ is a compact set (1) Closed \& (2) Bounded. This implies $\dot{x}=f(x)$ has a \underline{unique solution} if $x(0) \in \Omega_{\beta}$. \\
+
+$$
+V is continuous \& V(0)=0 \quad \exists \delta > 0
+$$
+
+$$
+\left\Vert x(0) \right\Vert \leq \delta \Rightarrow V(x) < \beta
+$$
+
+$$
+B_{\delta} \subset \Omega_{\beta} \subset B_r
+$$
+
+
+$$
+\begin{array}{l}
+x(0) \in B_{8} \rightarrow x(0) \in \Omega_{\delta} \quad \therefore x(t) \in \Omega_{B} \\
+x(t) \in B_{r}, \forall t \geq 0 \\
+\|x(0) \mid<\delta \rightarrow\| x(t) \|<r \leqslant \varepsilon \quad \forall t \geq 0 \\
+x=0 \text { is stable }
+\end{array}
+$$
