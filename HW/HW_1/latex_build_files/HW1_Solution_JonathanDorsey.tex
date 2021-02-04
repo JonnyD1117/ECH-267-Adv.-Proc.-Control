@@ -6,6 +6,17 @@
 \usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{cancel}
+\usepackage{titling}
+
+\usepackage{hyperref}
+\hypersetup{
+colorlinks=true,
+linkcolor=blue,
+filecolor=magenta,
+    urlcolor=blue,
+}
+\urlstyle{same}
+
 \graphicspath{ {./images/} }
 
 \newcommand{\R}{\mathbb{R}}
@@ -16,7 +27,17 @@
 
     \author{Jonathan Dorsey: Department of Mechanical \& Aerospace Engineering}
 
+
     \maketitle
+
+
+    \begin{center}
+        \section*{Github Repo Hosted at: }
+        \url{https://github.com/JonnyD1117/ECH-267-Adv.-Proc.-Control}
+    \end{center}
+
+
+
 
 \include{Problems/Prob1/prob1}
 \include{Problems/Prob2/prob2}
