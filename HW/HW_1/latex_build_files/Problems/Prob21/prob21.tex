@@ -1,0 +1,39 @@
+
+\section*{Problem \#21}
+
+Given the following expression defined on the domain $x: \R \to \R^n$...
+
+$$
+\left\Vert \dot{x}(t) \right\Vert \leq g(t) \quad \forall t \geq t_0
+$$
+
+\noindent Show that ...
+
+$$
+\left\Vert x(t) \right\Vert \leq \left\Vert x(t_0) \right\Vert + \int_{t_0}^{t}g(s)ds
+$$
+
+
+\noindent \underline{\textbf{Solution: }} \\
+
+\noindent This problem can be solved by integrating the initial expression and evaluating the integral as follows ...
+
+$$
+\int_{t_0}^{t} \left\Vert \dot{x}(t) \right\Vert \leq \int_{}^{}g(s)ds \quad t \geq t_0
+$$
+
+
+$$
+\left\Vert x(t) \right\Vert \biggr\rvert_{t_0}^{t} \leq \int_{t_0}^{t}g(s)ds \quad t \geq t_0
+$$
+
+
+$$
+\left\Vert x(t)  \right\Vert - \left\Vert x(t_0) \right\Vert \leq \int_{t_0}^{t}g(s)ds \quad t \geq t_0
+$$
+
+\noindent Therefore after evaluating the integral, such that...
+
+$$
+\left\Vert x(t)  \right\Vert \leq \left\Vert x(t_0) \right\Vert + \int_{t_0}^{t}g(s)ds \quad t \geq t_0
+$$

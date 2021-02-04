@@ -1,0 +1,57 @@
+\section*{Problem 9}
+
+$$
+\dot{z}=\hat{f}(z), \quad \text { where } \hat{f}(z)=\left.\frac{\partial T}{\partial x} f(x)\right|_{x=T^{-1}(z)}
+$$
+
+
+\subsection*{Part A}
+
+In order to prove that $x = 0$ is an isolated equilibrium point if and only if $z = 0$, it is necessary to show that if we assume multiple equilibrium we will encounter a contradiction. \\
+
+\noindent Given that $ x= 0$ is an \underline{isolated} equilibrium point, we will assume that it is not. This means that we can find some value of $z$ such that $f(z) = 0$. According to the transformation provided, we can state that for an function of $z$ there must exist a seperate function of $x$ that are equivalent. \\
+
+\noindent Therefore given.. $f(z)=\frac{\partial T}{\partial x} f(x)$, we can show via the assumed properties that the inverse of this function is $f(x)= [\frac{\partial T}{\partial x} ]^{-1} \hat{f}(z) $. If $z \neq 0$ is an equilibrium point of the system then it follows that...
+
+$$
+f(x)= [\frac{\partial T}{\partial x} ]^{-1} \hat{f}(z) = 0
+$$
+
+\noindent This implies that there is an equivalent $x$ that is also an equilibrium point of the system. By using the continuity of $T(\cdot)^{-1}$, we can show that we can arbitrarily find $x$ values close to the origin that satisfy the problem, since this behavior contradicts the fact that the system is actually an isolated equilibrium, it must \textbf{not} be true that arbitrary values of $z$ can yield arbitrary values of $x$ that are equilibrium points. This implies that $x =0$ must only be an isolated equilibrium point when $z =0$ is an isolated equilibrium point.
+
+\subsection*{Part B}
+
+We can show that $x = 0$ is asymptotically stable, stable, or unstable using the same proof. For the case that the equilibrium point is stable, we know that inorder for that statement to hold, there must exist an $\epsilon >0$ and a $\delta$ such that the following is true...
+
+$$
+\left\Vert x(0) \right\Vert < \delta \rightarrow \left\Vert x(t) \right\Vert < \epsilon, \quad \forall t \geq 0
+$$
+
+\noindent Due to the continuity of the transformation $T(\cdot)$, it holds that there exists..
+
+$$
+\left\Vert x \right\Vert < r \Rightarrow \left\Vert z \right\Vert < \gamma
+$$
+
+\noindent Likewise, we can show that
+
+$$
+\left\Vert x(0) \right\Vert < \delta \Rightarrow \left\Vert x(t) \right\Vert < r \Rightarrow \left\Vert z(t) \right\Vert < \gamma  , \quad \forall t \geq 0
+$$
+
+\noindent This demonstrates that there exists parameters for the original and transformed system such that their norms are bounded as expected. This allows us to translate from the norm of one coordinate system to the norm of the other coordinate system by using this bounds. \\
+
+
+\noindent In the similar manner, by the continuity of the inverse transformation $T^{-1}$ we can show that there exists an $\eta >0$ such that
+
+$$
+\left\Vert z \right\Vert < \eta \Rightarrow \left\Vert x \right\Vert < \delta
+$$
+
+\noindent This statement states that there is an equivalent inverse property such that the bound of the transformed system implies the original bound on the original system. By compiling all of these into a single equivalent statement we can write that
+
+$$
+\left\Vert z(0) \right\Vert < \eta \Rightarrow \left\Vert x(0) \right\Vert < \delta \Rightarrow \left\Vert z(t) \right\Vert < \gamma  , \quad \forall t \geq 0
+$$
+
+\noindent In order to account for the case where the system is asymptotically stable, we apply the same chain of logic used above, to demonstrate that the $x(t) \rightarrow \text{ as } t \rightarrow \infty$ is equivalent to the transformed system such that $z(t) \rightarrow \text{ as } t \rightarrow \infty$

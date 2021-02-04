@@ -1,0 +1,83 @@
+
+
+    \section*{Problem \#3}
+
+    Given a linear system of the form...
+
+    $$\dot{z} = Az + Bu $$
+    $$ y = Cz $$
+
+    \subsection*{Part 3.A}
+
+    From the Block Diagram, we can infer...
+
+    $$ U = Sin(e)$$
+    $$ y = G(s)u $$
+    $$ e = \theta_{i} - \theta_{0}$$
+    $$\dot{e} = \dot{\theta_{i}} - \dot{\theta_{0}}$$
+
+    \noindent Since $\dot{\theta_{i}}$ is constant, its derivative is zero.
+
+    $$ \dot{e} =  - \dot{\theta_{0}} $$
+    $$ \theta_{0} = \int y dt $$
+    $$ y = \dot{\theta_{0}} $$
+
+    Therefore:
+
+    $$ y = \dot{-e} $$
+
+    Via substitution
+
+    $$ \dot{z} = Az + BSin(e) $$
+    $$ -\dot{e} = Cz $$
+
+    Which matches the form of the solution given in the problem statement.
+
+
+
+    \subsection*{Part 3.B}
+
+    For the scalar state-space realization, the equilibrium parts are acheived by setting the rate of the state equal to zero and solving for the solutions which satisfy the expression.
+
+    $$ 0 = Az + BSin(e)$$
+
+    By simplifying the expression we achieve...
+
+    $$ z = -A^{-1}B \cdot Sin(e)$$
+
+    Via substitution into the output equation...
+
+    $$ 0 = C \left( -A^{-1}B \cdot Sin(e) \right) $$
+
+    Which can be written in generally as the plant transfer function multiplied by the sine input from the reference error.
+
+    $$ G(t) \cdot Sin(e) = 0 $$
+
+    Due to the initial condition $G(0) \neq 0 $, we know that the previous equation can only be valid when sine identically equals zero. $ Sin(e) = 0 $. Due to the periodic nature of the sine function we can demonstrate that...
+
+    $$ e = 0, 2\pi, \cdots, n\pi $$
+    Therefore the Equilibrium points are given by the following expression.
+    $$ e = \pm n \pi$$
+
+
+    \subsection*{Part 3.C}
+
+    For $G(s) = \frac{1}{\tau s + 1}$, the closed loop can be written in state-space form such that A = $-1/\tau$, B = $1/\tau$, and C = 1.
+
+    This leads to the state-space equation...
+
+    $$ \dot{z} = -\frac{1}{\tau}z + \frac{1}{\tau} \cdot Sin(e)  $$
+    $$ \dot{e} = -z $$
+
+    Which can further be constructed into an Augemented State-Space Via the following state definitions.
+
+    $$ x_{1} = e $$
+    $$ x_{2} = -z $$
+
+    And constructed as follows.
+
+
+    $$ \dot{x_1} = x_{2} $$
+    $$ \dot{x_2} = - \frac{1}{\tau} x_2 - \frac{1}{\tau} sin(x_1)$$
+
+    Which is the state space representation of the pendulum equation. Where instead of physical parameters like the length of the pendulum or the acceleration due to gravity, the state equations are parameterized as function of the close-loop system pole $\tau$.

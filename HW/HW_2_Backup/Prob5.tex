@@ -1,0 +1,91 @@
+\section*{Problem \#5}
+
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=x_{2} \\
+\dot{x}_{2}=x_{1}-\operatorname{sat}\left(2 x_{1}+x_{2}\right)
+\end{array}
+$$
+
+
+\noindent Assuming a quadratic Lyapunov candidate function, we can show that...
+
+$$
+\begin{array}{l}
+\dot{V}(x) = 2x_1x_2 - x_2 \operatorname{sat}\left(2x_1 + x_2 \right)
+\end{array}
+$$
+
+\subsection*{Part A}
+
+In order to show that origin of the system is asymptotically stable, we must show that it complies with Lyapunov Stability Theorem. For this to be valid, the function $\dot{V}(x) < 0$. This is slightly more difficult to determine in this case due to the presence of the saturation function. Which is defined as ...
+
+
+$$
+\begin{array}{l}
+\operatorname{sat}(y)=\begin{cases}
+          -ka \quad &\text{if } \, y < a \\
+          ky \quad &\text{if } \, -a\leq y \leq a\\
+          ka \quad &\text{if } \, y >a \\
+     \end{cases}
+\end{array}
+$$
+
+
+\noindent Where $k$ is the value of the slope of the linear region when the input $ y \in \left[-a, a \right]$. Using this definition, we can breakdown the analysis of the inequality into each segment of the piecewise saturation function and determine whether the system is stable given each segment.
+
+\subsubsection*{Case: Linear Opertion ~ $-a\leq y \leq a $}
+
+\noindent By simplifying the expression for $\dot{V}<0$, and plugging in the expression for the saturation function in the linear region we obtain...
+
+
+$$
+\begin{array}{l}
+\dot{V}(x) = 2x_1^2x_2^2 -x^2 \operatorname{sat}(2x_1 + x_2) < 0 \\
+\quad \quad\:\: 2x_1 < \operatorname{sat}(2x_1 + x_2) \\
+\end{array}
+$$
+
+\noindent Such that...
+
+$$2x_1 < k\left( 2x_1 + x_2 \right)$$
+
+\noindent The restriction imposed by this shows that so long as the following expression is valid.
+$$
+\frac{2x_1}{2x_1 + x_2} < k
+$$
+
+\noindent This means that as long as the stability of the origin is restricted by the value of the slope of the saturation function. In this case, this means that the system is \textbf{asymptotically stable}, while the condition is satisfied since this condition keeps $\dot{V}$ as a negative definite function, as required my Lyapunov Stability Theorem.
+
+
+\subsubsection*{Case: Negative Saturation ~ $ y < -a $}
+
+\noindent By applying the same logic as the previous case, with the appropriate substitution for the region of operation of the saturation function, we obtain the condition to keep $\dot{V}(x)$ negative definite is...
+
+$$
+2x_1 < -ka
+$$
+
+\noindent This function fundamentally restricts the value of the state space due to the fact that saturation function platues at $sat(y) = -ka$, $\forall y < -a$.
+
+
+\subsubsection*{Case: Positive Saturation  ~ $ y > a $}
+
+\noindent By applying the same logic as the previous case, with the appropriate substitution for the region of operation of the saturation function, we obtain the condition to keep $\dot{V}(x)$ negative definite is...
+
+$$
+2x_1 < ka
+$$
+
+\noindent This function fundamentally restricts the value of the state space due to the fact that saturation function platues at $sat(y) = ka$, $\forall y < a$.
+
+
+\subsection*{Part B}
+
+\noindent As can be seen in the positive and negative operating regions of the saturation function above, the values of the state space are fundamentally limited by the constant $|x|<.5ka$. Since this condition is required for the function to be stable/asymptotically stable, we must conclude that there exists regions of the state space where the time derivative of the candidate function is not negative semi definite and thereby is not stable. This infers that trajectories starting from this region of the state space are not stable and do not converge towards the origin.
+
+
+\subsection*{Part C}
+
+\noindent Due to the conclusions drawn above, it is plain that while there exists a set $D \subset \R^2$, for which the origin is stable, via the appropriate conditions of the Lyapunov candidate function, according to the Lyapunov Stability Theorem, the restriction on the stable domain of the state space means that $V$ cannot map $\R^2 \rightarrow \R$, such that the state space is radially unbounded, for all time. Since this restriction exists the system cannot be \textbf{globally asymptotically stable}. 

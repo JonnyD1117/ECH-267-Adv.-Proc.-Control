@@ -1,0 +1,29 @@
+\section*{Problem \#18}
+
+In order to demonstrate that the given function $f(x)$ has a unique solution at a given initial condition, for all $t\geq 0$, then we need to show that function is \underline{Lipschitz Continuous} for the domain $x\in \R^n$.  \\
+
+\noindent Since the function is defined as
+
+$$
+f(x) = \frac{g(x)}{1 + g^T(x)g(x)}
+$$
+
+\noindent While we are given that the function $g(x)$ is continuously differentiable, we need to detemine whether the function $f(x)$ which is a composite funtion of $g(x)$ is continuously differentiable on $x\in\R^n$. \\
+
+\noindent After rearanging the for of the function $f(x)$ we can see that the only place where $f$ might \underline{not} be continuously differentiable is at the origin. By checking that the limit exists for this function, we can show that $f(x)$ is also continuously differentiable, as expected. \\
+
+\noindent Since $f(x)$ is continuously differentiable, it should naturally be Lipschitz continuous, since this condition is a weaker form of continuity than being continuously differentiable.  However, we should still be able to test the \underline{Lipschitz Condition}, and verify the existence and uniqueness of the systems solution.
+
+\newtheorem{theorem}{Local Existence and Uniqueness}
+
+\begin{theorem}
+Let $f(x,t)$ be a piecewise continuous in t and satisfy the Lipschitz condition.
+
+$$ \left\Vert f(x) - f(y) \right\Vert \leq L \left\Vert x - y \right\Vert$$
+
+$$\forall x\text{, } y \in B \{ x\in \R^n | \left\Vert x- x_0) \right\Vert \leq r \}\text{, }\forall t \in [t_0, t_1]$$
+
+\noindent Then, there exists some $\delta > 0$, such that the state equation $\dot{x}=f(t,x)$ with $x(t_0) =0$ has a unique solution over $[t_0, t_0 + \delta]$ \\
+\end{theorem}
+
+\noindent Since we can show numerically that this condition is satisfied, which is just a nice check, since we already new that our composite function $f$ should have been continuously differentiable, and thus yeilded the same results. 
