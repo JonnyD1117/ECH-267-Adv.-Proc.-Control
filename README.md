@@ -19,7 +19,15 @@ The following are the specifications of the system which I have will be using to
 - [ ] Import CAD to MATLAB 
 - [x] Learn how to animate robot model in MATLAB 
 - [x] Develop MPC implementation (using CasADi) of inverted pendulum, cart pole, and Inverted Double-Pendulum 
-- [ ] Develop the model for the Robot 
+- [ ] Investigate DH Parameter Modeling 
+- [ ] Investigate Velocity Kinematics-Manipulator Jacobian
+- [ ] Develop DH Forward & Inverse Kinematic Model of 3Dof Robot
+- [ ] Develop Dynamics of 3Dof robot, using Lagrange Equation
+- [ ] Test Dynamics model in Matlab 
+- [ ] Test Forward Kinematics Model in Matlab
+
+
+Develop the model for the Robot 
 - [ ] Discretize Model 
 - [ ] Manually feed pre-defined tracjectories to model for testing model and visualization. 
 - [ ] Develop MPC controller for robot model given the constrains of the physical system (joint angles, min/max velocities, min/max accelerations...etc) as well as the system dynamics of the robot. 
