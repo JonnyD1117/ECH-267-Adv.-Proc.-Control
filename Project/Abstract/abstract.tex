@@ -18,19 +18,121 @@
     \maketitle
 
 
-    \section{Overview}
+    \section*{Overview}
 
-    The objective of this project is to implement an optimal Path/Trajectory Planner using the Model Predictive Control (MPC) formulation, for a simplified robotic arm/manipulator. The responsibility of the MPC will be to generate the `optimal' path, from a specified starting waypoint to a specified ending waypoint. This formulation should be able to use MPC as online means of generating optimal paths, in real-time, as well as avoid obstacles, which might exist in the robots workspace.
-
-    \section{Problem Statement}
-
-    \begin{list}
-        \item Simulatable Model of Robot Arm
-        \item
-    \end{list}
+    The objective of this project is to implement an optimal Path Planner using Model Predictive Control (MPC). This methodology will be applied to a  simplified robotic arm/manipulator. The responsibility of the MPC will be to generate the `optimal' path, from a specified starting waypoint to a specified ending waypoint, as well as facilitate the control of the arm from the current position to the next. \\
 
 
-    \section{Solution Methodology}
+    This formulation should be able to use MPC as online means of generating optimal paths, in real-time, as well as avoid obstacles, which might exist in the robots workspace.
+
+
+
+
+
+
+
+
+
+
+
+    \section*{Problem Statement}
+
+    The formulation of this project can be viewed as a Nonlinear Programming (NLP) problem. Using a standard formulation, we can construct the appropriate Optimal Control problem for the MPC formulation, which solves the NLP problem for a receding prediction horizon.
+
+    The \underline{Optimal Control} formulation for \textbf{Multiple Direct Shooting} can written as shown below...
+
+    $$
+    \begin{array}{l}
+    \min _{u} J_{N}\left(\mathbf{x}_{0}, \mathbf{u}\right)=\sum_{k=0}^{N-1} \ell\left(\mathbf{x}_{\mathrm{u}}(k), \mathbf{u}(k)\right) \\
+    \text { s.t.: } \mathbf{x}_{\mathbf{u}}(k+1)=\mathbf{f}\left(\mathbf{x}_{\mathbf{u}}(k), \mathbf{u}(k)\right) \\
+    \mathbf{x}_{\mathbf{u}}(0)=\overline{\mathbf{x}}_{0}, \\
+    \mathbf{u}(k) \in U, \forall k \in[0, N-1] \\
+    \mathbf{x}_{\mathbf{u}}(k) \in X, \forall k \in[0, N]
+    \end{array}
+    $$
+
+
+    \noindent It should be noted that the \underline{multiple shooting} variant of this formulation is more suited than the single shooting version, as it is more efficient and handles constraints better according to the nonlinear nature of the problem being solved.
+
+
+    \section*{Solution Methodology}
+
+    This project intends to use the optimization framework \textbf{\underline{CasADi}}, which is an open source package for symbolic mathematics with a particular emphasis on solving optimization problems. Using this framework it is relatively straightforward to cast the NLP formulation for this project into a simple coding syntax. Additionally, CasADi has a number of frontend APIs including Matlab, Python, and C++ enabling a variety of languages for implementation. \\
+
+    \noindent Since CasADi directly solves the NLP formulation of the optimization, we can now cast the multiple shooting MPC optimal control formulation into its general NLP form. In general terms, this is given by the following expression..
+
+    $$
+    \begin{aligned}
+    &\mathbf{w}=\left[\begin{array}{lllll}
+    \mathbf{u}_{0} & \cdots & \mathbf{u}_{N-1}, \mathbf{x}_{0} & \cdots & \mathbf{x}_{N}
+    \end{array}\right] \text { Problem Decision variables }\\
+    &\begin{array}{l}
+    \min _{\pi} \Phi(w) \\
+    \text { subject to }: & g_{1}(w)=\left[\begin{array}{c}
+    g_{1}\left(x_{0}, \mathbf{u}_{0}\right) \\
+    \vdots \\
+    g_{1}\left(\mathbf{x}_{N-1}, \mathbf{u}_{N-1}\right) \\
+    g_{1}\left(\mathbf{x}_{N}\right)
+    \end{array}\right] \leq 0, g_{2}(\mathbf{w})=\left[\begin{array}{c}
+    \overline{\mathbf{x}}_{0}-\mathbf{x}_{0} \\
+    \mathbf{f}\left(\mathbf{x}_{0}, \mathbf{u}_{0}^{\Delta}\right)-\mathbf{x}_{1} \\
+    \vdots \\
+    \mathbf{f}\left(\mathbf{x}_{N-1}, \mathbf{u}_{N-1}\right)-\mathbf{x}_{N}
+    \end{array}\right]=0
+    \end{array}
+    \end{aligned}
+    $$
+
+    \noindent By selecting the correct ``cost'' function, and deriving the appropriate dynamics of the system, it should be a straightforward task to implement these within the CasADi framework.
+
+    \section*{Modeling}
+
+    In order to create a simulatable system, this project requries the developement of mathematical model that describes the robot arm, including its dynamics and kinematics. Not only is this model required for the simulation, but the developement of a model is pivotal for the use of MPC, where the model itself is used to make predictions to find the optimal controller inputs. \\
+
+    \subsection*{Modeling Assumptions:}
+
+    In order to keep the modeling of the robot simple this project plans to following the following simplications and assumptions for the mathematical modeling of the robot.
+
+
+\begin{enumerate}
+  \item \subsubsection*{Robot Construction Assumptions}
+
+    Typically, simplified robot models are assumed to be construction of lower pairs including revolute or prismatic joints. Each member of the robots construction are assumed to be rigid bodies with no appreciable compliance. This formulation ensures that the robot is not an under actuated system, as well as keeping the dynamics simple and straightforward. These are reasonable assumptions for most robot manipulators of simple construction.
+
+  \item \subsubsection*{Actuator Assumptions}
+
+  With the exception of actuator saturation, this project will assume \underline{perfect} actuators, such that modeling of the actuators is not required and that if `X' Newton-meters of torque is commanded, the actuator will supply that amount granted that it does not exceed the saturation limits specified. This enables the controller to directly command model by controlling joint torques.
+
+\end{enumerate}
+
+    \subsection*{Modeling Dynamics}
+      In general, dynamics of robot manipulators can be made by the application of \underline{Lagrange Equations}, to the chain of revolute/prismatic joints given there geometry and physical properties. Once derived the system can then be implemented in state space form where, numerical integrators (Euler's Method or RK4) can be applied to determine the evolution of the states in time under the action of control inputs.
+
+
+    \subsection*{Modeling Forward \& Inverse Kinematics}
+
+    The \underline{forward kinematics} of a system are invaluable in the simulation of a manipulator type robot since given the value and orientation of the joint variables, it is possible to determine the Cartesian coordinates of the end-effector of the system. \\
+
+    \noindent \underline{Inverse kinematics}, on the other hand, are invaluable for determining the joint positions and orientations given the current or desired position of the end-effector.
+
+    \subsubsection*{Denavit-Hartenberg Parameters:}
+    One of the unique convetions in robotics is that of the \underline{Denavit-Hartenberg Parameters} (DH Parameters) which enable a minimum set of four parameters per link fully define the kinematics of the robot. These are not unique, but merely a convention that is nearly universal in robot design and also has a clear intuitive meaning for each parameter.
+
+
+
+
+
+
+
+
+
+
+
+
+
+    \section*{Testing}
+
+    \section*{References}
 
 
 \end{document}
