@@ -1,0 +1,140 @@
+\documentclass[12px]{article}
+% \usepackage{amsmath}
+\usepackage[fleqn]{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{cancel}
+\graphicspath{ {./images/} }
+
+\newcommand{\R}{\mathbb{R}}
+
+
+\begin{document}
+
+\section*{Review of Homogeneous Transformation \\ (for Rotation \& Translation)}
+
+\subsection*{\underline{Rotational Transformation:}}
+
+The Homogeneous transform for a rotation about a specified axis $k$ where $k \in \langle x, y, z\rangle$  is given by...
+
+$$
+T_{Rk}(\theta) =
+\begin{bmatrix}
+    R_k(\theta) & 0_{3x1} \\
+    0_{1x3} & 1
+\end{bmatrix}
+$$
+
+\noindent This definition requires formulas for the rotation matrices about each individual axis be defined.
+
+\subsubsection*{Rotation Matrix about $X$ Axis}
+
+$$
+R_x(\theta) =
+\begin{bmatrix}
+     1 & 0 & 0 \\
+     0 & cos(\theta) & -sin(\theta) \\
+     0 & sin(\theta) & cos(\theta)
+\end{bmatrix}
+$$
+
+\subsubsection*{Rotation Matrix about $Y$ Axis}
+
+$$
+R_y(\theta) =
+\begin{bmatrix}
+     cos(\theta) & 0 & sin(\theta) \\
+     0 & 1 & 0 \\
+     -sin(\theta) & 0 & cos(\theta)
+\end{bmatrix}
+$$
+
+\subsubsection*{Rotation Matrix about $Z$ Axis}
+
+$$
+R_z(\theta) =
+\begin{bmatrix}
+    cos(\theta) & -sin(\theta) & 0\\
+    sin(\theta) & cos(\theta) & 0 \\
+    0 & 0 & 1
+\end{bmatrix}
+$$
+
+
+
+\subsection*{\underline{Translational Transformation:}}
+
+The Homogeneous transform for a translation along a specified axis $k$ where $k \in \langle x, y, z\rangle$  is given by...
+
+$$
+T_{k}(dist_k) =
+\begin{bmatrix}
+    1 & 0 & 0 &  dist_x \\
+    0 & 1 & 0 &  dist_y \\
+    0 & 0 & 1 &  dist_z \\
+    0 & 0 & 0 &  1 \\
+\end{bmatrix}
+$$
+
+NOTE: that $d_x, d_y, d_z$ are \textbf{not} defined simultaneously, depending along which specific axis the translation is taking place. This means that $d_k$ is only defined for the given value of k, while the other components remain zero.
+
+
+\section*{Denavit Hartenberg Parameters:}
+
+Denavit Hartenberg Parameters (DH Params) is the minimal set of parameters required to create complete transformations between each joint of robot with Prismatic and Revolute joints. While there are many different ways of creasting transformation between each joint frame which describe the robot, the DH Parameters provide a minimal and intuitive set parameters...
+
+\begin{itemize}
+    \item Link \underline{\textbf{Twist:}} ($\alpha_i$)
+    \item Link \underline{\textbf{Length:}} ($a_i$)
+    \item Link \underline{\textbf{Offset:}} ($d_i$)
+    \item Link \underline{\textbf{Angle}} ($\theta_i$)
+\end{itemize}
+
+\noindent These parameters have a very \underline{intuitive} meaning. By agreeing to use this (DH) parameterization, we can achieve the exact same transformation of coordinate systems from the base frame to the end-effector frame, while maintaining a minimum parameterization (4 params instead of 6), which are all intuitive and easy to visualize.
+
+\noindent The downside of this mean is that since this is merely a \underline{convention}, we must follow a set of rules assigning coordinate frames to links of the robot inorder to retain this parameterization.
+
+
+\section*{Rules for Applying DH Parameters:}
+
+
+\begin{enumerate}
+    \item Actuate about the \textbf{z-axis}
+    \begin{itemize}
+        \item Rotate about Z for revolute joints
+        \item Translate along Z for prismatic joints.
+    \end{itemize}
+
+    \item Axis $\hat{Z}_{j-1} $ is \textbf{perpendicular} to, and \textbf{intersects}, $\hat{X}_{j}$
+
+    \item The y-axis is solved implicitly using Right Hand Rule and Cross-Products. $\hat{y}_j = \hat{z}_j \times \hat{x_j}$
+
+\end{enumerate}
+
+
+\section*{Tips for DH Parameters:}
+
+\begin{itemize}
+    \item The joint frame does not need to physically coincide with the \underline{actual} joint. It only needs to align with the axis of actuation.
+    \item The robot arm can be arranged in any configuration that suits the DH Paramters.
+\end{itemize}
+
+
+\section*{Forward Kinematics using DH Params:}
+
+To get the forward kinematics at a particular join configuration \textbf{q}, substitute the joint value into the \textbf{z-component} of the transform chain.
+
+$$
+T^{j}_{j-1} =
+\begin{cases}
+    T_{Rz}(q_j)T_{z}(d_j)T_{x}(a_j)T_{Rx}(\alpha_j) , & \text{for Revolute} \\
+    T_{Rz}(\theta_j)T_{z}(q_j)T_{x}(a_j)T_{Rx}(\alpha_j) , & \text{for Prismatic} \\
+\end{cases}
+$$
+
+\noindent To obtain the transformation from the base coordinates to end-effector coordinates, simply muliply the DH parameterized Homogeneous transforms (shown above) for each frame defined on the robot
+
+$$
+T_{0}^{n} = \displaystyle\prod_{j=1}^{n} T^{j}_{j-1}
+$$
+\end{document}
