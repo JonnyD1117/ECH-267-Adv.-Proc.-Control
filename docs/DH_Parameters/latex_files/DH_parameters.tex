@@ -11,6 +11,74 @@
 
 \begin{document}
 
+\section*{Review of Homogeneous Transformation \\ (for Rotation \& Translation)}
+
+\subsection*{\underline{Rotational Transformation:}}
+
+The Homogeneous transform for a rotation about a specified axis $k$ where $k \in \langle x, y, z\rangle$  is given by...
+
+$$
+T_{Rk}(\theta) =
+\begin{bmatrix}
+    R_k(\theta) & 0_{3x1} \\
+    0_{1x3} & 1
+\end{bmatrix}
+$$
+
+\noindent This definition requires formulas for the rotation matrices about each individual axis be defined.
+
+\subsubsection*{Rotation Matrix about $X$ Axis}
+
+$$
+R_x(\theta) =
+\begin{bmatrix}
+     1 & 0 & 0 \\
+     0 & cos(\theta) & -sin(\theta) \\
+     0 & sin(\theta) & cos(\theta)
+\end{bmatrix}
+$$
+
+\subsubsection*{Rotation Matrix about $Y$ Axis}
+
+$$
+R_y(\theta) =
+\begin{bmatrix}
+     cos(\theta) & 0 & sin(\theta) \\
+     0 & 1 & 0 \\
+     -sin(\theta) & 0 & cos(\theta)
+\end{bmatrix}
+$$
+
+\subsubsection*{Rotation Matrix about $Z$ Axis}
+
+$$
+R_z(\theta) =
+\begin{bmatrix}
+    cos(\theta) & -sin(\theta) & 0\\
+    sin(\theta) & cos(\theta) & 0 \\
+    0 & 0 & 1
+\end{bmatrix}
+$$
+
+
+
+\subsection*{\underline{Translational Transformation:}}
+
+The Homogeneous transform for a translation along a specified axis $k$ where $k \in \langle x, y, z\rangle$  is given by...
+
+$$
+T_{k}(dist_k) =
+\begin{bmatrix}
+    1 & 0 & 0 &  dist_x \\
+    0 & 1 & 0 &  dist_y \\
+    0 & 0 & 1 &  dist_z \\
+    0 & 0 & 0 &  1 \\
+\end{bmatrix}
+$$
+
+NOTE: that $d_x, d_y, d_z$ are \textbf{not} defined simultaneously, depending along which specific axis the translation is taking place. This means that $d_k$ is only defined for the given value of k, while the other components remain zero.
+
+
 \section*{Denavit Hartenberg Parameters:}
 
 Denavit Hartenberg Parameters (DH Params) is the minimal set of parameters required to create complete transformations between each joint of robot with Prismatic and Revolute joints. While there are many different ways of creasting transformation between each joint frame which describe the robot, the DH Parameters provide a minimal and intuitive set parameters...
@@ -41,8 +109,6 @@ Denavit Hartenberg Parameters (DH Params) is the minimal set of parameters requi
 
     \item The y-axis is solved implicitly using Right Hand Rule and Cross-Products. $\hat{y}_j = \hat{z}_j \times \hat{x_j}$
 
-    \item
-
 \end{enumerate}
 
 
@@ -64,5 +130,11 @@ T^{j}_{j-1} =
     T_{Rz}(q_j)T_{z}(d_j)T_{x}(a_j)T_{Rx}(\alpha_j) , & \text{for Revolute} \\
     T_{Rz}(\theta_j)T_{z}(q_j)T_{x}(a_j)T_{Rx}(\alpha_j) , & \text{for Prismatic} \\
 \end{cases}
+$$
+
+\noindent To obtain the transformation from the base coordinates to end-effector coordinates, simply muliply the DH parameterized Homogeneous transforms (shown above) for each frame defined on the robot
+
+$$
+T_{0}^{n} = \displaystyle\prod_{j=1}^{n} T^{j}_{j-1}
 $$
 \end{document}
