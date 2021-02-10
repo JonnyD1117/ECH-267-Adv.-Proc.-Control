@@ -1,0 +1,34 @@
+\documentclass[12px]{article}
+% \usepackage{amsmath}
+\usepackage[fleqn]{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{biblatex}
+
+\addbibresource{bib_file.bib}
+\graphicspath{ {./images/} }
+
+\newcommand{\R}{\mathbb{R}}
+
+
+\begin{document}
+
+    \title{ECH 267 Nonlinear Control Theory \\ Project Abstract }
+
+    \author{Jonathan Dorsey: Department of Mechanical \& Aerospace Engineering}
+
+    \maketitle
+
+
+    \section*{Project Abstract}
+
+    \indent The objective of this project is to implement simulated optimal \underline{Path Planner} using Model Predictive Control (MPC) to plan and control the behavior of a 3 degree of freedom (3DOF) robotic arm. The responsibility of the MPC controller/planner will be to generate the `optimal' path and to drive the arm from its current position to the next. The main challenges faced in completing this project consist of solving for the \textbf{nonlinear equations of motion} (as well as any required forward/inverse kinematics) of the robotic arm as well as formulating and solving the \textbf{MPC controller}, at each timestep. \\
+
+     Each of these topics are well covered in literature; however, the coupling of optimal path planning (via MPC) with robotic manipulators was fairly limited, with most research utilizing other optimization methods, artificial potential fields, or discretized methods such as graph and heuristic search techniques. \\
+
+    To this end, this project intends to model a 3DOF robotic arm, implement MPC for both control and planning using the CasADi optimization framework, test the scenario of real-time obstacle avoidance, and to tune the system and identify the performance benefits and limitations of this methodology.
+
+
+
+\end{document}

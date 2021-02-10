@@ -1,0 +1,9 @@
+[0] Config.pm:304> INFO - This is Biber 2.14
+[0] Config.pm:307> INFO - Logfile is 'abstract_draft1.blg'
+[70] biber-MSWIN32:322> INFO - === 
+[87] Biber.pm:415> INFO - Reading 'abstract_draft1.bcf'
+[190] Biber.pm:943> INFO - Found 0 citekeys in bib section 0
+[196] Utils.pm:304> WARN - The file 'abstract_draft1.bcf' does not contain any citations!
+[206] bbl.pm:652> INFO - Writing 'abstract_draft1.bbl' with encoding 'UTF-8'
+[206] bbl.pm:755> INFO - Output to abstract_draft1.bbl
+[229] Biber.pm:128> INFO - WARNINGS: 1
