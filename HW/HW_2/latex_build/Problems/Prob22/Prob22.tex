@@ -1,1 +1,30 @@
-\section{Problem 22}
+\section*{Problem 22}
+
+
+
+
+$$
+\dot{x}=f(x) \quad, \dot{x}=\underbrace{h(x) f(x)}_{g(x)}
+$$
+
+\noindent Given these two related systems and the fact that $h(x)$ is positive definite, we can evaluate the stability of each system by linearization. In order to linearize the function $g(x)$ we must apply the chain-rule, as shown below.
+
+$$
+\left.\frac{\partial g}{\partial x}\right|_{x=0}=h(0) \frac{\partial f(0)}{\partial x}+\frac{\partial h(0)}{\partial x} f(0)
+$$
+
+\noindent By evaluating the system at its equlibrium point, we see that the function $f(0)=0$ leaving us with the expression
+
+
+$$
+\left.\frac{\partial g(0)}{\partial x}\right|=h(0) \frac{\partial f(g)}{\partial x}
+$$
+
+\noindent Since this is the linearized system, we can rewrite this system in terms of the linear matrices which drop out from the equation above.
+
+
+$$
+A_2 = h(0)A_1
+$$
+
+\noindent Since we know that $h(x)$ is positive definite and that $h(0)>0$, we can see that second system $A_2$ will be stable if and only if the first system $A_1$ is stable since $h(0)$ merely scales the values and cannot flip the signs. This means that if the eigenvalues of the system are in the left half plane, and then eigenvalues of the second must also be in the left half plane. Since this is the case, we can show using similar logic that if the first system is \underline{exponentially stable} then the second system \textbf{must} also be exponentially stable. 

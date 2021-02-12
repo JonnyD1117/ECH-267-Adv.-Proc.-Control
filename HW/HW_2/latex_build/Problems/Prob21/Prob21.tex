@@ -1,1 +1,70 @@
-\section{Problem 21}
+\section*{Problem 21}
+
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=-x_{1}+x_{2}+\left(x_{1}^{2}+x_{2}^{2}\right) \sin t \\
+\dot{x}_{2}=-x_{1}-x_{2}+\left(x_{1}^{2}+x_{2}^{2}\right) \cos t
+\end{array}
+$$
+
+
+Given the system we want to show that it is exponentially stable and to provide an estimate for the region of attraction. In order to do this we begin with a simple quadratic Lyapunov candidate function, as shown below, take its time derivative and then substitute the state equations back into the Lyapunov function.
+
+$$
+V(x)=\frac{1}{2}\left(x_{1}^{2}+x_{2}^{2}\right)
+$$
+
+\noindent This results in the system shown below.
+
+$$
+\begin{aligned}
+\dot{V} &=-x_{1}^{2}+x_{1} x_{2}+x_{1}\left(x_{1}^{2}+x_{2}^{2}\right) \sin t-x_{1} x_{2}-x_{2}^{2}+x_{2}\left(x_{1}^{2}+x_{2}^{2}\right) \cos t \\
+&=-\left(x_{1}^{2}+x_{2}^{2}\right)+\left(x_{1}^{2}+x_{2}^{2}\right)\left(x_{1} \sin t+x_{2} \cos t\right)
+\end{aligned}
+$$
+
+
+\noindent In order to evaluate the bound of the system, we can rewrite the system in terms of its norms. This form allows us to determine a ball with a specific radius such that the Lyapunov function is valid within. This is important in the estimation of the region of attraction. For the given Lyapunov system we can write the equation as an inequality using 2-norms.
+
+$$
+\dot{V} \leq-\left\Vert x\right\Vert_{2}^{2}+\left\Vert x\right\Vert_{2}^{3} \sqrt{(\sin t)^{2}+(\cos t)^{2}}
+$$
+
+\noindent We can reduce this system using the identity $1^2 = Cos^2(t) + Sin^2(t)$, which simplifies this
+
+$$
+  \dot{V} &\leq -\left\Vert x\right \Vert_{2}^{2} +\left\Vert x \right\Vert_{2}^{3} \\
+$$
+
+\noindent We can further simplify this statement by creating an equivalent expression described by the same norm.
+
+$$
+\dot{V}(x)\leq-(1-r)\|x\|_{2}^{2}, \quad \forall\|x\|_{2} \leq r
+$$
+
+\noindent With this expression we can show show that the Lyapunov function is negative definite for any $r<1$. This means that our system is \underline{stable} under this condition.
+
+\noindent However, in order to show that the system is exponentially stable, we must apply Theorem 4.10, and show that it satisfies its requirements.
+
+\begin{enumerate}
+  \item $V is C_1$
+  \item $V(0)= 0 $ and $V(x) > 0, \quad \forall x \in D - \{ 0\}$
+  \item $\dot{V}(x) < 0 \quad \forall x \in D$
+\end{enumerate}
+
+\noindent \textbf{Theorem 4.10}
+$$
+K_1 \left\Vert x \right\Vert^2 \leq V(x) \leq K_2 \left\Vert x \right\Vert^2
+$$
+
+
+$$
+\dot{V} \leq -K_3 \left\Vert x \right\Vert^2
+$$
+
+
+\noindent This is satisfied given $K_1 = .25$, $K_2 =1 $, $K_3 = r $, and $a =2$.
+
+
+\noindent Under these conditions, we can show that the system is \underline{exponentially stable} and that the \underline{region of attraction} can be estimated with $\left \Vert x \right\Vert \leq r$, for $r <1$.

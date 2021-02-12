@@ -173,13 +173,14 @@ x2_dot = -x1 + (1/3)*x1^3 -x2;
   %% 17 
   
   
-  syms a b
-  
-  x1 = sqrt(-a/b);
+a =1 ; 
+b = 1; 
+
+
+  x1 = 0; 
   
   A = [-3*x1^2 1 ; -a -b]
   
-  latex(eig(A))
   
   eig(A)
   

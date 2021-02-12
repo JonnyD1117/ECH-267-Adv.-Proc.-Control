@@ -1,1 +1,158 @@
-\section{Problem 19}
+\section*{Problem 19}
+
+
+\subsection*{Part 1}
+
+$$
+\dot{x}=\left[\begin{array}{cc}
+-1 & \alpha(t) \\
+\alpha(t) & -2
+\end{array}\right] x,|\alpha(t)| \leq 1
+$$
+
+
+
+$$
+\begin{array}{l}
+V(x)=\frac{1}{2} x_{1}^{2}+\frac{1}{2} x_{2}^{2} \\
+\dot{V}(x)=x_{1} \dot{x}_{1}+x_{2} \dot{x}_{2}
+\end{array}
+$$
+
+
+
+
+$$
+\dot{V}(x)=-x_{1}^{2}-2 x_{2}^{2}+2 x_{1} x_{2} \alpha(t)
+$$
+
+\noindent We can check whether the system is exponentially stable if it satisfies \textbf{Theorem 4.10}
+
+\begin{enumerate}
+  \item $V is C_1$
+  \item $V(0)= 0 $ and $V(x) > 0, \quad \forall x \in D - \{ 0\}$
+  \item $\dot{V}(x) < 0 \quad \forall x \in \R^2$
+\end{enumerate}
+
+\noindent \textbf{Theorem 4.10}
+$$
+K_1 \left\Vert^2 x \right\Vert \leq V(x) \leq K_2 \left\Vert x \right\Vert^2
+$$
+
+
+$$
+\dot{V} \leq -K_3 \left\Vert x \right\Vert^2
+$$
+
+
+\noindent This is satisfied given $K_1 = .25$, $K_2 =1 $, $K_3=1$, and $a =2$.
+
+
+
+\subsection*{Part 2}
+
+
+$$
+\dot{x}=\left[\begin{array}{cc}
+-1 & \alpha(t) \\
+-\alpha(t) & -2
+\end{array}\right] x
+$$
+
+
+$$
+\dot{V}(x)=-x_{1}^{2}-2 x_{2}^{2}
+$$
+
+
+\begin{enumerate}
+  \item $V is C_1$
+  \item $V(0)= 0 $ and $V(x) > 0, \quad \forall x \in D - \{ 0\}$
+  \item $\dot{V}(x) < 0 \quad \forall x \in \R^2$
+\end{enumerate}
+
+\noindent \textbf{Theorem 4.10}
+$$
+K_1 \left\Vert^2 x \right\Vert \leq V(x) \leq K_2 \left\Vert x \right\Vert^2
+$$
+
+
+$$
+\dot{V} \leq -K_3 \left\Vert x \right\Vert^2
+$$
+
+
+\noindent This is satisfied given $K_1 = .25$, $K_2 =1 $, $K_3=1$, and $a =2$.
+
+
+\subsection*{Part 3}
+
+$$
+\dot{x}=\left[\begin{array}{cc}
+0 & 1 \\
+-1 & -\alpha(t)
+\end{array}\right] x, \alpha(t) \geq 2
+$$
+
+
+
+$$
+\dot{V}(x)=-x_{2} \alpha(t)
+$$
+
+
+
+\begin{enumerate}
+  \item $V is C_1$
+  \item $V(0)= 0 $ and $V(x) > 0, \quad \forall x \in D - \{ 0\}$
+  \item $\dot{V}(x) < 0 \quad \forall x \in \R^2$
+\end{enumerate}
+
+\noindent \textbf{Theorem 4.10}
+$$
+K_1 \left\Vert^2 x \right\Vert \leq V(x) \leq K_2 \left\Vert x \right\Vert^2
+$$
+
+
+$$
+\dot{V} \leq -K_3 \left\Vert x \right\Vert^2
+$$
+
+
+\noindent This is satisfied given $K_1 = .25$, $K_2 =1 $, $K_3\leq \frac{x_2 \alpha(t)}{\left\Vert x\right\Vert^2}$, and $a =2$.
+
+\subsection*{Part 4}
+
+
+$$
+\dot{x}=\left[\begin{array}{cc}
+-1 & 0 \\
+\alpha(t) & -2
+\end{array}\right] x
+$$
+
+
+
+$$
+\dot{V}=-x_{1}^{2}+x_{1} x_{2} \alpha(t)-2 x_{2}^{2}
+$$
+
+
+\begin{enumerate}
+  \item $V is C_1$
+  \item $V(0)= 0 $ and $V(x) > 0, \quad \forall x \in D - \{ 0\}$
+  \item $\dot{V}(x) < 0 \quad \forall x \in \R^2$
+\end{enumerate}
+
+\noindent \textbf{Theorem 4.10}
+$$
+K_1 \left\Vert^2 x \right\Vert \leq V(x) \leq K_2 \left\Vert x \right\Vert^2
+$$
+
+
+$$
+\dot{V} \leq -K_3 \left\Vert x \right\Vert^2
+$$
+
+
+\noindent This is satisfied given $K_1 = .25$, $K_2 =1 $, $K_3\leq \frac{\dot{V}(x)}{\left\Vert x\right\Vert^2}$, and $a =2$.

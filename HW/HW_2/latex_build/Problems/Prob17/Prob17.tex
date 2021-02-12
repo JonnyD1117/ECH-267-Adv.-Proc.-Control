@@ -81,11 +81,39 @@ A_j =
 
 -3x_1 & 1 & \\
 
--a  & -b&
+-a  & -b &
 
 \end{bmatrix} \right\rvert_{x=0}
 $$
 
 
 
-\noindent By taking the eigenvalues of this Jacobian we can determine the local stability condition of the system. These are given by $\lambda_1 =-\frac{\sqrt{9\,a^2+2\,a\,b^2+b^4}-3\,a+b^2}{2\,b} $ and $ \lambda_2=\frac{3\,a+\sqrt{9\,a^2+2\,a\,b^2+b^4}-b^2}{2\,b}$
+\noindent By taking the eigenvalues of this Jacobian we can determine the local stability condition of the system. These are given by $\lambda_{1,2} = .5\pm .886j $, when the constant a and b equal 1. Therefore the system is a \underline{stable focus}. \\
+
+
+\noindent We can show that this is globally asymptoticially stable, using a standard quadratic Lyapunov candidate function.
+
+$$
+V(x) = \frac{1}{2}x_1^2 + \frac{1}{2}x_2^2
+$$
+
+\noindent Whose time derivative is...
+
+$$
+\dot{V}(x) = x_1\dot{x_1} + x_2\dot{x_2}
+$$
+
+\noindent After substituting in the state equations...
+
+$$
+\dot{V}(x) = -x_1^4 + x_1x_2 - ax_1x_2 - bx_2^2
+$$
+
+
+\noindent Note that if the constants $a$ and $b$ both equal 1, then the Lyapunov function reduces to..
+
+$$
+\dot{V}(x) = -x_1^4 -x_2^2
+$$
+
+\noindent Since this function is negative definite, and since the candidate function is positive definite and radially unbounded we can say that according to the Global Lyapunov stability theorem that the system must be \underline{globally asymptotically stable} about the origin. 

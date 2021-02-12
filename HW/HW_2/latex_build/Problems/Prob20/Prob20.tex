@@ -1,1 +1,91 @@
-\section{Problem 20}
+\section*{Problem 20}
+Given the system...
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=x_{2} \\
+\dot{x}_{2}=2 x_{1} x_{2}+3 t+2-3 x_{1}-2(t+1) x_{2}
+\end{array}
+$$
+
+\noindent We can simplify that this expression such that...
+
+
+
+\begin{enumerate}
+  \begin{enumerate}
+    \item Verify that $x_1(t) = t$, $x_2 = 1$ is a solution.
+    \item Show that if $x(0)$ is sufficiently close to $[0 1]^T$, then $x(t)$ approaches $[t 1]^T$ as $t\rightarrow \infty$
+  \end{enumerate}
+\end{enumerate}
+
+\subparagraph*{Part A}
+
+We can show that $\begin{bmatrix} x_1(t) \\ x_2(t)  \end{bmatrix} = \begin{bmatrix}   t \\ 1 \end{bmatrix}$ is a solution by differentiating these values with respect to time and then substituting into the state equations.
+
+$$
+\begin{array}{l}
+  \frac{d}{dt} \left( x_1(t) \right) = \frac{d}{dt} \left( t \right) \quad \quad \rightarrow \quad \dot{x_1} = 1 \\
+  \frac{d}{dt} \left( x_2(t) \right) = \frac{d}{dt} \left( 1 \right) \quad \quad \rightarrow  \quad \dot{x_2} = 0
+\end{array}
+$$
+
+\noindent After subbing these into the state equations we obtain...
+
+$$
+\begin{array}{l}
+  \dot{x}_{1}=1 \\
+  \dot{x}_{2}=0
+\end{array}
+$$
+
+
+\noindent Since this answer is consistent with the state equations we know that it is a valid solution of the system.
+
+
+\subparagraph*{Part B}
+
+The main task of this problem is take a the system whose equilibrium is not at the origin and to transform the system such that we have an equivalent system about the origin. After performing this transformation, we can then use the rules and techniques that we have learned to prove whether or not the system is asymptoticially stable and approaches the origin as $t\rightarrow \infty$.  However, even though we redefine the problem to be about the origin, the result will hold the original system we are interested in investigating. \\
+
+\noindent In order to transform this system we must define new state variables $z_i$ such that the system appears to be centered on the origin $z = (0,0)$. Since we are told in the problem statement that we want to know whether the system will converge to $[t, 1]^T$, we know that we want to shift the $x_i$ variables such that the system in $z$ will converge to $[0, 0]^T$.
+
+$$
+\begin{array}{l}
+  z_{1}= x_1 - t \\
+  z_{2}= x_2 - 1
+\end{array}
+$$
+
+\noindent By using this change of variables, we can see that at $x = (t, 1) $ that $z = (0,0)$. We can now carry this substitution all the way through and rewrite the state equations in terms of $z_i$.
+
+$$
+\begin{array}{l}
+  \dot{z}_{1}= z_2 \\
+  \dot{z}_{2}= 2z_1z_2 - z_1 - 2z_2
+\end{array}
+$$
+
+\noindent Note that these state equations are \underline{Autonomous}, unlike the original set of state equations that we first were given. This means that we can now use our standard toolkit to solve for the stability of the system, since this system is now defined to be independent of time. We can now determine the stability by linearization and evaluating about the equilibrium point of the system.
+
+
+
+$$
+A_j =
+\begin{bmatrix}
+  \frac{\partial f_{1}}{\partial z_{1}} & \frac{\partial f_{1}}{\partial z_{1}} & \\
+
+  \frac{\partial f_{2}}{\partial z_{1}} & \frac{\partial f_{2}}{\partial z_{2}}&
+\end{bmatrix}
+=
+\left .
+\begin{bmatrix}
+ 0 & 1 & \\
+-1+2 z_2 & -2 +2 z_1
+\end{bmatrix} \right\rvert_{z=0} =
+\begin{bmatrix}
+  0 & 1 & \\
+  -1 & -2 &
+\end{bmatrix}
+$$
+
+\noindent Since the linearized equation has negative eigenvalues, we know that the system must be \underline{Uniformly asymptoticially Stable}. We know that this result is \textbf{uniform} since it is independent of time.
