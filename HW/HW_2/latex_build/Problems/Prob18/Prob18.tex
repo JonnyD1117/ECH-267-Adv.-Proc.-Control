@@ -1,1 +1,62 @@
-\section{Problem 18}
+\section*{Problem 18}
+
+
+
+$$
+\dot{X}(t) = \frac{-x}{t+1} \quad \forall t \geq 0
+$$
+
+\noindent We can solve this equation directly using integration. This leads to...
+
+
+$$
+x(t)  = x(t_0) = exp\left( \int_{t_0}^t \frac{-1}{1 + \tau} d\tau \right)
+$$
+
+
+
+$$
+\frac{dx}{dt} = \frac{-x}{1 + t}
+$$
+
+
+
+$$
+\int_{x_{0}}^{x} \frac{d x}{x}=\int_{t_{0}}^{t}\left(\frac{-1}{1+t}\right) d t
+$$
+
+
+
+$$
+\left.\ln (x)\right|_{x_{0}} ^{x}=\left(\int_{t_{0}}^{t} \frac{-1}{1+\tau} d \tau\right)
+$$
+
+
+$$
+X(t)=x\left(t_{0}\right) \exp \left\{\left(\int_{-\infty}^{t} \frac{-1}{1+\tau} d \tau\right)\right\}
+$$
+
+
+
+\noindent Using this solution, we can say that the any trajectory in the system will ...
+
+
+$$
+x(t) = x(t_0)e^{-\alpha}
+$$
+
+\noindent We know that due to the sign of the exponent in the solution of the problem that the system must be decaying over time... such that
+
+
+$$
+|x(t)| \leq |x(t_0)|
+$$
+
+\noindent This means that the solution is \underline{stable} for all $t \geq 0$; however, if we want to determine global stability we must demonstrate that the system $X(t) \rightarrow 0$ as $t \rightarrow \infty $. In order to show these, we can perform the integral in the exponent of the previous solution and then analyze the system at $t=\infty$.
+
+$$
+x(t) = x(t_0)\left[\frac{1+ t_0}{1 + t} \right] = 0 \quad \quad t \rightarrow \infty
+$$
+
+
+\noindent Using this solution, we can clearly see that the value of $x$ trends towards zero as time trends towards infinity. Because of this, we can conclude that the system is \underline{globally asymptoticially stable}.

@@ -1,1 +1,69 @@
-\section{Problem 15}
+\section*{Problem 15}
+
+Given the system in the problem statement we wish to show that it is globally asymptotically stable for the following cases.
+
+\subsection*{Case: $Q>0 $}
+
+Given the Lyapunov Candidate $V(X) = x^tPx$ we can show that $\dot{V}(x)$ can be dervied by differeniating each term according to the product rule of calculus.
+
+
+$$
+\dot{V}(x) = \dot{x^T}Px + x^T\dot{P}x + x^TP\dot{x} \\
+$$
+
+\noindent By substituting the state equation and its transpose into this expression we obtain the equation..
+
+$$
+x^{\top}\left(A-B R^{-1} B^{\top} P\right)^{\top} P x+x^{\top} P\left(A-B R^{-1} B^{T} P\right) x
+$$
+
+\noindent By substituting the Riccati Equation into this expression we can simplify the equation
+
+
+$$
+\dot{V}=x^{\top}\left[P A-P B R^{-1} B^{T} P+A^{T} P-P\left(B R^{-1} B^{T} P\right)^{\top}\right] X
+$$
+
+\noindent Which simplies to ...
+
+$$
+\dot{V}= -x^{\top}\left[Q+P B R^{-1} B^{\top} P\right] x
+$$
+
+
+\noindent Since the problem statement told us that $P$, and $Q$, and $R$ are positive definite and since (A, B) is controllable, we can conclude that the expression inside of the square brackets are Positive Definite. Since negating a PD function yields a ND function, we can show that according to Lyapunov Global Stability Theorem, that the system is \underline{\textbf{Globally Asymptotically Stable}} since $\dot{V}< 0$ and the function $V$ is PD, defined for all $\R^n$, and radially unbounded.
+
+
+
+
+\subsection*{Case: $Q=C^TC $}
+
+In the case where $Q = C^tC$, we obtain the following Lyapunov function...
+
+
+$$
+\dot{V}= -x^{\top}\left[C^TC + PBR^{-1} B^{\top} P\right] x
+$$
+
+
+\noindent We know from problem statement that $Ce^{At}\equiv 0 $ only when $x=0$. This means that if we look at at the case when $\dot{V}(x) = 0$...
+
+
+$$
+\dot{V}= -x^{\top}\left[Q + PBR^{-1} B^{\top} P\right] x \equiv 0
+$$
+
+Since we know that $Cx \equiv 0$ we know that $R^{-1}B^TPx(t) \equiv 0$ for the system to be valid. This means our system symplifies to...
+
+$$
+\dot{x} = Ax - BR^{-1}B^TPx = Ax
+$$
+
+\noindent Since this is a linear equation we know we can compute the solution by integrating both sides (since it is observable), such that ...
+
+$$
+x(t)  = C e^{At}x_0
+$$
+
+
+\noindent According the Corollary 4.2 from La Salle's Theorem, when $V(x)$ is positive definite and radially unbounded, and $\dot{V}(x)\leq0$ for all $x\in\R^n$ and the only solution which can stay identically 0 is the trivial solution, then the origin is globally asymptotically stable. We can draw this conclusion since we know that (for the given Lyapunov function) at $V(x) =0 $ the only point which at which $Ce^{At}x_0 = 0$ is at the origin. Therefore this system is \underline{\textbf{globally asymptotically stable}}.   

@@ -1,1 +1,128 @@
-\section{Problem 11}
+\section*{Problem 11}
+
+
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=x_{2} \\
+\dot{x}=-x_{1}-x_{2} \sec \left(x_{2}^{2}-x_{3}^{2}\right) \\
+\dot{x}_{3}=x_{3} \operatorname{sat}\left(x_{2}^{2}-x_{3}^{2}\right)
+\end{array}
+$$
+
+
+\subsection*{Part 1: Unique Eq. Pt.}
+
+Given the previous system, we want to detemine want to determine whether the origin is an unique equilibrium point. To solve this, we need to set the state equations equal to zero. After a bit of simplication we arrive at the following expressions.
+
+
+$$
+\begin{array}{l}
+0=x_{2} \\
+0=x_{1} \\
+0=x_{3} sat(x_2^2 - x_3^2)
+\end{array}
+$$
+
+
+\noindent The saturation function can only scale values between $[-1, +1]$. Sincee this scaling constant could be divided against zero, we can show that the presence of the saturation function does not change the result of the last state equation since we could cancel the scaling of the saturation by dividing it out. \\
+
+\noindent This means that $x_1 = x_2 = x_3 =0 $ is a \underline{unique equilibrium point} of the system, since there are no other values possible which satisfy the expression.
+
+
+
+
+
+
+\subsection*{Part 2: Asymptotic Stability}
+
+In the problem statement we are told to solve the problem given the Lyapunov Candidate function $V(x) = x^TX$. This expands to...
+
+$$
+V(x) = x_1^2 + x_1^2 + x_1^2
+$$
+
+\noindent The time derivative of this function is...
+
+$$
+\dot{V}(x) = 2x_1\dot{x}_1 + 2x_2\dot{x}_2 + 2x_3\dot{x}_3
+$$
+
+
+\noindent By substituting the state equations into this expression we get...
+
+$$
+\dot{V}(x)=-2 x_{2}^{2} \operatorname{sat}\left(x_{2}^{2}-x_{3}^{2}\right)+2 x_{3}^{2} \operatorname{sat}\left(x_{2}^{2}-x_{3}^{2}\right)
+$$
+
+However, solving this equation and showing that $\dot{V} < 0$, for all $x \in \R^3$ is complicated by the presence of the Saturation function which is define as shown below.
+
+$$
+Sat(x) = \begin{cases}
+1, \quad x \geq a \\
+x, \quad -1\geq x \geq x\\
+-1, \quad x\leq a
+\end{cases}
+$$
+
+
+\noindent Note that with this definition we can show that the saturation function is always positive for positive inputs and is always negative for negative inputs. This means that we only need to reason about the sign of the input and then we can conclude the sign of the saturation which is the only thing that the presence of the saturation function would change given the previous definition. \\
+
+
+\noindent For the expression for $\dot{V}(x)$ given above, we can see that it is \textbf{not} obvious whether the function is negative definite or positive definite due to the alternating of signs as well as the presence of the saturation functions. However, as mentioned above, we know that the saturation function is merely a scaling function between the range of $[-1,1]$. This means that we can if we can reason about the inputs to the saturation function we can reason about the sign of the output of the saturation function. This will allow use to investigate whether the system is ND or PD. \\
+
+\noindent Since the inputs for both saturation functions is $x_2^2 - x_3^2$ we only need to investigate the two cases where one variable is larger than the other.
+
+
+\subsubsection*{Case: $x_2 > x_3$}
+
+If we assume that $x_2 > x_3$ we can see from the function $sat(x_2^2 - x_3^2)$ that no matter the sign of  $x_2$ or $x_3$ the system will only be negative of $x_3>x_2$ and that the system will only be positive of $x_2 > x_3$. Using this reasoning, we can state that ... \\
+
+\noindent If $x_2 > x_3$: \\
+
+\noindent Then ...
+
+$$
+Sat(x_2^2 - x_3^2) > 0
+$$
+
+\noindent By applying this fact to our Lyapunov function, we can show that Saturation must result in a multiplicative constant that is greater than zero such that. $ 0 \leq C_i \leq 1 $
+
+
+$$
+ \dot{V}(x)=-2 x_{2}^{2} \operatorname{sat}\left(x_{2}^{2}-x_{3}^{2}\right)+2 x_{3}^{2} \operatorname{sat}\left(x_{2}^{2}-x_{3}^{2}\right)
+$$
+
+$$
+ \dot{V}(x)=-2C_1 x_{2}^{2} + 2 C_2 x_{3}^{2}
+$$
+
+\noindent Since we are assumming that $x_2 > x_3$ we can state that the function $\dot{V} < 0$ since any squared value of $x_2$ will be larger than any squared value of $x_3$. Additionally since the constants $C_1$ and $C_2$ are identical, they scale each term identically and do not alter the conclusion that \underline{$\dot{V}(x)$ is Negative Definite}.
+
+
+\subsubsection*{Case: $x_3 > x_2$}
+
+Using the same logic as before. We can show that ...
+
+\noindent If $x_3 > x_2$: \\
+
+\noindent Then ...
+
+$$
+Sat(x_2^2 - x_3^2) < 0
+$$
+
+
+\noindent Likewise
+
+$$
+ \dot{V}(x)=2C_2 x_{2}^{2} - 2 C_3 x_{3}^{2}
+$$
+
+\noindent Since we are assumming that $x_3 > x_2$ we can state that the function $\dot{V} < 0$ since any squared value of $x_3$ will be larger than any squared value of $x_2$. Additionally since the constants $C_3$ and $C_4$ are identical, they scale each term identically and do not alter the conclusion that \underline{$\dot{V}(x)$ is Negative Definite}.
+
+
+
+\subsubsection*{Conclusion}
+
+Since the function $\dot{V}(x) < 0 $ for all $\forall X \in \R^3$, and since $V(x)$ is Positive definite, and radially unbounded, we can conclude that the system is \underline{Globally Asympototically Stable}.

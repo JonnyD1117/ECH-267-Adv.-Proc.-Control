@@ -54,9 +54,34 @@ k3 = .5*m1*(v1_sqr) + .5*I3*(omega_3)^2;
 K_tot = k1 + k2 + k3; 
 
 
-L = K_tot - U_tot;
+% L = K_tot - U_tot;
 
-latex(L)
+dT_dq1 = diff(K_tot, q1);
+dT_dq2 = diff(K_tot, q2);
+dT_dq3 = diff(K_tot, q3);
+
+dU_dq1 = diff(U_tot, q1);
+dU_dq2 = diff(U_tot, q2);
+dU_dq3 = diff(U_tot, q3);
+
+dT_dq1_dot = diff(K_tot, q1_dot);
+dT_dq2_dot = diff(K_tot, q2_dot);
+dT_dq3_dot = diff(K_tot, q3_dot);
+
+
+dt_dT_dq1_dot = diff(dT_dq1_dot, t);
+dt_dT_dq2_dot = diff(dT_dq2_dot, t);
+dt_dT_dq3_dot = diff(dT_dq3_dot, t);
+
+
+T1 = dt_dT_dq1_dot - dT_dq1 + dU_dq1;
+T2 = dt_dT_dq2_dot - dT_dq2 + dU_dq2;
+T3 = dt_dT_dq3_dot - dT_dq3 + dU_dq3;
+
+latex(T1)
+
+
+
 
 
 

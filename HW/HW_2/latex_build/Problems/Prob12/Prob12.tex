@@ -1,1 +1,82 @@
-\section{Problem 12}
+\section*{Problem 12}
+
+Given that the origin $x = 0$ is an equilibrium point of the system
+
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=-k h(x) x_{1}+x_{2} \\
+\dot{x}_{2}=-h(x) x_{2}-x_{1}^{3}
+\end{array}
+$$
+
+\noindent let $D = \{x \in \R^2 | \left\Vert x \right\Vert_2 < 1\}$. Using $V(x) = \frac{1}{4} x_1^4 + \frac{1}{2}x^2_2$, investigate stability of the origin of the following cases.
+
+\noindent Note the derivative of the function $V(x)$ can be written as...
+
+$$
+\dot{V}(x) = x_1^3 \dot(x)_1 + x_2\dot{x}_2 \\
+$$
+
+
+\subsection*{(1) $k>0, h(x)>0, \forall x \in D$}
+
+
+$$
+\dot{V}(x) = x_1^3[-kh(x)x_1 + x_2] + x_2 [-h(x)x_2 -x_1^3]
+$$
+
+\noindent After simplification...
+$$
+\dot{V}(x) = -kh(x)x_1^4 - h(x)x_2^2
+$$
+
+\subsubsection*{Solution} Given that $\forall x \in D$, the function $\dot{V}(x)$ is \underline{Negative Semi-Definite} (due to $\dot{V}(0)=0$), this system is \textbf{Stable} according to the Lyapunov Stability Theorem.
+
+\subsection*{(2) $k>0, h(x)>0, \forall x \in \mathbb{R}^{2}$}
+
+$$
+\dot{V}(x) = -kh(x)x_1^4 - h(x)x_2^2
+$$
+
+
+\subsubsection*{Solution} Given that $\forall x \in \R^2$, the function $\dot{V}(x)$ is \underline{Negative Semi-Definite} (due to $\dot{V}(0)=0$), this system is \textbf{Globally Stable} according to the Lyapunov Global Stability Theorem, since in addition to the Lyapunov function being NSD, the function $V(x)$ is \underline{radially unbounded} with respect to $\left\Vert x \right\Vert$. However since Lyapunov function is not negative definite, we cannot conclude asymptotic stability.
+
+
+\subsection*{(3) $k>0, h(x)<0, \forall x \in D$}
+
+
+$$
+\dot{V}(x) = -kh(x)x_1^4 - h(x)x_2^2
+$$
+
+
+
+\subsubsection*{Solution} Given that $\forall x \in D$, the system is \textbf{unstable}. This is because both terms in the function would be negative semi-definite only as long as both $k$ and $h(x)$ are greater than zero. Since $h(x)<0$ for this case, this has the effect of negating a NSD function, which in turn produces a Positive Semi-Definite function. This violates the Lyapunov Stability Theorem and we can conclude that under this condition the system must be unstable.
+
+
+\subsection*{(4) $k>0, h(x)=0, \forall x \in D$}
+
+$$
+\dot{V}(x) = -kh(x)x_1^4 - h(x)x_2^2
+$$
+
+\subsubsection*{Solution} Given that $\forall x \in D$, the function $\dot{V}(x)$ is \underline{Negative Semi-Definite} (due to $\dot{V}(0)=0$), this system is \textbf{Stable}. However, while technically this Lyapunov function is NSD, since $h(x)=0$ it is clear that this Lyapunov function is zero $\forall x \in D$. While this doesn't violate the stability theorem, to me this would appear to be a \underline{marginally stable} system and even though it technically might be classified as stable, is so close to instability that it could practically be considered unstable.
+
+
+\subsection*{(5) $k=0, h(x)>0, \forall x \in D$}
+
+$$
+\dot{V}(x) = - h(x)x_2^2
+$$
+
+\subsubsection*{Solution} Given that $\forall x \in D$, the function $\dot{V}(x)$ is \underline{Negative Semi-Definite} (due to $\dot{V}(0)=0$), this system is \textbf{Stable}. This is due to the fact that when $k=0$, the only term in the remaining expression is NSD. Since we are given that the term $h(x)>0$ this means that the function $\dot{V}(x)$ will never flip signs over the defined domain.
+
+
+\subsection*{(6) $k=0, h(x)>0, \forall x \in \mathbb{R}^{2}$}
+
+$$
+\dot{V}(x) = - h(x)x_2^2
+$$
+
+\subsubsection*{Solution} Given that $\forall x \in \R^2$, the function $\dot{V}(x)$ is \underline{Negative Semi-Definite} (due to $\dot{V}(0)=0$), this system is \textbf{Globally Stable}. We can conclude that this function is globally stable since, its NSD as well as being \underline{radially unbounded}. This means that over the entire domain of $\forall x \in \R^2$, the sign of the Lyapunov function will never flip and that the candidate function is well-conditioned as $\left\Vert x \right\Vert \rightarrow \infty$ such that $V(x) \rightarrow \infty$. 

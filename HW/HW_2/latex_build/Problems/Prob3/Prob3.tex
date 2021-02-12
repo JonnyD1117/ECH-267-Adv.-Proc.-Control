@@ -165,3 +165,27 @@ $$
   & \dot{x}_1 = -x_1 -x_2 \\
   & \dot{x}_2 = 2x_1 - x_2^3
 \end{flalign*}
+
+\noindent By using the following Lyapunov Candidate function...
+
+$$
+V(x) = x_1^2 + \frac{1}{2}x_2^2
+$$
+
+
+\noindent We can show that its time derivative will be ...
+
+$$
+\begin{array}{l}
+\dot{V}=2 x_{1} \dot{x}_{1}+x_{2} \dot{x}_{2} \\
+\dot{V}=2 x_{1}\left(-x_{1}-x_{2}\right)+x_{2}\left(2 x_{1}-x_{2}^{3}\right) \\
+\end{array}
+$$
+
+\noindent After simplication the Lyapunov Function is shown to be...
+
+$$
+\dot{V} = -2x_1^2 -x_1^4
+$$
+
+\noindent Since this function is \underline{negative definite} such that $\forall x \in D - \{0 \} | \dot{V} < 0$ we can conclude (via Lyapunov Stability Theorem) that the origin is \underline{\textbf{asymptotically stable}}  However, we can go beyond this conclusion, since this previous statement is valid for when $\forall x \in \R^2$, and since the quadratic candidate function is radially unbounded with respect to $x$, we can conlude (via Lyapunov Global Stability Theorem) that the system is \underline{\textbf{Globally Asymptotically Stable}} aout the origin. 

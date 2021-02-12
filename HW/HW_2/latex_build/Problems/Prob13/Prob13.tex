@@ -1,1 +1,41 @@
-\section{Problem 13}
+\section*{Problem 13}
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=x_{2} \\
+\dot{x}_{2}=-a \sin x_{1}-k x_{1}-d x_{2}-c x_{3} \\
+\dot{x}_{3}=-x_{3}+x_{2}
+\end{array}
+$$
+where all coefficients are positive and $k>a$. Using
+$$
+V(x)=2 a \int_{0}^{x_{1}} \sin y d y+k x_{1}^{2}+x_{2}^{2}+p x_{3}^{2}
+$$
+
+
+
+\subsection*{Solution}
+
+$$
+V(x) = 2a[ -cos(x)]_0^{x_1} + kx_1^2 + x_2^2 + px_3^2
+$$
+
+$$
+\dot{V}(x) = 2aSin(x_1)\dot{x}_1 + 2kx_1\dot{x}_1 + 2x_2\dot{x}_2 + 2Px_3\dot{x}_3
+$$
+
+
+\noindent After substitution and simplications using the state equations...
+
+$$
+\dot{V}(x) = - 2dx_2^2 -2cx_2x_3 - 2Px_3^2 + 2Px_2x_3
+$$
+
+
+\noindent If we select $P$ such that $P=c$ (which is valid since $p>0$) we can reduce this function to...
+
+$$
+\dot{V}(x) = - 2dx_2^2 - 2Px_3^2
+$$
+
+\noindent Under this restriction on $P$ we can see that $\dot{V}(x)<0$ over the complete domain $\forall x \in \R^3$. In addition to this, since the function $V(x)$ is radially unbounded we can conclude via Lyapunov Global Stability Theorem that the system is \textbf{Globally Asymptotically Stable}.

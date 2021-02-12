@@ -1,4 +1,4 @@
-\section{Problem 7}
+\section*{Problem 7}
 
 
 
@@ -8,3 +8,75 @@ $$
 \dot{x}_{2}=\left(x_{1}+x_{2}\right) \sin x_{1}-3 x_{2}
 \end{array}
 $$
+
+
+\subsection*{Part A}
+
+In order to determine whether the origin is a \underline{unique equilibrium point}, we must determine all possible equilibrium points of the system by setting the state equations equal to zero, such that...
+
+$$
+\begin{array}{l}
+0 =-x_{1}+x_{2} \\
+0 =\left(x_{1}+x_{2}\right) \sin x_{1}-3 x_{2}
+\end{array}
+$$
+
+\noindent This expression simplifies to...
+
+$$
+\begin{array}{l}
+x_{1}=x_{2} \\
+0=\left[2 x_{2} \sin \left(x_{1}\right)-3 x_{2}\right]\left(\frac{1}{x_{2}}\right) \\
+\end{array}
+$$
+
+
+\noindent After substituting the first state state equation in the second we get...
+
+$$
+0=2 \sin \left(x_{1}\right)-3
+$$
+
+\noindent Which reduces to ...
+
+$$
+\frac{3}{2} = sin(x_1)
+$$
+
+\subsubsection*{Solution}: In order to solve for equilibrium points (other than the origin) there must exist solutions to the previous equations. However the $Sine$ function is bouded by $[-1, 1]]$. This means that it is impossible for there to exist a solution which satisfies this expression. Therefore the origin is a \underline{\textbf{unique equilibrium point}}.
+
+
+\subsection*{Part B}
+
+To linearize the system, we must determine the Jacobian of the given system about the equilibrium point...
+
+$$
+A_j =
+\begin{bmatrix}
+  \frac{\partial f_{1}}{\partial x_{1}} & \frac{\partial f_{1}}{\partial x_{1}} & \\
+
+  \frac{\partial f_{2}}{\partial x_{1}} & \frac{\partial f_{2}}{\partial x_{2}}&
+\end{bmatrix}
+=
+\left .
+\begin{bmatrix}
+
+-1 & 1 & \\
+
+  sin(x_1) + x_1cos(x_1 + x_2cos(x_2))  & \sin (x)-3&
+
+\end{bmatrix} \right\rvert_{x=0}
+$$
+
+
+\noindent After evaluating the system at its origin, we can show that...
+
+$$
+A = \begin{bmatrix}
+-1 & 1 & \\
+0 & -3 &
+\end{bmatrix}
+$$
+
+\noindent By taking the eigenvalues of this matrix, we can see that the matrix is \underline{Hurwitz}, since it yields the following eigenvalues $\lambda_1 = -1$ and $\lambda_2 = -3$ in which both exist in the left half side of the complex plane.
+\subsection*{Part C}

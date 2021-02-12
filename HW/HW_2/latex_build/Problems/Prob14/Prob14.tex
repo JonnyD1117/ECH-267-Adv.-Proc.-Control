@@ -1,1 +1,60 @@
-\section{Problem 14}
+\section*{Problem 14}
+
+Given the governing equation...
+
+$$
+M \ddot{y}=M g-k y-c_{1} \dot{y}-c_{2} \dot{y}|\dot{y}|
+$$
+
+
+
+\noindent We can create the following state space system, given the following state definitions, $x_1 = y - \frac{Mg}{k}$, and $x_2=\dot{y}$.
+
+
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=x_{2} \\
+\dot{x}_{2}= g -\frac{ky}{m} - \frac{c_1x_2}{m} - c_2x_2|x_2|
+\end{array}
+$$
+
+\noindent Such that...
+
+$$
+g = (y - x_1)\frac{k}{m}
+$$
+
+\noindent Which simplifies to...
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=x_{2} \\
+\dot{x}_{2}= -\frac{kx_1}{m} - \frac{c_1x_2}{m} - c_2x_2|x_2|
+\end{array}
+$$
+
+\noindent Using candidate function, $V(x)=\frac{1}{2} ax_{1}^{2}+\frac{1}{2} bx_{2}^{2}$, we can check the stability of the system by evaluating the time derivative of the candidate function, and drawing conclusions via Lyapunov Stability Theory. By taking the time derivative we obtain...
+
+$$
+\begin{array}{l}
+\dot{V}(x)=ax_{1} \dot{x}_{1}+bx_{2} \dot{x}_{2} \\
+\dot{V}(x)=ax_{1}x_2 + bx_2 \left( -\frac{k}{m}x_1 -\frac{c_1}{m}x_2 - \frac{c_2}{m}x_2 |x_2| \right) \\
+\dot{V}(x)=\left(a -\frac{bk}{m}\right) x_2 - \frac{c_1}{m}x_2^2 - \frac{c_2}{m}x_2^2|x_2|
+\end{array}
+$$
+
+ \noindent This function will be negative semidefinite only when the $ x_{2} $ term is cancelled. In order to achieve this, we can define the arbitrary constants such that $a = \frac{k}{m}$, and $b=1$. Under these conditions the Lyapunov function simplifies to the following NSD expression.
+
+$$
+\dot{V}(x)=2 - \frac{c_1}{m}x_2^2 - \frac{c_2}{m}x_2^2|x_2|
+$$
+
+
+\noindent By using La Salle's Theorem (Corollary 4.2)...
+
+$$
+\dot{V} \equiv 0
+$$
+
+\noindent For this to be valid, we must infer that $x_2 = 0$. Further, we can show that under this condition, $\dot{x_1}=0$, which means that $x_1 =0 $. Since the only place where the function can be stationary is at the equilibrium $x=0$, we can show that since the Lyapunov function is NSD that with the exception of the equilibrium point the system must be decaying, the system must at least be asymptotically stable. However, since this is true for all $\R^2$ and since the function $V(x)$ is radially unbounded with respect to $x$, we can conclude that the system is \underline{Globally Asymptotically Stable}.
