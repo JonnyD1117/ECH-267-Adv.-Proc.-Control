@@ -1,0 +1,138 @@
+\section*{Problem \#6}
+
+Consider the following nonlinear system:
+$$
+\begin{aligned}
+\dot{x}_{1} &=f_{1}\left(x_{1}, x_{2}, x_{3}\right)+g_{1}\left(x_{1}\right) u \\
+\dot{x}_{2} &=f_{2}\left(x_{1}, x_{2}, x_{3}\right) \\
+\dot{x}_{3} &=f_{3}\left(x_{1}, x_{2}, x_{3}\right) \\
+y &=h\left(x_{2}\right) \\
+\end{aligned}
+$$
+
+\noindent Where $x_{1} \in \mathbb{R}$, $x_{2} \in \mathbb{R}$, $x_{3} \in \mathbb{R}$, $u \in \mathbb{R}$, $y \in \mathbb{R}$, $f_{1}(0,0,0)=f_{2}(0,0,0)=f_{3}(0,0,0)=0$ and $g_{1}(0) \neq 0$ .
+
+\begin{itemize}
+  \item (a) Determine the relative degree of the controlled output $y$ with respect to the manipulated input $u$.
+  \item (b) Design an input/output feedback linearizing controller to stabilize the input/output dynamics.
+  \item (c) State the conditions that ensure this controller enforces local asymptotically stability of the origin.
+\end{itemize}
+
+
+\subsection*{Solution Problem 6}
+
+
+\subsection*{Part A}
+To determine the \underline{relative degree} of the system we need to determine how many derivatives of the output $y$ must be taken inorder to see the effect of the input on the system. \\
+
+\noindent This can be show by taking the generalized system form $ \dot{x} = f(x) + g(x)u $ and computing the Lie Derivaties.
+
+$$
+L_{g} L_{f}^{i-1} h(x)=0, \quad i=1,2, \ldots, \rho-1 ; \quad L_{g} L_{f}^{\rho-1} h(x) \neq 0
+$$
+
+\noindent This relation determines whether the derives of the output are independent of the input to the system. To begin this process for the given system, we need to take the Lie Derivative $L_g$ for $i = 1$ which gives ...
+
+$$
+L_gh(x) = \underbrace{\frac{\partial h}{\partial x_{1}} g_{1}(\cdot)}_0 + \underbrace{\frac{\partial h}{\partial x_{2}} g_{2}(\cdot)}_0 + \underbrace{\frac{\partial h}{\partial x_{3}} g_{3}(\cdot)}_0
+$$
+
+\noindent Therefore ...
+
+$$
+L_gh(x) = 0
+$$
+
+\noindent This indicates that the first derivative is \underline{independent} of the input. This means that we need to take the second derivate of the output and evaluate the system again, this time for $i = 2$.
+
+$$
+L_gL_fh(x) =
+\frac{\partial}{\partial x}\left(\frac{\partial h}{\partial x} \cdot f\right) \cdot g
+$$
+
+\noindent In order to evluate this expression we need to compute $L_fh(x)$ and then compute the $L_g(L_fh(x))$.
+
+$$
+L_fh(x)= \frac{\partial h}{\partial x} f(x)=\frac{\partial h}{\partial x_{1}} f_{1}(\cdot)+\frac{\partial h}{\partial x_{2}} f_{2}(\cdot)+\frac{\partial h}{\partial x_{3}} f_{3}(\cdot)
+$$
+
+
+\noindent Since the function $h(x_2)$ is only dependent on $x_2$ derivatives of $h(x_2)$ with respect to $x_1$ and $x_2$ are zero.
+
+$$
+L_fh(x)= \underbrace{\frac{\partial h}{\partial x_{1}} f_{1}(\cdot)}_0 + \frac{\partial h}{\partial x_{2}} f_{2}(\cdot) + \underbrace{\frac{\partial h}{\partial x_{3}} f_{3}(\cdot)}_0
+$$
+
+
+\noindent Therefore
+
+$$
+L_fh(x)= \frac{\partial h}{\partial x_{2}} f_{2}(\cdot)
+$$
+
+
+\noindent To complete the process we need to take the following derivative
+
+$$
+L_gL_fh(x) = \frac{\partial}{\partial x} \left[ \frac{\partial}{\partial x_2}f_2(\cdot) \right] g(\cdot)
+$$
+
+
+\noindent We can expand this to...
+
+$$
+L_gL_fh(x) = \frac{\partial}{\partial x_1}(\frac{\partial}{\partial x_2}f_2(\cdot))\cdot g_1() + \underbrace{\frac{\partial}{\partial x_2}(\frac{\partial}{\partial x_2}f_2(\cdot))\cdot g_2()}_0 + \underbrace{\frac{\partial}{\partial x_3}(\frac{\partial}{\partial x_2}f_2(\cdot))\cdot g_3()}_0
+$$
+
+
+\noindent Since $g_1$ and $g_2$ are zero, the last two terms of the expression are cancelled out. This means that we can write.
+
+$$
+L_gL_fh(x) = \frac{\partial}{\partial x_1}(\frac{\partial}{\partial x_2}f_2(\cdot))\cdot g_1()
+$$
+
+\noindent Since this term does not reduce to zero we have determined that the system has a \underline{\textbf{Relative Degee}} = 2, since it took two time derivatives of the output to obtain an input/output relationship.
+
+
+\subsection*{Part B}
+
+We can directly find the input/output feedback linearizing controller, from the general equation, since our system is expressed in the general form $\dot{x} = f(x) + g(x)u$. The generalize linearizing input/output controller can be shown to be...
+
+
+$$
+u=\frac{1}{\operatorname{L_g} \operatorname{L_f} h(x)}\left[-L^{2}_f h(x) + v\right]
+$$
+
+
+\noindent Since we already have the expression for $L_gL_fh(x)$ from the previous problem, we only need to determine $L^2_fh(x)$ and the controller will be solved for.
+
+$$
+L_{f}\left(L_{f} h\right)=\frac{\partial}{\partial x}\left(L_{f} h\right)=\frac{\partial}{\partial x}\left(\left[\frac{\partial h(x)}{\partial x}\right] \cdot f(x)\right) \cdot f(x)
+$$
+
+
+$$
+= \frac{\partial}{\partial x}\left(\left[\frac{\partial h(x_2)}{\partial x_2}\right] \cdot f_2(x)\right) \cdot f(x)
+$$
+
+\noindent By using prduct rules of calculus, this term expands to...
+$$
+L_{f}\left(L_{f} h\right) =  \frac{\partial}{\partial x_1} \left[ f_2() \right]\cdot f_1() +  \left[ \frac{\partial^2}{\partial x_2^2} (h(x_2))\cdot f_2() + \frac{\partial}{\partial x_2} (h(x_2))\cdot \frac{\partial}{\partial x_2}(f_2()) \right]  + \frac{\partial}{\partial x_3} \left[ f_2() \right] \cdot f_3()
+$$
+
+\noindent By substituting the derived expressions for $L_gL_fh(x)$ and $L^2_fh(x)$ into the feedback linearizing controller...
+$$
+u=\frac{1}{\operatorname{L_g} \operatorname{L_f} h(x)}\left[-L^{2}_f h(x) + v\right]
+$$
+
+We can design a controller that linearizes the nonlinear terms in the state equations and allows us to manipulate the system as if it was linear, and enabling the use of linear control techniques such as pole placement to control the system and keep it stable.
+
+\subsection*{Part C}
+
+Just linearizing the control input does not inherently make the system stable so in order to control the system and keep it stable we need to ensure the following ...
+
+\begin{itemize}
+  \item The system is in a form conducive to linerization $\dot{x} = f(x) + g(x)u$
+  \item  The virtual input $v$ needs to enforce stable dynamics such that the closed loop system ($A - BK$) has stable poles in the \underline{left-half-plane} (aka Hurwitz)
+  \item  The state space is controllable.
+\end{itemize}

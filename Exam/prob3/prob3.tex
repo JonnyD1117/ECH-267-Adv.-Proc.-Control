@@ -1,0 +1,129 @@
+\section*{Problem \#3}
+
+Consider the nonlinear system
+$$
+\begin{array}{l}
+\dot{x}_{1}=h(t) x_{2}-g(t) x_{1}^{3} \\
+\dot{x}_{2}=-h(t) x_{1}-g(t) x_{2}^{3}
+\end{array}
+$$
+where $h(t)$ and $g(t)$ are bounded continuously differentiable functions, with $0<g_{0} \leq g(t)$.
+
+
+\begin{itemize}
+  \item (a) Is the equilibrium $x=0$ uniformly asymptotically stable? Is it globally uniformly asymptotically stable?
+  \item (b) Is it (globally/locally) exponentially stable?
+\end{itemize}
+
+
+
+\subsection*{Solution Problem 3}
+
+To investigate the stability properties of this system, we can use Lyapunov Stability Theory. We can construct a Lyapunov Candidate function $V(x)$ such that.
+
+$$
+V(x) = \frac{1}{2} x_1^2 + \frac{1}{2} x_2^2
+$$
+
+\noindent By taking the time derivate of $V$...
+
+$$
+\dot{V}(x) = x_1\dot{x_1} + x_2\dot{x_2}
+$$
+
+\noindent We can further expand this expression by substituting the state equations.
+
+$$
+\begin{aligned}
+\dot{V}(x) & = x_1\left( h(t) x_2 -g(t) x_1^3 \right) + x_2\left(-h(t) x_1 -g(t) x_2^3 \right) \\
+& = x_1x_2h(t) -x_1x_2h(t) - x_1^4g(t) -x_2^4g(t)
+\end{aligned}
+$$
+
+\noindent After canceling terms, we get that the Lyanpunov function for this problem is...
+$$
+\dot{V}(x) = - x_1^4g(t) -x_2^4g(t)
+$$
+
+\noindent According to Theorem 4.8 (Khalil), we state that a equilibrium point is \underline{uniformly stable}, if we can show that
+
+
+
+$$
+  W_1(x)\leq V(t,x) \leq W_2(x) \\
+$$
+$$
+\frac{\partial V}{\partial t} + \frac{\partial V}{\partial x}f(t,x) \leq 0
+$$
+
+\noindent $\forall t \geq t_0$ and $\forall x \in D$\\
+
+\noindent Where the function $W_1$ and $W_2$ are positive definite functions. The reasoning is that for $V$ to obey this property $V$ must itself be positive definite, while for time derivative of $V$ must be at negative semi-definite. Additionally, inorder for this theorem to hold, it must be shown that these properties are independent of time. \\
+
+\noindent However, in order to show that the system is \underline{Uniformly Asymptotically Stable}, we need a stronger condition. This condition is...
+
+$$
+\frac{\partial V}{\partial t} + \frac{\partial V}{\partial x}f(t,x) \leq - W_3(x)
+$$
+
+\noindent Where $W_3$ is also a positive definite function. This condition implies that there must exist a bound on the values of $\dot{V}(t,x)$ such that $\dot{V}$ is \textbf{always} be strictly less than zero. Using this information we can show whether or not the system is uniformly asymptotically stable.
+
+
+\subsubsection*{Part A}
+It is trivial to show that the candidate function $V(x)$ is positive definite $\forall x \in \R^2$, since by its constructed of even powers and since each term is negated the function must be $V(x) > 0 \quad \forall x \in \R^2 - \{0\}$ and $V(0)=0$. However, inorder to demonstrate that the theorem above holds, we mut show that the function $\dot{V}(x)$ is strictly negative definite. \\
+
+\noindent Given the Lyapunov function...
+
+$$
+\dot{V}(x) = - x_1^4g(t) -x_2^4g(t)
+$$
+
+\noindent In order to ensure that this function stays negative definite over the entire domain $\forall x \in \R^2$, it must be shown that $g(t)$ term does not impact the negative definite-ness of $\dot{V}$. Since we are given that...
+
+$$ 0<g_{0} \leq g(t)$$
+
+\noindent We know that the value of $g(t)$ will always remain greater than zero, by definition. This tells us that $\dot{V}(x)>0$, $\forall x \in \R^2 $ and that $\dot{V}(0) = 0$ at the equilibrium point of the system. Since this function is negative definite, it is possible to find a positive definite function that satisfies the relationship for $W_3$ presented above. \\
+
+\noindent Therefore according to \textbf{Theorem 4.8} and \textbf{Theorem 4.9} (Khalil), we have shown that there exists a positive definite function $V(x)$which can be upper and lower bounded by other PD functions, and that there exists a function $\dot{V}$ that is strictly negative definite, BOTH of which are independent of the initial time of the system $t_0$. Therefore we can conclude that the system is \underline{\textbf{Uniformly Asymptotically Stable}}! \\
+
+\noindent Additionally, since we can find a function $W_1$ that is radially unbounded (\textbf{Theorem 4.9}), and since all of the former properties hold for the entire domain $\forall x \in \
+R^2$ and not just a subset $D \subset \R^2$, we can conclude that the system is also \underline{\textbf{Uniformly Globally Asymptotically Stable}}.
+
+
+
+
+
+\subsubsection*{Part B}
+
+In order to determine whether the system is (globally/locally) exponentially stable, we must establish by \textbf{Theorem 4.10} (Khalil), that there exists constants $k_1$, $k_2$, $k_3$, and $a$ such that ...
+
+$$
+k_{1}\|x\|^{a} \leq V(t, x) \leq k_{2}\|x\|^{a}
+$$
+$$
+\frac{\partial V}{\partial t}+\frac{\partial V}{\partial x} f(t, x) \leq-k_{3}\|x\|^{a}
+$$
+
+\noindent In order for to evaluate this, we only need to determine whether such constants exist. We can start by rewriting our candidate function in terms of its norm.
+
+$$
+V(x) = \frac{1}{2} \left\Vert x \right\Vert_2^2
+$$
+
+\noindent It is relatively straightforward to demonstrate that we can satisfy the first condition, with $k_1 = .25$, $k_2 = 1$, $a=2$.
+
+$$
+\frac{1}{2} \left\Vert x \right\Vert_2^2 \leq V(x) \leq \left\Vert x \right\Vert_2^2
+$$
+
+
+\noindent The final task to determine whether there is a constant $k_3$ such that ...
+
+$$
+- x_1^4g(t) -x_2^4g(t) \leq -k_3 \left\Vert x \right\Vert_2^2
+$$
+
+
+\noindent While it is possible that I am not seeing the pattern or simplifying the form the correct way, I cannot find a constant $k_3$ for this specific Lyapunov function that demonstrates that the system is exponentially stable, therefore I think that the system is \textbf{NOT} \underline{\textbf{Exponentially Stable}}. \\
+
+\noindent My reasoning for this decision that for the Lyapunov function that I constructed to solve this problem, it is very hard to relate the 2-norm of the $x$ to $- x_1^4g(t) -x_2^4g(t)$. This makes it hard to reduce the problem down to its core. Since as far as I can tell, this expression does not simplify (such defining a ball of a certain radius and using that to get the form of eqach side of the inequality to be more or less comparable), then it appears to me that the there are obvious values of $\forall x \in \R^2$ that would require a different $k_3$ to satisfy the inequality. In particular, the when the value of $x_1<1, x_2 <1$, would require a significantly different $k_3$ than when $x_1 >1, x_2 >1$.

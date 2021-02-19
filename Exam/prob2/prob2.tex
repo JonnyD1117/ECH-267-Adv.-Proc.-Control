@@ -1,0 +1,107 @@
+\section*{Problem \#2}
+
+Consider the system
+$$
+\ddot{z}+\dot{z}+z-\frac{1}{3} z^{3}=0
+$$
+
+\begin{itemize}
+  \item (a) Choose state variables and write the system in state space.
+  \item (b) Considering the domain $z \in[-2,2]$ and $\dot{z} \in[-1,1],$ does a solution to the ordinary differential equation exist? If so, is it unique? Justify your answer.
+  \item (c) Find all equilibrium points and determine the type (e.g., stable/unstable node or focus) of each one.
+\end{itemize}
+
+
+
+
+
+\subsection*{\textbf{Problem 2 Solution}}
+
+\subsubsection*{\textbf{Part A.}}
+
+By assigning the states $q_1 = z$, and $q_2 = \dot{z}$, we can rewrite the governing differential equation as a system of single order ODEs as follows.
+
+$$
+\begin{array}{l}
+\dot{q_{1}}=q_{2} \\
+\dot{q}_{2}=-q_{2}-q_{1}+\frac{1}{3} q_{1}^{3}
+\end{array}
+$$
+
+
+
+\subsubsection*{\textbf{Part B.}}
+
+According to \textbf{Theorem 3.1} we know that if a system satisfies the Lipschitz condition for domain $D \subset \R^n$ that a solution for the system exists, but further more that this solution is unique. In order to show this property it must be shown that ...
+
+$$
+\left\Vert f(x) - f(y) \right\Vert \leq L \left\Vert x - y\right\Vert
+$$
+
+
+\noindent On the domain where $z \in[-2,2]$ and $\dot{z} \in[-1,1]$, we can see that domain is symetrically bounded above and below for both $z$ and $\dot{z}$. Since the each function of the state space are continuously differentiable (e.g. polynomials) then it must follow that the system is \underline{\textbf{locally Lipschitz Continuous}}. This implies not only that there exists a solution but also that there is a unique solution. 
+
+
+\subsubsection*{\textbf{Part C.}}
+
+In order to detemine all of the equilibrium points, we must first set the state rates equal to zero and then solve for the states that satisfy this condition.
+
+
+$$
+\begin{array}{l}
+0=q_{2} \\
+0=-q_{2}-q_{1}+\frac{1}{3} q_{1}^{3}
+\end{array}
+$$
+
+\noindent We can immediately tell by observation that the system must have an equilibrium point such that $q_2 \equiv 0$. By carrying the algebra through, we can conclude that the system has equilibrium points at ...
+
+$$
+\begin{array}{l}
+q_{2}=0 \\
+q_{1}=0, \pm \sqrt{3}
+\end{array}
+$$
+
+\noindent We can check this by plugging in each of these values into the state space equation and showing that $\dot{q}_1$ and $\dot{q}_2$ equal zero for each combination of $q_1$ and $q_2$ above. \\
+
+\noindent Further more we can determine the \underline{type} of the equilibrium by \textbf{linearizing} the state-space. This is accomplished by computing the Jacobian matrix of the state equations about the equilibrium points.
+
+
+$$
+A=\left.\left[\begin{array}{ll}
+\frac{\partial f_{1}}{\partial x_{1}} & \frac{\partial f_{2}}{\partial x_{2}} \\
+\frac{\partial f_{2}}{\partial x_{1}} & \frac{\partial f_{2}}{\partial x_{2}}
+\end{array}\right]\right|_{x=x_{e q}}
+= \left[\begin{array}{cc}
+0 & 1 \\
+-1+q_{1}^{2} & -1
+\end{array}\right]
+$$
+
+\noindent By plugging in each of the equilibrium points above, we can compute the Jacobian of each individual point and after computing the eigenvalues of each point, we can infer the local type of the equilibrium point.
+
+
+$$
+A_{1}= \left. \left[\begin{array}{cc}
+0 & 1 \\
+-1 & -1
+\end{array}\right] \right|_{q=(0,0)}
+$$
+
+
+$$
+A_{2}=A_{3}=\left. \left[\begin{array}{ll}
+0 & 1 \\
+2 & -1
+\end{array}\right] \right|_{q=(\pm \sqrt{3}, 0)}
+$$
+
+
+\noindent By computing the eigenvalues for each matrix we find that  $eig(A_1) = -0.5 \pm 0.8660j$, and that $eig(A_2)=eig(A_3) = [1 -2]^T$.
+
+\begin{enumerate}
+  \item $q = (0,0)$ is a \underline{Stable Focus}, since its real component is in the left-half-plane.
+  \item $q = (0, \sqrt{3}$ is a \underline{Saddle Point}, since one of its eigenvalues is negative while the other is positive.
+  \item $q = (0, -\sqrt{3}$ is a \underline{Saddle Point}, since one of its eigenvalues is negative while the other is positive.
+\end{enumerate}
