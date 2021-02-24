@@ -1,4 +1,4 @@
-
+%% 3 Degree of Freedom: DH Parameter Homogeneous Transformation Derivation  
 clear all 
 clc
 
@@ -20,7 +20,6 @@ R_z = [cos(theta) -sin(theta) 0;
        
     output = [R_z [0;0;0]; 
               [0 0 0] 1];  
-
 end 
 
 function output = T_z(dist)
@@ -29,7 +28,6 @@ output = [1 0 0 0;
           0 1 0 0; 
           0 0 1 dist;
           0 0 0 1];
-
 end 
 
 function output = T_Rx(theta)
@@ -40,7 +38,6 @@ R_x = [cos(theta) -sin(theta) 0;
        
     output = [R_x [0;0;0]; 
               [0 0 0] 1];  
-
 end 
 
 function output = T_x(dist)
@@ -49,14 +46,11 @@ output = [1 0 0 dist;
           0 1 0 0; 
           0 0 1 0;
           0 0 0 1];
-
 end 
 
 function output = T_h(alpha, a, d, theta)
 
 
 output = T_Rz(theta)*T_z(d)*T_x(a)*T_Rx(alpha);
-
-
 
 end 
