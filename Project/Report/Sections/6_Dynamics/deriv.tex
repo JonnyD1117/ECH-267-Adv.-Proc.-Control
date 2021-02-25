@@ -1,0 +1,73 @@
+% \documentclass[landscape, 12pt]{report}% \usepackage{amsmath}
+% \usepackage[fleqn]{amsmath}
+% \usepackage{amssymb}
+% \usepackage{graphicx}
+% \usepackage{cancel}
+% \usepackage{breqn}
+% \graphicspath{ {./images/} }
+% \usepackage{pdflscape}
+% \usepackage{lscape}
+% \usepackage[landscape]{geometry}
+% \newcommand{\R}{\mathbb{R}}
+
+\section*{Dynamics Model of RRR-Robot Manipulator}
+
+
+\subsection*{Lagrange-Euler Equations of Motion}
+
+\subsection*{SymPy-Symbolic Math Library}
+
+\section*{EOM Derivation}
+
+
+
+\subsection*{Equation 1}
+
+\begin{dmath}
+1.0 I_{1} \frac{d^{2}}{d t^{2}}  \operatorname{q_{1}}{\left (t \right )} + 0.25 L_{2}^{2} m_{2} \frac{d^{2}}{d t^{2}}  \operatorname{q_{1}}{\left (t \right )} + 1.0 L_{2}^{2} m_{3} \frac{d^{2}}{d t^{2}}  \operatorname{q_{1}}{\left (t \right )} + 0.5 L_{2} L_{3} m_{3} \sin{\left (\operatorname{q_{1}}{\left (t \right )} - \operatorname{q_{2}}{\left (t \right )} \right )} \left(\frac{d}{d t} \operatorname{q_{2}}{\left (t \right )}\right)^{2} + 0.5 L_{2} L_{3} m_{3} \cos{\left (\operatorname{q_{1}}{\left (t \right )} - \operatorname{q_{2}}{\left (t \right )} \right )} \frac{d^{2}}{d t^{2}}  \operatorname{q_{2}}{\left (t \right )} + 0.5 L_{2} g m_{2} \cos{\left (\operatorname{q_{1}}{\left (t \right )} \right )} + 1.0 L_{2} g m_{3} \cos{\left (\operatorname{q_{1}}{\left (t \right )} \right )}
+\end{dmath}
+
+
+\subsection*{Equation 2}
+
+\begin{dmath}
+1.0 I_{2} \frac{d^{2}}{d t^{2}}  \operatorname{q_{2}}{\left (t \right )} - 0.5 L_{2} L_{3} m_{3} \sin{\left (\operatorname{q_{1}}{\left (t \right )} - \operatorname{q_{2}}{\left (t \right )} \right )} \left(\frac{d}{d t} \operatorname{q_{1}}{\left (t \right )}\right)^{2} + 0.5 L_{2} L_{3} m_{3} \cos{\left (\operatorname{q_{1}}{\left (t \right )} - \operatorname{q_{2}}{\left (t \right )} \right )} \frac{d^{2}}{d t^{2}}  \operatorname{q_{1}}{\left (t \right )} + 0.25 L_{3}^{2} m_{3} \frac{d^{2}}{d t^{2}}  \operatorname{q_{2}}{\left (t \right )} + 0.5 L_{3} g m_{3} \cos{\left (\operatorname{q_{2}}{\left (t \right )} \right )}
+\end{dmath}
+
+
+\subsection*{Equation 3}
+
+\begin{dmath}
+  T_{3} = 1.0 I_{3} \frac{d^{2}}{d t^{2}}  \operatorname{q_{3}}{\left (t \right )}
+\end{dmath}
+
+
+
+
+\section*{RRR Forward Dynamics Matrices}
+
+
+$$
+\tau = M(\theta) \ddot{\theta} + V(\theta, \dot{\theta}) + K(\theta)
+$$
+
+$$ M(\theta) =
+  \left[\begin{matrix}I_{1} + 0.25 L_{2}^{2} m_{2} + L_{2}^{2} m_{3} & 0.5 L_{2} L_{3} m_{3} \cos{\left (\operatorname{q_{1}}{\left (t \right )} - \operatorname{q_{2}}{\left (t \right )} \right )} & 0\\0.5 L_{2} L_{3} m_{3} \cos{\left (\operatorname{q_{1}}{\left (t \right )} - \operatorname{q_{2}}{\left (t \right )} \right )} & I_{2} + 0.25 L_{3}^{2} m_{3} & 0\\0 & 0 & I_{3}\end{matrix}\right]
+$$
+
+
+$$
+V(\theta, \dot{\theta})  =
+\left[\begin{matrix}0.5 L_{2} L_{3} m_{3} \sin{\left (\operatorname{q_{1}}{\left (t \right )} - \operatorname{q_{2}}{\left (t \right )} \right )} \left(\frac{d}{d t} \operatorname{q_{2}}{\left (t \right )}\right)^{2}\\- 0.5 L_{2} L_{3} m_{3} \sin{\left (\operatorname{q_{1}}{\left (t \right )} - \operatorname{q_{2}}{\left (t \right )} \right )} \left(\frac{d}{d t} \operatorname{q_{1}}{\left (t \right )}\right)^{2}\\0\end{matrix}\right]
+$$
+
+
+$$
+K(\theta) = \left[\begin{matrix}0.5 L_{2} g m_{2} \cos{\left (\operatorname{q_{1}}{\left (t \right )} \right )} + L_{2} g m_{3} \cos{\left (\operatorname{q_{1}}{\left (t \right )} \right )}\\0.5 L_{3} m_{3} \cos{\left (\operatorname{q_{2}}{\left (t \right )} \right )}\\0\end{matrix}\right]
+$$
+
+\subsection*{Inverse Dynamics}
+
+$$
+\ddot{\theta} = M^{-1}(\theta) [ \tau -V(\theta, \dot{\theta})- K(\theta) ]
+$$
