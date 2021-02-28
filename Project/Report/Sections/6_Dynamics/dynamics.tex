@@ -21,83 +21,153 @@ $$
 Before diving into the analysis, it is important to collect all of the parameters and transformations required to construct the expressions which will be used to derive the dynamics.
 
 DH Parameters
-$$
-\begin{array}{|r|r|r|}
-\hline \alpha_{i-1} & A_{i-1} & D_{i} \\
-\hline 0 & 0 & 0 \\
--90 & 0 & 243.5 \\
-0 & 431.8 & -93.4 \\
-90 & -20.3 & 433.1 \\
--90 & 0 & 0 \\
-90 & 0 & 0 \\
-\hline
-\end{array}
-$$
+
+\begin{align*}
+  \begin{array}{|r|r|r|}
+  \hline \alpha_{i-1} & A_{i-1} & D_{i} \\
+  \hline 0 & 0 & 0 \\
+  -90 & 0 & 243.5 \\
+  0 & 431.8 & -93.4 \\
+  90 & -20.3 & 433.1 \\
+  -90 & 0 & 0 \\
+  90 & 0 & 0 \\
+  \hline
+  \end{array}
+  &&
+  \begin{array}{|l|r|}
+  \hline m_{1} & - \\
+  m_{2} & 17.40 \\
+  m_{3} & 4.80 \\
+  m_{4} & 0.82 \\
+  m_{5} & 0.35 \\
+  m_{6} & 0.09 \\
+  \hline
+  \end{array}
+\end{align*}
+% $$
+% \begin{array}{|r|r|r|}
+% \hline \alpha_{i-1} & A_{i-1} & D_{i} \\
+% \hline 0 & 0 & 0 \\
+% -90 & 0 & 243.5 \\
+% 0 & 431.8 & -93.4 \\
+% 90 & -20.3 & 433.1 \\
+% -90 & 0 & 0 \\
+% 90 & 0 & 0 \\
+% \hline
+% \end{array}
+% $$
 
 Link Masses
-$$
-\begin{array}{|l|r|}
-\hline m_{1} & - \\
-m_{2} & 17.40 \\
-m_{3} & 4.80 \\
-m_{4} & 0.82 \\
-m_{5} & 0.35 \\
-m_{6} & 0.09 \\
-\hline
-\end{array}
-$$
+% $$
+% \begin{array}{|l|r|}
+% \hline m_{1} & - \\
+% m_{2} & 17.40 \\
+% m_{3} & 4.80 \\
+% m_{4} & 0.82 \\
+% m_{5} & 0.35 \\
+% m_{6} & 0.09 \\
+% \hline
+% \end{array}
+% $$
 
 Link Moments of Inertia
 
-$$
-\begin{array}{|c|r|}
-\hline I_{x x_{1}} & - \\
-I_{y y_{1}} & - \\
-I_{z z_{1}} & 0.350 \\
-\hline I_{x x_{2}} & 0.130 \\
-I_{y y_{2}} & 0.524 \\
-I_{z z_{2}} & 0.539 \\
-\hline I_{x x_{3}} & 66.0 \mathrm{e}-3 \\
-I_{y y_{3}} & 12.5 \mathrm{e}-3 \\
-I_{z z_{3}} & 86.0 \mathrm{e}-3 \\
-\hline I_{x x_{4}} & 1.80 \mathrm{e}-3 \\
-I_{y y_{4}} & 1.80 \mathrm{e}-3 \\
-I_{z z_{1}} & 1.30 \mathrm{e}-3 \\
-\hline I_{x x_{8}} & 300 \mathrm{e}-6 \\
-I_{y y_{5}} & 300 \mathrm{e}-6 \\
-I_{z z_{5}} & 400 \mathrm{e}-6 \\
-\hline I_{x x_{6}} & 150 \mathrm{e}-6 \\
-I_{y y_{6}} & 150 \mathrm{e}-6 \\
-I_{z z_{6}} & 40 \mathrm{e}-6 \\
-\hline
-\end{array}
-$$
+\begin{align*}
+  \begin{array}{|c|r|}
+  \hline I_{x x_{1}} & - \\
+  I_{y y_{1}} & - \\
+  I_{z z_{1}} & 0.350 \\
+  \hline I_{x x_{2}} & 0.130 \\
+  I_{y y_{2}} & 0.524 \\
+  I_{z z_{2}} & 0.539 \\
+  \hline I_{x x_{3}} & 66.0 \mathrm{e}-3 \\
+  I_{y y_{3}} & 12.5 \mathrm{e}-3 \\
+  I_{z z_{3}} & 86.0 \mathrm{e}-3 \\
+  \hline I_{x x_{4}} & 1.80 \mathrm{e}-3 \\
+  I_{y y_{4}} & 1.80 \mathrm{e}-3 \\
+  I_{z z_{1}} & 1.30 \mathrm{e}-3 \\
+  \hline I_{x x_{8}} & 300 \mathrm{e}-6 \\
+  I_{y y_{5}} & 300 \mathrm{e}-6 \\
+  I_{z z_{5}} & 400 \mathrm{e}-6 \\
+  \hline I_{x x_{6}} & 150 \mathrm{e}-6 \\
+  I_{y y_{6}} & 150 \mathrm{e}-6 \\
+  I_{z z_{6}} & 40 \mathrm{e}-6 \\
+  \hline
+  \end{array}
+  &&
+  \begin{array}{|l|r|}
+  \hline s_{x 1} & - \\
+  s_{y 1} & - \\
+  s_{z 1} & - \\
+  \hline s_{x 2} & 68 \\
+  s_{y 2} & 6 \\
+  s_{z 2} & -16 \\
+  \hline s_{x 3} & 0 \\
+  s_{y 3} & -70 \\
+  s_{z 3} & 14 \\
+  \hline s_{x 4} & 0 \\
+  s_{y 4} & 0 \\
+  s_{z 4} & -19 \\
+  \hline s_{x 5} & 0 \\
+  s_{y 5} & 0 \\
+  s_{z 5} & 0 \\
+  \hline s_{x 6} & 0 \\
+  s_{y 6} & 0 \\
+  s_{z 6} & 32 \\
+  \hline
+  \end{array}
+\end{align*}
+
+
+% $$
+% \begin{array}{|c|r|}
+% \hline I_{x x_{1}} & - \\
+% I_{y y_{1}} & - \\
+% I_{z z_{1}} & 0.350 \\
+% \hline I_{x x_{2}} & 0.130 \\
+% I_{y y_{2}} & 0.524 \\
+% I_{z z_{2}} & 0.539 \\
+% \hline I_{x x_{3}} & 66.0 \mathrm{e}-3 \\
+% I_{y y_{3}} & 12.5 \mathrm{e}-3 \\
+% I_{z z_{3}} & 86.0 \mathrm{e}-3 \\
+% \hline I_{x x_{4}} & 1.80 \mathrm{e}-3 \\
+% I_{y y_{4}} & 1.80 \mathrm{e}-3 \\
+% I_{z z_{1}} & 1.30 \mathrm{e}-3 \\
+% \hline I_{x x_{8}} & 300 \mathrm{e}-6 \\
+% I_{y y_{5}} & 300 \mathrm{e}-6 \\
+% I_{z z_{5}} & 400 \mathrm{e}-6 \\
+% \hline I_{x x_{6}} & 150 \mathrm{e}-6 \\
+% I_{y y_{6}} & 150 \mathrm{e}-6 \\
+% I_{z z_{6}} & 40 \mathrm{e}-6 \\
+% \hline
+% \end{array}
+% $$
 
 Frame {i} to Frame {i-CG} Vectors
 
-$$
-\begin{array}{|l|r|}
-\hline s_{x 1} & - \\
-s_{y 1} & - \\
-s_{z 1} & - \\
-\hline s_{x 2} & 68 \\
-s_{y 2} & 6 \\
-s_{z 2} & -16 \\
-\hline s_{x 3} & 0 \\
-s_{y 3} & -70 \\
-s_{z 3} & 14 \\
-\hline s_{x 4} & 0 \\
-s_{y 4} & 0 \\
-s_{z 4} & -19 \\
-\hline s_{x 5} & 0 \\
-s_{y 5} & 0 \\
-s_{z 5} & 0 \\
-\hline s_{x 6} & 0 \\
-s_{y 6} & 0 \\
-s_{z 6} & 32 \\
-\hline
-\end{array}
-$$
+% $$
+% \begin{array}{|l|r|}
+% \hline s_{x 1} & - \\
+% s_{y 1} & - \\
+% s_{z 1} & - \\
+% \hline s_{x 2} & 68 \\
+% s_{y 2} & 6 \\
+% s_{z 2} & -16 \\
+% \hline s_{x 3} & 0 \\
+% s_{y 3} & -70 \\
+% s_{z 3} & 14 \\
+% \hline s_{x 4} & 0 \\
+% s_{y 4} & 0 \\
+% s_{z 4} & -19 \\
+% \hline s_{x 5} & 0 \\
+% s_{y 5} & 0 \\
+% s_{z 5} & 0 \\
+% \hline s_{x 6} & 0 \\
+% s_{y 6} & 0 \\
+% s_{z 6} & 32 \\
+% \hline
+% \end{array}
+% $$
 
 
 
@@ -599,8 +669,62 @@ $$
 
 
 
+$$
+K=\frac{1}{2}\left(I_{z z 1} \omega_{1}^{2}+I_{z z 2} \omega_{2}^{2}+I_{z z 3} \omega_{3}^{2}+m_{2} v_{c 2}^{2}+m_{3} v_{c 3}^{2}\right)
+$$
+
+$$
+\approx\left(11+0.45 c_{2}^{2}\right) \dot{q}_{1}^{2}+0.83 \dot{q}_{2}^{2}+0.055 \dot{q}_{3}^{2}+\left(1.17+1.92 s_{2}\right) \dot{q}_{1} \dot{q}_{2}-0.3 c_{2+3} \dot{q}_{1} \dot{q}_{3}-0.29 \dot{q}_{3} \dot{q}_{2}
+$$
 
 
+
+$$
+U=-0.068 m_{2} g c_{2}+m_{3} g\left[-0.432 c_{2}+0.07 c\left(q_{2}+q_{3}\right)\right]
+$$
+
+
+$$
+=-31.9 c_{2}+3.3 c_{3} c_{2}-3.3 s_{2} s_{3}
+$$
+
+
+
+$$
+\frac{\partial L}{\partial \boldsymbol{q}}=\left[\begin{array}{c}
+0 \\
+-91.9 s_{2}+3.3 s_{2} c_{3}+3.3 c_{2} s_{3}-0.9 c_{2} s_{2} \dot{q}_{1}^{2}+1.92 c_{2} \dot{q}_{1} \dot{q}_{2}+0.3 s_{2+3} \dot{q}_{1} \dot{q}_{3} \\
+3.3 s_{3} c_{2}+3.3 s_{2} c_{3}+0.3 s_{2+3} \dot{q}_{1} \dot{q}_{3}
+\end{array}\right]
+$$
+
+
+$$
+\frac{\partial L}{\partial \dot{\boldsymbol{q}}}=\left[\begin{array}{c}
+\left(22+0.9 c_{2}^{2}\right) \dot{q}_{1}+\left(1.17+1.92 s_{2}\right) \dot{q}_{2}-0.3 c_{2+3} \dot{q}_{3} \\
+1.66 \dot{q}_{2}+\left(1.17+1.92 s_{2}\right) \dot{q}_{1}-0.29 \dot{q}_{3} \\
+0.11 \dot{q}_{3}-0.3 c_{2+3} \dot{q}_{1}-0.29 \dot{q}_{2}
+\end{array}\right]
+$$
+
+
+
+$$
+\frac{d}{d t} \frac{\partial L}{\partial \dot{\boldsymbol{q}}}
+=\left[\begin{array}{c}
+\left(22+0.9 c_{2}^{2}\right) \ddot{q}_{1}+\left(1.17+1.92 s_{2}\right) \ddot{q}_{2}-0.3 c_{2+3} \ddot{q}_{3}-1.8 c_{2} s_{2} \dot{q}_{1} \dot{q}_{2}+1.92 c_{2} \dot{q}_{2}^{2}+0.3 s_{2+3} \dot{q}_{2} \dot{q}_{3}+0.3 s_{2+3} \dot{q}_{3}^{2} \\
+1.66 \ddot{q}_{2}+\left(1.17+1.92 s_{2}\right) \ddot{q}_{1}-0.29 \ddot{q}_{3}+1.92 c_{2} \dot{q}_{1} \dot{q}_{2} \\
+0.11 \ddot{q}_{3}-0.3 c_{2+3} \ddot{q}_{1}-0.29 \ddot{q}_{2}+0.3 s_{2+3} \dot{q}_{1} \dot{q}_{2}+0.3 s_{2+3} \dot{q}_{1} \dot{q}_{3}
+\end{array}\right.
+$$
+
+$$
+\frac{d}{d t} \frac{\partial L}{\partial \dot{\boldsymbol{q}}}-\frac{\partial L}{\partial \boldsymbol{q}}=\left[\begin{array}{l}
+\tau_{1} \\
+\tau_{2} \\
+\tau_{3}
+\end{array}\right]
+$$
 
 \subsection*{Equations of Motion}
 
