@@ -1,0 +1,607 @@
+\section*{PUMA 560 Dynamics}
+
+In order to derive the dynamics of the PUMA 560, this project will use the Euler-Lagrange Equation. This method is more compatible with the use of symbolic math engines like SymPy or Matlab's Symbolic toolbox. By using the Lagrange equations, we can compute the forward dynamics of the system by computing the kinetic and potential energy of the system, computing the Lagrangian, and performing a series of symbolic differentiations.
+
+$$
+\frac{d}{d t}\left(\frac{\partial L}{\partial q_{i}}\right)-\frac{\partial L}{\partial q_{i}}=Q_{i}
+$$
+
+\noindent Where the Lagrangian is defined as the difference between the kinetic energy $T$ and the potential energy $V$ of the system, and where $Q_i$ is the generalized forces acting on the system.
+
+$$
+L = T-V
+$$
+
+\noindent By repeating this computation for each generalize coordinate $q_i$, we can derive the governing rigid body dynamics of the system.
+
+
+
+\subsection*{Required Transformations and Parameters}
+
+Before diving into the analysis, it is important to collect all of the parameters and transformations required to construct the expressions which will be used to derive the dynamics.
+
+DH Parameters
+$$
+\begin{array}{|r|r|r|}
+\hline \alpha_{i-1} & A_{i-1} & D_{i} \\
+\hline 0 & 0 & 0 \\
+-90 & 0 & 243.5 \\
+0 & 431.8 & -93.4 \\
+90 & -20.3 & 433.1 \\
+-90 & 0 & 0 \\
+90 & 0 & 0 \\
+\hline
+\end{array}
+$$
+
+Link Masses
+$$
+\begin{array}{|l|r|}
+\hline m_{1} & - \\
+m_{2} & 17.40 \\
+m_{3} & 4.80 \\
+m_{4} & 0.82 \\
+m_{5} & 0.35 \\
+m_{6} & 0.09 \\
+\hline
+\end{array}
+$$
+
+Link Moments of Inertia
+
+$$
+\begin{array}{|c|r|}
+\hline I_{x x_{1}} & - \\
+I_{y y_{1}} & - \\
+I_{z z_{1}} & 0.350 \\
+\hline I_{x x_{2}} & 0.130 \\
+I_{y y_{2}} & 0.524 \\
+I_{z z_{2}} & 0.539 \\
+\hline I_{x x_{3}} & 66.0 \mathrm{e}-3 \\
+I_{y y_{3}} & 12.5 \mathrm{e}-3 \\
+I_{z z_{3}} & 86.0 \mathrm{e}-3 \\
+\hline I_{x x_{4}} & 1.80 \mathrm{e}-3 \\
+I_{y y_{4}} & 1.80 \mathrm{e}-3 \\
+I_{z z_{1}} & 1.30 \mathrm{e}-3 \\
+\hline I_{x x_{8}} & 300 \mathrm{e}-6 \\
+I_{y y_{5}} & 300 \mathrm{e}-6 \\
+I_{z z_{5}} & 400 \mathrm{e}-6 \\
+\hline I_{x x_{6}} & 150 \mathrm{e}-6 \\
+I_{y y_{6}} & 150 \mathrm{e}-6 \\
+I_{z z_{6}} & 40 \mathrm{e}-6 \\
+\hline
+\end{array}
+$$
+
+Frame {i} to Frame {i-CG} Vectors
+
+$$
+\begin{array}{|l|r|}
+\hline s_{x 1} & - \\
+s_{y 1} & - \\
+s_{z 1} & - \\
+\hline s_{x 2} & 68 \\
+s_{y 2} & 6 \\
+s_{z 2} & -16 \\
+\hline s_{x 3} & 0 \\
+s_{y 3} & -70 \\
+s_{z 3} & 14 \\
+\hline s_{x 4} & 0 \\
+s_{y 4} & 0 \\
+s_{z 4} & -19 \\
+\hline s_{x 5} & 0 \\
+s_{y 5} & 0 \\
+s_{z 5} & 0 \\
+\hline s_{x 6} & 0 \\
+s_{y 6} & 0 \\
+s_{z 6} & 32 \\
+\hline
+\end{array}
+$$
+
+
+
+
+
+
+
+\subsection*{Computing Kinetic and Potential Energies}
+
+For the case of a chain of rigid bodies, we can compute the individual kinetic energy of each link to be ...
+$$
+k_{i}=\frac{1}{2} m_{i} v_{C_{i}}^{T} v_{C_{i}}+\frac{1}{2}^{i} \omega_{i}^{T} C_{i} I_{i}^{i} \omega_{i}
+$$
+
+\noindent From this expression we can see that the kinetic energy of each rigid body is a function of its linear and angular velocities. Furthermore, we can show that the total kinetic energy is merely the sum of the kinetic energy of each body as shown below.
+
+$$
+k=\sum_{i=1}^{n} k_{i}
+$$
+
+\noindent This provides a scalar expression for the total kinetic energy associated with the motion of the system of rigid bodies. Furthermore we can show that the potential energy of a rigid body is the work done by gravity on the body itself. In a similar fashion to the kinetic energy, we can show that the total potential energy is the sum of the individual potential energies of each rigid body in the system. This can be shown as ...
+
+$$
+u_{i}=-m_{i}^{0} g^{T}{ }^{0} P_{C_{i}}+u_{r e f_{i}}
+$$
+
+$$
+u=\sum_{i=1}^{n} u_{i}
+$$
+
+
+\noindent It should be noted that the only nonconstant terms that we need to define are the height vectors $P_i$ for the potential energy, the linear velocity of the center of mass $V_{C_{i}}$, and the angular velocities $\omega_i$. All of these quantities need to be computed with respect to the reference frame $\{ 0 \}$, before we can continue to deriving the equations of motion for the PUMA 560.
+
+\subsection*{Defining Velocities in Couple Frames of Motion}
+
+The task of determining the linear and angular velocities of each link of the robot is a non-trival task. Since our robot is constructed as chain of connected rigid bodies, each capable of independent motion and actuation, we can see that positions and velocities (aka kinematics) of the robot are coupled. This means that kinematic analysis must be very cautiuous to define and reference dependent motion of the robot.\\
+
+\noindent In order to rigorously define the motion of the robot, we can make use of DH parameters, homogeneous transforms to aid in garunteeing that the each component of the system is computed correct with respect to the reference frame. The reference frame of the system is $\{ 0 \}$. The next step is compute the non-zero velocities the primary 3-links in the PUMA 560. The following general equations are useful for converting between dependent motion of couple coordinate frames.
+
+
+
+$$
+{}^{i}\omega_{i+1}={ }^{i} \omega_{i}+{ }_{i+1}^{i} R \dot{\theta}_{i+1}{ }^{i+1} \hat{Z}_{i+1}
+$$
+
+
+$$
+{}^{i}v_{i+1}={ }^{i} v_{i}+{ }^{i} \omega_{i} \times{ }^{i} P_{i+1}
+$$
+
+
+
+\noindent Both of these equations express how we can translate the velocity as seen in one frame into the another frame which is presummed to also be in motion. By applying these general expressions, with respect to the reference frame $\{ 0\}$, we can compute the individual velocities of each link in the system.
+
+
+\subsubsection*{Coupled Linear Velocities}
+
+The linear velocities of the the system are arguably the most difficult terms in the kinetic energy to obtain since, in order to compute the velocity at the center of mass of each link, we must first compute the velocity of the coordinate system for each link. This effectively means that two seperate transformations must be computed for the velocity of the CG is determined. \\
+
+\noindent Inorder to compute the velocity to the origin of the joint frame (w.r.t. $\{ 0 \}$) we can use the following expression.
+
+$$
+{}^{0}V_{i+1} = {}^{0}V_{i} + {}^{0}\omega_{i} \times {}^{0}P_{i+1}
+$$
+
+\noindent Where ${}^{0}P_{i+1}$ is the position vector from the origin of the reference frame to the current of interest. This vector can itself be broken down further using frame transformations, such that...
+
+$$
+{}^{0}P_{i+1} = \left( {}^{0}_{i}R \right) \left({}^{i}P_{i+1}\right)
+$$
+
+\noindent This transformation enables us to leverage the geometry of the robot to determine the vector ${}^{i}P_{i+1}$, which can then be transformed into the correct frame of reference. \\
+
+\noindent Once the velocity of the joint frame is established, we can then compute the velocity of the center of mass of the link using
+
+$$
+{}^{0}V_{CG_{i}} = {}^{0}V_i + {}^{0}\omega_i \times r_i
+$$
+
+\noindent Where ${}^{0}V_i$ is the velocity (as seen from $\{ 0 \}$) of the i-th link, and where ${}^{0}\omega_i$ is the angular velocity (as seen from $\{ 0 \}$), and where the position vector $r_i$, is the vector from the origin of the i-th link frame to the center of gravity of the same link.
+
+
+
+\subsubsection*{Coupled Angular Velocities }
+
+Unlike linear velocities, angular velocities can be simply described from different coordinate frames by using the following expression.
+
+
+$$
+{}^{0}\omega_i = {}^{0}\omega_{i-1} + \dot{q}_{i} \left( {}^{0}_{i}R \right) \left( {}^{i}\hat{Z}_{i}\right)
+$$
+
+\noindent Where $\dot{q}_i$ is the magnitude of the angular velocity of the i-th joint, and where  ${}^{i}\hat{Z}_{i}$ is the unit vector in the z direction of the i-th joint, since by DH convention, this is the only axis allowed to rotate. By using this expression, we can describe the angular velocity of the i-th joint, in such a way that we can correctly relate the angular velocities of i-th and (i-1) frames, since the motion between these two frames is coupled, and must be accounted for under transformations.
+
+
+
+
+\subsection*{Computing Linear and Angular Velocities}
+
+
+\subsubsection*{Frame $\{ 0 \}$ Velocities}
+
+Since frame $\{ 0 \}$ is the reference frame of the robot, we know that both the linear and angular velocities must be zero, such that...
+
+$$
+{}^{0}V_{0} = \langle 0,0,0 \rangle
+$$
+
+$$
+{}^{0}\omega_{0} = \langle 0,0,0 \rangle
+$$
+
+
+\subsubsection*{Frame $\{ 1 \}$ Velocities}
+
+We know from DH parameters and PUMA 560 diagram that the origin frame $\{ 1 \}$ is coincident to the origin of frame $\{ 0 \}$; however, while the reference frame is stationary, frame $\{ 1 \}$ can rotate about the $\hat{Z}_1$ axis. By using the velocity transforms show above, we can show that...
+
+$$
+{}^{0}V_{1} = {}^{0}V_{0} + {}^{0}\omega_{0} \times {}^{0}P_{1}
+$$
+
+\noindent Since both the ${}^{0}\omega_{0} = {}^{0}P_{1} =0$, we know that ...
+
+
+$$
+{}^{0}V_{1} = 0
+$$
+
+$$
+{}^{0}\omega_1 = {}^{0}\omega_{0} + \dot{q}_{1} \left( {}^{0}_{1}R \right) \left( {}^{1}\hat{Z}_{1}\right)
+$$
+
+
+\noindent By plugging in the appropriate rotation matrix we get...
+
+$$
+{}^{0}\omega_1 = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}
+ + \dot{q}_{1} \left[\begin{array}{cccc} \cos\left(\theta _{1}\right) & -\sin\left(\theta _{1}\right) & 0 \\ \sin\left(\theta _{1}\right) & \cos\left(\theta _{1}\right) & 0 \\ 0 & 0 & 1 \end{array}\right] \left( {}^{1}\hat{Z}_{1}\right)
+$$
+
+
+\noindent Since $\hat{Z}_{1}$ is a unit vector in the $Z_1$ direction, we can reduce this to...
+
+$$
+{}^{0}\omega_1 = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}
+ + \dot{q}_{1} \left[\begin{array}{c} 0 \\  0 \\ 1 \end{array}\right]
+$$
+
+
+
+\noindent Therefore ...
+
+$$
+{}^{0}\omega_1 = \left[\begin{array}{c} 0 \\  0 \\ \dot{q}_{1} \end{array}\right]
+$$
+
+$$
+{}^{0}V_{1} = 0
+$$
+
+
+
+
+\subsubsection*{Frame $\{ 2 \}$ Velocities}
+
+From the previous section, we now know that, $ {}^{0}V_{1} = 0$ and that $ {}^{0}\omega_1 = \left[\begin{array}{c} 0 \\  0 \\ \dot{q}_{1} \end{array}\right]$, by applying the same transforms for the $i=2$ frame, we can show that...
+
+$$
+{}^{0}V_{2} = {}^{0}V_{1} + {}^{0}\omega_{1} \times {}^{0}P_{2}
+$$
+
+$$
+{}^{0}\omega_2 = {}^{0}\omega_{1} + \dot{q}_{2} \left( {}^{0}_{2}R \right) \left( {}^{2}\hat{Z}_{2}\right)
+$$
+
+
+
+\noindent Where ...
+
+$$
+{}^{0}P_{2} = {}^{0}_{1}R\left({}^{1}P_2\right) = \begin{bmatrix} c_1 &-s_1 & 0 \\ s_1 & c_1 & 0 \\ 0 & 0 & 1\end{bmatrix} \cdot \begin{bmatrix} 0 \\ .2435 \\ 0 \end{bmatrix}
+$$
+
+\noindent Therefore ...
+
+$$
+{}^{0}P_{2} = .2435 \begin{bmatrix} -s_1 \\ c_1 \\ 0
+\end{bmatrix}
+$$
+
+\noindent Where ${}^{1}P_2 = \begin{bmatrix} 0 \\ .2435 \\ 0 \end{bmatrix}$ is the position vector from frame $\{ 1 \}$ to frame $\{ 2 \}$. The numerical value of this vector is given by the DH parameters.
+
+
+
+
+$$
+{}^{0}V_{2} = {}^{0}V_{1} + {}^{0}\omega_{1} \times .2435 \begin{bmatrix} -s_1 \\ c_1 \\ 0
+\end{bmatrix}
+$$
+
+
+\noindent Given that ${}^{0}\omega_1 = \left[\begin{array}{c} 0 \\  0 \\ \dot{q}_{1} \end{array}\right]$
+
+
+$$
+{}^{0}V_{2} = 0 + \left[\begin{array}{c} 0 \\  0 \\ \dot{q}_{1} \end{array}\right] \times .2435 \begin{bmatrix} -s_1 \\ c_1 \\ 0
+\end{bmatrix}
+$$
+
+
+
+$$
+{}^{0}V_{2} = \left[\begin{array}{c} 0 \\  0 \\ \dot{q}_{1} \end{array}\right] \times .2435 \begin{bmatrix} -s_1 \\ c_1 \\ 0
+\end{bmatrix}
+$$
+
+\noindent By performing the Cross Product we will get the velocity.
+
+$$
+{}^{0}V_{2} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix}
+$$
+
+\noindent We can now turn our attention to the angular velocity of the second frame.
+
+$$
+{}^{0}\omega_2 = {}^{0}\omega_{1} + \dot{q}_{2} \left[\begin{array}{ccc}
+c_{1} c_{2} & -c_{1} s_{2} & -s_{1} \\
+s_{1} c_{2} & -s_{1} s_{2} & c_{1} \\
+-s_{2} & -c_{2} & 0
+\end{array}\right] \left( {}^{2}\hat{Z}_{2}\right)
+$$
+
+
+\noindent Since ${}^{2}\hat{Z}_2$ is a unit vector we can simplify the expression to....
+
+$$
+{}^{0}\omega_2 = {}^{0}\omega_{1} + \dot{q}_{2} \left[\begin{array}{c} -s_{1} \\ c_{1} \\ 0
+\end{array}\right]
+$$
+
+
+\noindent We know from the previous section that ${}^{0}\omega_1 = \left[\begin{array}{c} 0 \\  0 \\ \dot{q}_{1} \end{array}\right]$
+
+
+\noindent Therefore we can show that...
+
+
+
+$$
+{}^{0}\omega_2 = \left[\begin{array}{c} 0 \\  0 \\ \dot{q}_{1} \end{array}\right]+ \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ 0
+\end{array}\right]
+$$
+
+$$
+{}^{0}\omega_2 = \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+\end{array}\right]
+$$
+
+$$
+{}^{0}V_{2} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix}
+$$
+
+
+
+
+
+\subsubsection*{Frame $\{ 3 \}$ Velocities}
+
+
+$$
+{}^{0}V_{3} = {}^{0}V_{2} + {}^{0}\omega_{2} \times {}^{0}P_{3}
+$$
+
+$$
+{}^{0}\omega_3 = {}^{0}\omega_{2} + \dot{q}_{3} \left( {}^{0}_{3}R \right) \left( {}^{3}\hat{Z}_{3}\right)
+$$
+
+\noindent Since we know from the last section that ${}^{0}V_{2} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix}$,
+
+
+\noindent We know that
+$$
+{}^{0}P_3 = {}^{0}_{2}R \left( {}^{2}P_3\right)
+$$
+
+
+$$
+{}^{0}P_3 = \left[\begin{array}{ccc}
+c_{1} c_{2} & -c_{1} s_{2} & -s_{1} \\
+s_{1} c_{2} & -s_{1} s_{2} & c_{1} \\
+-s_{2} & -c_{2} & 0
+\end{array}\right] {}^{2}P_3
+$$
+
+
+
+\noindent Where ${}^{2}P_3 = \begin{bmatrix} .4318 \\ 0 \\ -.093 \end{bmatrix}$. The the values for this vector have been obtained by the DH parameters.
+
+
+
+$$
+{}^{0}P_3 = \left[\begin{array}{ccc}
+c_{1} c_{2+3} & -c_{1} s_{2+3} & -s_{1} \\
+s_{1} c_{2+3} & -s_{1} s_{2+3} & c_{1} \\
+-s_{2+3} & -c_{2+3} & 0
+\end{array}\right] \begin{bmatrix} .4318 \\ 0 \\ -.093 \end{bmatrix}
+$$
+
+
+
+\noindent Since we know that ${}^{0}\omega_2 = \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}\end{array}\right]$, and that ${}^{0}V_{2} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0 \end{bmatrix}$
+
+$$
+{}^{0}V_{3} = {}^{0}V_2 + {}^{0}\omega_2 \times {}^{0}P_{3}
+$$
+
+
+
+$$
+{}^{0}V_{3} = .2435\begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix} + \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+\end{array}\right] \times {}^{0}P_{3}
+$$
+
+
+
+
+$$
+{}^{0}V_{3} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix} + \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+\end{array}\right] \times \left[\begin{array}{ccc}
+c_{1} c_{2+3} & -c_{1} s_{2+3} & -s_{1} \\
+s_{1} c_{2+3} & -s_{1} s_{2+3} & c_{1} \\
+-s_{2+3} & -c_{2+3} & 0
+\end{array}\right] \begin{bmatrix} .4318 \\ 0 \\ -.093 \end{bmatrix}
+$$
+
+
+\noindent We know that ${}^{0}\omega_2 = \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+\end{array}\right]$.
+
+
+$$
+{}^{0}\omega_3 = {}^{0}\omega_{2} + \dot{q}_{3} \left( {}^{0}_{3}R \right) \left( {}^{3}\hat{Z}_{3}\right)
+$$
+
+
+$$
+{}^{0}\omega_3 = {}^{0}\omega_{2} + \dot{q}_{3} \left[\begin{array}{ccc}
+c_{1} c_{2+3} & -c_{1} s_{2+3} & -s_{1} \\
+s_{1} c_{2+3} & -s_{1} s_{2+3} & c_{1} \\
+-s_{2+3} & -c_{2+3} & 0
+\end{array}\right] \left( {}^{3}\hat{Z}_{3}\right)
+$$
+
+
+\noindent Where ${}^{3}\hat{Z}_{3}$ is a unit vector in the $Z$ direction for the third frame.
+
+
+
+$$
+{}^{0}\omega_3 = {}^{0}\omega_{2} + \dot{q}_{3} \left[\begin{array}{c}
+ -s_{1} \\ c_{1} \\ 0 \end{array}\right]
+$$
+
+
+
+$$
+{}^{0}\omega_3 = \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+\end{array}\right] + \dot{q}_{3} \left[\begin{array}{c}
+ -s_{1} \\ c_{1} \\ 0 \end{array}\right]
+$$
+
+
+$$
+{}^{0}\omega_3 = \begin{bmatrix}
+-(\dot{q}_2 + \dot{q}_3)s_1 \\
+(\dot{q}_2 + \dot{q}_3)c_1 \\
+\dot{q}_1
+\end{bmatrix}
+$$
+
+\subsection*{Velocities at Link CGs}
+
+As with the derivation of the linear velocities of the frame origins, we need to use the following expression to properly determine the velocity of the link at its center of gravity (CG).
+
+$$
+{}^{0}V_{C_{i}} = {}^{0}V_{i} + {}^{0}\omega_i \times r_i
+$$
+
+\noindent Where $r_i$ is the vector from the i-th frames origin to its CG. By applying this to every non-static link in the robot, we can compute the velocity of the CG as seen from frame $\{ 0 \}$.
+
+$$
+{}^{0}V_{0} = \langle 0,0,0 \rangle
+$$
+
+$$
+{}^{0}\omega_{0} = \langle 0,0,0 \rangle
+$$
+
+
+\subsubsection*{Frame $\{ 1 \}$ CG Velocity}
+
+Using the link CG vectors for the Puma 560 parameters determined by B. Armstrong, we can see that the effective  CG of the first link is either difficult to measure or insignificant to the point such that no vector from the origin of frame $\{ 1 \}$ to the CG of frame $\{ 1 \}$ is given. Therefore we can skip this term and assume that
+
+
+$$
+{}^{0}V_{C_1}=0
+$$
+
+
+\subsubsection*{Frame $\{ 2 \}$ CG Velocity}
+
+We know from the previous derivations of velocities that ...
+
+\begin{center}
+  \begin{align*}
+    {}^{0}\omega_2 = \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+    \end{array}\right]
+    &&
+    {}^{0}V_{2} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix}
+  \end{align*}
+\end{center}
+
+\noindent By plugging these terms into the expression below
+
+$$
+{}^{0}V_{C_{2}} = {}^{0}V_{2} + {}^{0}\omega_2 \times r_2
+$$
+
+
+\noindent Where $r_2 = \begin{bmatrix}
+0.068 \\ 0.006 \\ -0.016
+\end{bmatrix}
+$, is obtained from B. Armstrong.
+
+
+$$
+{}^{0}V_{C_{2}} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix} + \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+\end{array}\right] \times \begin{bmatrix}
+0.068 \\ 0.006 \\ -0.016
+\end{bmatrix}
+$$
+
+
+\subsubsection*{Frame $\{ 3 \}$ CG Velocity}
+
+We know from the previous derivations of velocities that ...
+
+$$
+{}^{0}V_{3} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix} + \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+\end{array}\right] \times \left[\begin{array}{ccc}
+c_{1} c_{2+3} & -c_{1} s_{2+3} & -s_{1} \\
+s_{1} c_{2+3} & -s_{1} s_{2+3} & c_{1} \\
+-s_{2+3} & -c_{2+3} & 0
+\end{array}\right] \begin{bmatrix} .4318 \\ 0 \\ -.093 \end{bmatrix}
+$$
+
+
+$$
+{}^{0}\omega_3 = \begin{bmatrix}
+-(\dot{q}_2 + \dot{q}_3)s_1 \\
+(\dot{q}_2 + \dot{q}_3)c_1 \\
+\dot{q}_1
+\end{bmatrix}
+$$
+
+
+\noindent By plugging these terms into the expression below
+
+$$
+{}^{0}V_{C_{3}} = {}^{0}V_{3} + {}^{0}\omega_3 \times r_3
+$$
+
+
+\noindent Where $r_3 = \begin{bmatrix}
+0 \\ -0.07 \\ 0.014
+\end{bmatrix}
+$, is obtained from B. Armstrong.
+
+
+$$
+{}^{0}V_{C_{2}} = .2435 \begin{bmatrix} -c_1\dot{q}_1 \\ -s_1\dot{q}_1 \\ 0\end{bmatrix} + \left[\begin{array}{c} -\dot{q}_{2}s_{1} \\ \dot{q}_{2}c_{1} \\ \dot{q}_{1}
+\end{array}\right] \times \left[\begin{array}{ccc}
+c_{1} c_{2+3} & -c_{1} s_{2+3} & -s_{1} \\
+s_{1} c_{2+3} & -s_{1} s_{2+3} & c_{1} \\
+-s_{2+3} & -c_{2+3} & 0
+\end{array}\right] \begin{bmatrix} .4318 \\ 0 \\ -.093 \end{bmatrix} + \begin{bmatrix}
+-(\dot{q}_2 + \dot{q}_3)s_1 \\
+(\dot{q}_2 + \dot{q}_3)c_1 \\
+\dot{q}_1
+\end{bmatrix} \times \begin{bmatrix}
+0 \\ -0.07 \\ 0.014
+\end{bmatrix}
+$$
+
+
+
+
+\subsection*{Derivation of Equations of Motion}
+
+
+
+
+
+
+\subsection*{Equations of Motion}
+
+\subsection*{Coding of Dynamics }

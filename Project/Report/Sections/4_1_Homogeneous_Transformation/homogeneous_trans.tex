@@ -84,3 +84,45 @@ $$
 
 
 \noindent By using the universal, DH paramterization with homogeneous transformation we can now describe the relationships to or from any joint of the robot to any other joint of the robot. This is a powerful concept which facilitates the analysis of any robot whose joints are based on revolute or prismatic members.
+
+
+\subsection*{DH Transforms for PUMA 560 }
+
+By using DH transformations, we can extract the rotation matrices for each frame of the link with respect to $\{ 0 \}$. We can use these rotation matrics later when deriving the kinematics of the robot. After computing these rotation matrices by applying the DH transformations, we get...
+
+
+\subsubsection*{Frame 0-1 Transformation}
+
+This transform expresses vectors from the frame $\{ 1 \}$ as components of the reference frame $\{ 0 \}$.
+
+$$
+{}^{0}_{1}R = \left[\begin{array}{cccc} \cos\left(\theta _{1}\right) & -\sin\left(\theta _{1}\right) & 0 \\ \sin\left(\theta _{1}\right) & \cos\left(\theta _{1}\right) & 0 \\ 0 & 0 & 1 \end{array}\right]
+$$
+
+\subsubsection*{Frame 0-2 Transformation}
+
+This transform expresses vectors from the frame $\{ 2 \}$ as components of the reference frame $\{ 0 \}$.
+
+$$
+{ }_{2}^{0} R=\left[\begin{array}{ccc}
+c_{1} c_{2} & -c_{1} s_{2} & -s_{1} \\
+s_{1} c_{2} & -s_{1} s_{2} & c_{1} \\
+-s_{2} & -c_{2} & 0
+\end{array}\right]
+$$
+
+
+\subsubsection*{Frame 0-3 Transformation}
+
+This transform expresses vectors from the frame $\{ 3 \}$ as components of the reference frame $\{ 0 \}$.
+
+$$
+{ }_{3}^{0} R=\left[\begin{array}{ccc}
+c_{1} c_{2+3} & -c_{1} s_{2+3} & -s_{1} \\
+s_{1} c_{2+3} & -s_{1} s_{2+3} & c_{1} \\
+-s_{2+3} & -c_{2+3} & 0
+\end{array}\right]
+$$
+
+
+\noindent These equations will be handy later when change of coordinates is required to compute velocities of each link.

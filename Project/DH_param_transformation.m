@@ -14,7 +14,31 @@ syms a0 a1 a2 alpha0 alpha1 alpha2 d1 d2 d3 theta1 theta2 theta3
 
 %% Derivation 
 
-R_01 =  T_h(alpha, a, d, theta)
+% R_01 =  T_h(0, 0, 0, theta1);
+% R_12 =  T_h(-90, 0, .2435, theta2);
+% 
+% R_23 =  T_h(0, .4318, -.0934, theta3);
+% 
+% 
+% R_02 = R_01*R_12
+% R_03 = R_01*R_12*R_23; 
+
+
+R_01 =  T_Rz(theta1);
+R_12 =  T_Rx(-pi/2)*T_Rz(theta2);
+
+R_23 =  T_Rz(theta3);
+
+
+R_02 = R_01*R_12;
+R_03 = R_01*R_12*R_23; 
+
+
+vpa(R_02,4)
+
+
+
+
 
 
 %%
@@ -48,7 +72,7 @@ end
 function output = T_Rx(theta)
 
 R_x = [ 1 0 0 ;
-        0 cos(theta) -sin(theta) 0; 
+        0 cos(theta) -sin(theta); 
        0 sin(theta) cos(theta) ]; 
        
     output = [R_x [0;0;0]; 
