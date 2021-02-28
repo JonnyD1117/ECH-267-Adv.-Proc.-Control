@@ -1,0 +1,57 @@
+\section*{Denavit-Hartenberg Parameters}
+
+The Denavit-Hartenberg (DH) parameters are an important tool in analyzing the geometry of any given robot as well as in the formulation of joint transformations which enable a concise and universal means of deriving important quanties for kinematic and dynamic analysis of the robot.
+
+\subsection*{Purpose and Appliction of DH Parameters}
+
+The purpose of DH parameters is to standardize the description of geometry of robots into a universal parameterization such that arbitary construction of different robots can all be described concisely in a single and intuitive notation. \\
+
+\noindent The DH Parameters are defined to be...
+$$
+\begin{array}{l}
+a_{i}=\text { the distance from } \hat{Z}_{i} \text { to } \hat{Z}_{i+1} \text { measured along } \hat{X}_{i} \\
+\alpha_{i}=\text { the angle from } \hat{Z}_{i} \text { to } \hat{Z}_{i+1} \text { measured about } \hat{X}_{i} \\
+d_{i}=\text { the distance from } \hat{X}_{i-1} \text { to } \hat{X}_{i} \text { measured along } \hat{Z}_{i} ; \text { and } \\
+\theta_{i}=\text { the angle from } \hat{X}_{i-1} \text { to } \hat{X}_{i} \text { measured about } \hat{Z}_{i}
+\end{array}
+$$
+
+\noindent Where $\alpha_i$ is the angle of twist between axis of actuation from one link to the next, $a_i$ is the offset distance measured along the $x$ axis required to locate the frame of the next link, $d_i$ is the distance along the axis of actuation from which is required to locate the frame of the next linbk, and finally, $\theta_i$ is the angle about the axis of actuation required to locate the frame of the next link. \\
+
+\noindent It is important to note that these parameters need not be constant and are allowed to be degrees of freedom of the system such that the robot can change its geometry. Often only one of these parameters will be variable while the other three remain constants. This occurs due to the constraints acting on each joint frame, of the robot.
+
+\subsection*{Rules for Obtaining DH Parameterization}
+While DH Parameterization is by no means the only parameterization possible, its universal use and acceptance in the robotics community means that one is more likely to see it in the literature. However there are rules which this parameterization requires in order to be conistent and valid. These are...
+
+
+\begin{enumerate}
+  \item Identify the joint axes and imagine (or draw) infinite lines along them. For steps 2 through 5 below, consider two of these neighboring lines (at axes $i$ and $i+1)$
+  \item Identify the common perpendicular between them, or point of intersection. At the point of intersection, or at the point where the common perpendicular meets the $i$ th axis, assign the link-frame origin.
+  \item Assign the $\hat{Z}_{i}$ axis pointing along the $i$ th joint axis.
+  \item Assign the $\hat{X}_{i}$ axis pointing along the common perpendicular, or, if the axes intersect, assign $\hat{X}_{i}$ to be normal to the plane containing the two axes.
+  \item Assign the $\hat{Y}_{i}$ axis to complete a right-hand coordinate system.
+  \item Assign \{0\} to match \{1\} when the first joint variable is zero. For $\{N\},$ choose an origin location and $\hat{X}_{N}$ direction freely, but generally so as to cause as many linkage parameters as possible to become zero.
+\end{enumerate}
+
+
+
+\subsection*{PUMA 560 Robot DH Parameter}
+
+For the PUMA 560 robot being used in this project, we can show that the DH parameters are shown as follows. Note that the angles $\theta_i$ are not included as they are degree of freedom that we can control arbitarily. This is because the system contains only 3 revolute joints of actuation and not prismatic members.
+
+\begin{center}
+$$
+  \begin{array}{|r|r|r|}
+  \hline \alpha_{i-1} & A_{i-1} & D_{i} \\
+  \hline 0 & 0 & 0 \\
+  -90 & 0 & 243.5 \\
+  0 & 431.8 & -93.4 \\
+  90 & -20.3 & 433.1 \\
+  -90 & 0 & 0 \\
+  90 & 0 & 0 \\
+  \hline
+  \end{array}
+$$
+\end{center}
+
+\noindent These parameter values have previously been determined by \underline{B. Armstrong}, by using the prescribed rules and the geometry of the PUMA 560 robot.

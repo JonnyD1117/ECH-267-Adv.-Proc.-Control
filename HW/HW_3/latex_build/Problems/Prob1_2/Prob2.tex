@@ -1,0 +1,53 @@
+\section*{Problem 1.2}
+
+
+The first task is to check whether the \textbf{\underline{unforced}} system is stable.
+
+$$
+\dot{x} = -(1)x^3 - x^5
+$$
+
+\noindent Where $V(x) = .5x^2$, such that $\dot{V} = x\dot{x}$. By plugging in the state equation we get...
+
+$$
+\dot{V}(x) = -x^4 - x^6
+$$
+
+\noindent Obviously, the candidate function is positive definite and radially unbounded while the Lyapunov function is negative definite. Therefore the \underline{unforced} system is \textbf{Globally Asymptotically Stable}.
+
+\noindent Now we can look at the forced behavior of the system given by
+
+
+$$
+\dot{x} = -(1+u)x^3 - x^5
+$$
+
+\noindent Where $V(x) = .5x^2$, such that $\dot{V} = x\dot{x}$. By plugging in the state equation we get...
+
+$$
+\dot{V}(x) = x(-(1+u)x^3 - x^5)
+$$
+
+$$
+\dot{V}(x) = -(1+u)x^4 -x^6
+$$
+
+\noindent Which expands to...
+
+$$
+\dot{V}(x) = -x^4 -ux^4 -x^6
+$$
+
+\noindent Using this expression we want to show that the conditions under which we can find the bounds of the inputs such that the system is asymptotically stable. To show this we want to show that $\dot{V}(x)$ will remain negative definite. We can determine the conditions this will occur if we upper bound the Lyapunov function by$-x^4$ and determine the bounds on the input such that the inequality holds.
+
+$$
+\dot{V}(x) = -(1 + u)x^4 -x^6 \leq 0
+$$
+
+\noindent It is clear from this expression that the system will only be negative definite ( hence G.A.S.) if the term $-(1+u)x^4$ never becomes zero or positive. This is achieved when...
+
+$$
+u> -1
+$$
+
+\noindent As long as this bound on the input is obeyed, the forced system is stable we can show from this result by Theorem 4.19 that the system is actually \textbf{ISS}.

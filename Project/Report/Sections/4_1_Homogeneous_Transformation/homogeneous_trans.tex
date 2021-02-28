@@ -1,0 +1,86 @@
+\section*{Homogeneous Transform}
+
+The homogeneous transformation is a construct in robotics which enables both the rototation and position of any vector within a given coordinate frame to be viewed with respect to another frame. This construction provides a compact matrix notation for changing coordinate frames of reference during computation.
+
+
+\subsection*{Rotation Matrices}
+
+Before discussing more general transformation, it is important to understand how one can translate between coordinate frames. To accomplish this task we use \underline{rotation matrices}. \\
+
+\noindent As mentioned previously, a rotation matrix is a transformation which rotates a vector described in one coordinate sytem into components of another coordinate system. These are extremely useful for rigid body dynamics in general but they are required for the study of robotics as the number and orientation of joint reference frames becomes too cumbersum to derive geometrically for each frame of the system.\\
+
+\noindent From the following definitions of rotations about the $x$, $y$, and $z$ axis of 3D coordinate system, can chain together the rotations necessary for a system of coordinate frames such that we can describe any single frame from any other frame mrely by multiplying the seperate rotations together, as desired.
+
+\begin{center}
+  $$
+  \mathbf{R}_{x}(\theta)=\left(\begin{array}{ccc}
+  1 & 0 & 0 \\
+  0 & \cos \theta & -\sin \theta \\
+  0 & \sin \theta & \cos \theta
+  \end{array}\right)
+  $$
+
+
+  $$
+  \mathbf{R}_{y}(\theta)=\left(\begin{array}{ccc}
+  \cos \theta & 0 & \sin \theta \\
+  0 & 1 & 0 \\
+  -\sin \theta & 0 & \cos \theta
+  \end{array}\right)
+  $$
+
+  $$
+\mathbf{R}_{z}(\theta)=\left(\begin{array}{ccc}
+\cos \theta & -\sin \theta & 0 \\
+\sin \theta & \cos \theta & 0 \\
+0 & 0 & 1
+\end{array}\right)
+$$
+\end{center}
+
+
+
+\subsection*{General Homogeneous Transformation Definition}
+
+The general homogeneous transformation is equivalent to performing the following operation.
+
+$$
+{ }^{A} P={ }_{B}^{A} R^{B} P+{ }^{A} P_{B O R G}
+$$
+
+\noindent However, in order to create a general matrix transformation from this vector expression we can form the following matrix by the addition of the second equation such that $1 = 1$. While this is a trivial operation, this enables us to use the matrix as a general transform on position vector, given only the rotation matrix from one frame to another and the position vector from the origin of the given frame as viewed from the other.
+
+$$
+\left[\begin{array}{c}
+{}^{A}P \\
+1
+\end{array}\right]=\left[\begin{array}{ccc|c}
+{} & {}^{A}_{B}R & & {}^{A}P_{B org} \\
+\hline 0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{c}
+{}^{B}P \\
+1
+\end{array}\right]
+$$
+
+\noindent This expression can be written as shown below, in a very abreviated and compact form, while clearly conveying the operation being done by this generation transformation.
+
+$$
+P={ }_{B}^{A} T^{B} P
+$$
+
+\noindent This form is known as the \underline{homogeneous transform}.
+
+\subsection*{DH Parameter Based Transformations}
+
+Since the DH Parameters provide a universal notation for describing the the position and orientation of a robot, it is natural to want to express the homogeneous transformation of each coordinate frame using this parameterization. In fact, we can chain a series of these transformation together, based on the DH table previously shown will will allow us to utilize the general nature of the homogeneous transformation and account for all of the twist, offsets, and linear and angular discplacements required to view a joint frame from another (usually the reference frame). \\
+
+\noindent For a single transformation from a frame $\{ i\}$ to frame $\{ i-1 \}$, we can use the homogeneous transformation for explicit rotations about a joint axis or specific translations along a joint axis as dictated by the DH parameters.The matrices $R$ and $D$ represent the homogeneous transformation for rotation and translations repsectively, with the subscript of each providing the axis upon which the operation should be performed.
+
+
+$$
+{ }_{i}^{i-1} T=R_{X}\left(\alpha_{i-1}\right) D_{X}\left(a_{i-1}\right) R_{Z}\left(\theta_{i}\right) D_{Z}\left(d_{i}\right)
+$$
+
+
+\noindent By using the universal, DH paramterization with homogeneous transformation we can now describe the relationships to or from any joint of the robot to any other joint of the robot. This is a powerful concept which facilitates the analysis of any robot whose joints are based on revolute or prismatic members.

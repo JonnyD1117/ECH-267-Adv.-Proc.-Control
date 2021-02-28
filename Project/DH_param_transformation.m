@@ -2,7 +2,22 @@
 clear all 
 clc
 
+
+%%
+
+
+
 syms a0 a1 a2 alpha0 alpha1 alpha2 d1 d2 d3 theta1 theta2 theta3 
+
+
+
+
+%% Derivation 
+
+R_01 =  T_h(alpha, a, d, theta)
+
+
+%%
 
 
 T1 = T_h(alpha0, a0, d1, theta1); 
@@ -32,9 +47,9 @@ end
 
 function output = T_Rx(theta)
 
-R_x = [cos(theta) -sin(theta) 0; 
-       sin(theta) cos(theta) 0; 
-           0          0      1 ]; 
+R_x = [ 1 0 0 ;
+        0 cos(theta) -sin(theta) 0; 
+       0 sin(theta) cos(theta) ]; 
        
     output = [R_x [0;0;0]; 
               [0 0 0] 1];  

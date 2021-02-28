@@ -1,0 +1,20 @@
+\section*{Problem 2.2}
+
+
+
+The first task is to check whether the \textbf{\underline{unforced}} system is stable.
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=-x_{1}+x_{2} \\
+\dot{x}_{2}=-x_{1}^{3}-x_{2}+u
+\end{array}
+$$
+
+\noindent Where $V(x) = .5x^2$, such that $\dot{V} = x\dot{x}$. By plugging in the state equation we get...
+
+$$
+\dot{V}(x) = -x_1^2 + x_1x_2 - x_1^3x_2 -x_2^2
+$$
+
+\noindent Clearly, the candidate function the system is \underline{\textbf{not globally stable}}, about the origin, since we can find a value $x_1$ and $x_2$ such that previous equations results in zero for non-zero values of $x$. This means that the Lyapunov function is only Negative Semi-definite, at best. Since ISS implies global asymptotically stability, we obviously can conclude, that since the unforced system is not G.A.S that the system is not ISS.
