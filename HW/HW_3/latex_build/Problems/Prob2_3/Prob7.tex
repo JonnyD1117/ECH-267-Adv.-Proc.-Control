@@ -1,1 +1,50 @@
 \section*{Problem 2.3}
+
+
+The first task is to check whether the \textbf{\underline{unforced}} system is stable.
+
+
+$$
+\begin{array}{l}
+\dot{x}_{1}=\left(x_{1}-x_{2}+u\right)\left(x_{1}^{2}-1\right) \\
+\dot{x}_{2}=\left(x_{1}+x_{2}+u\right)\left(x_{1}^{2}-1\right)
+\end{array}
+$$
+
+
+\noindent Assuming...
+
+$$
+V=\frac{1}{2}\|x\|_{2}^{2}
+$$
+
+
+
+\noindent We can show that ...
+
+$$
+\dot{V}=x_{1}\left[\left(x_{1}-x_{2}\right)\left(x_{1}^{2}-1\right)\right]+x_{2}\left[\left(x_{1}+x_{2}\right)\left(x_{1}^{2}-1\right)\right] \leqslant 0
+$$
+
+\noindent Which reduces to..
+$$
+\left(x_{1}^{2}+x_{2}^{2}\right)\left(x_{1}^{2}-1\right) \leq 0
+$$
+
+$$
+x_{1}^{4}-x_{1}^{2}+x^{2} x_{2}^{2}-x_{2}^{2} \leq 0
+$$
+
+\noindent It is clear that this Lyapunov function is not stable at the origin; however, before we can state state this system is no globally stable, we need to show a stonger condition of instability since, lack of existence of stable Lyapunov function does not infer instability. To address this we can use La Salle's Theorem, and evaluate $\dot{V}(x)=0$ and see if the only solution that can stay identically at the origin IS the origin.
+
+
+$$
+x_{1}^{4}-x_{1}^{2}+x^{2} x_{2}^{2}-x_{2}^{2} = 0
+$$
+
+$$
+x_{1}^{4}+x^{2} x_{2}^{2} = x_{1}^{2} + x_{2}^{2}
+$$
+
+
+\noindent By using corollary 4.2, we can show that the previous equation is valid for the origin; however, it is also valid for the case where $x_1=x_2=1$. According to this corollary, we can state that since there exists a non-trivial solution to $\dot{V}(x)=0$, the system is \textbf{NOT} \underline{locally or globally asymptotically stable}.  Under this conclusion, we can immediate state that the system is \textbf{not ISS} (locally or globally), since ISS infers at least uniform asymptotic stability about the origin.  

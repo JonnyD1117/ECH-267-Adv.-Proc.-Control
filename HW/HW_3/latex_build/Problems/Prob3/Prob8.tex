@@ -1,1 +1,29 @@
 \section*{Problem 3}
+
+
+$$
+\begin{array}{l}
+\dot{\eta}=f_{0}(\eta, \xi) \\
+\dot{\xi}=A \xi+B u
+\end{array}
+$$
+
+
+Where $\eta \in \mathbb{R}^{n-\tau}, \xi \in \mathbb{R}^{r}$ for some $1 \leq r<n,(A, B)$ is controllable, and the system $\eta=f_{0}(\eta, \xi)$ with $\xi$ viewed as the input, is (globally) input-to-state stable. Find a state feedback control $u=\gamma(\eta, \xi)$ that stabilizes the origin of the full system.\\
+
+\subsection*{Solution:}
+
+\noindent In order to solve this problem, we need to analyze this casaded system and each of its component systems such that under control input $u = \gamma(\eta, \xi)$, the origin of the combined system is stablilized. \\
+
+\noindent Since we are given that the first state equation is Globally IIS, we can use Lemma 4.7 to investigate the requirements for the other state equation such that the combined system is garunteed to be stable. Under this lemma if we can show that, $\dot{\xi}$ is globally uniformly asymptotically stable, then we can show this property. \\
+
+\noindent However, since $\dot{\xi}=A \xi+B u$ is (assumed) to be a linear system and is given as controllable, we can show that it must globally exponentially stable if and only if the closed loop system has negative eigenvalues. Since G.U.E.S. is a stronger condition than G.U.A.S., we can state that so long as the control input to the second state is garunteed to produce a \underline{stable} closed-loop system, that the second state equation must be G.U.E.S. and therefore satisfies the condition for Lemma 4.7, for the casaded system. \\
+
+\noindent This means that if we choose a control input $u = -K\xi$..
+
+
+$$
+\dot{\xi}= (A -BK)\xi
+$$
+
+\noindent So long as the clossed-loop system $(A -BK) $ is \underline{Hurwitz}, we can show that the origin of the system is stabilized.
