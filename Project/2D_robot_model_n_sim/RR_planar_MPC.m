@@ -15,8 +15,8 @@ p.L1 = .25;
 p.L2 = .25; 
 p.g = 9.81;
 
-N = 35;
-T = .1;
+N = 15;
+T = .2;
 
 % Control Input Saturation Limits
 tau_1_max = 10; % N*m
@@ -50,7 +50,7 @@ obj = 0; % Initialize the Objective Func. to zero
 g = [] ; % Initialize the Constraints as Empty 
 
 % Define Loss function Weights on the States and Control Inputs
-Q = zeros(4,4); Q(1,1)=5; Q(2,2) =4 ;Q(3,3) =2 ;Q(4,4) =2 ; % Weighting matrices (states)
+Q = zeros(4,4); Q(1,1)=10; Q(2,2) =10 ;Q(3,3) =4 ;Q(4,4) =4 ; % Weighting matrices (states)
 R = .25*eye(2,2); % Weighting matrices (controls)
 %
 st = X(:,1); 
@@ -117,7 +117,7 @@ args.ubx(4*(N+1)+1:2: 4*(N+1) + 2*N,1) = tau_2_max;   % Input Upper Bound TAU2
 % SIMULATION LOOP 
 t0 = 0; 
 x0 = [deg2rad(25); deg2rad(45); 0;0] ;
-x_ref = [0;deg2rad(65); 0; 0] ;
+x_ref = [deg2rad(180);deg2rad(-45); 0; 0] ;
 
 x_list(:,1) = x0; 
 t(1) = t0; 
@@ -191,7 +191,7 @@ disp("DONE");
 
 
 figure(3)
-for i=1:1:100
+for i=1:1:(sim_time/T)
     
     
     theta = x_list(1:2,i); 
@@ -206,9 +206,47 @@ for i=1:1:100
 end 
 
 
+%% End Effector Trajectory 
+
+x1_traj = []; 
+y1_traj = [];
+
+x2_traj = []; 
+y2_traj = [];
+
+
+for i=1:1:100
+    
+    
+    theta = x_list(1:2,i); 
+    theta_dot = x_list(3:4,i); 
+    pos = forward_kinematics(p,theta, theta_dot);
+    
+    x_vec = pos.x;
+    y_vec = pos.y;
+    
+    
+    x1_traj = [x1_traj,x_vec(1)];
+    y1_traj = [y1_traj,y_vec(1)];
+    
+    x2_traj = [x2_traj,x_vec(2)];
+    y2_traj = [y2_traj,y_vec(2)];
+
+    
+   
+end 
+
+figure(4)
+hold on
+plot(x1_traj, y1_traj, 'b')
+plot(x2_traj, y2_traj,'r')
+title("Joint Trajectories")
+xlabel("X-Axis")
+ylabel("Y-Axis")
+legend(["Joint 1"," Joint 2"])
+
+
 %%
-
-
 
 function [t0, x0, u0] = shift(T, t0, x0, u, f)
 
