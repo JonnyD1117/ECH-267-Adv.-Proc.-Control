@@ -50,23 +50,45 @@ obj = 0; % Initialize the Objective Func. to zero
 g = [] ; % Initialize the Constraints as Empty 
 
 % Define Loss function Weights on the States and Control Inputs
-Q = zeros(4,4); Q(1,1)=10; Q(2,2) =10 ;Q(3,3) =4 ;Q(4,4) =4 ; % Weighting matrices (states)
-R = .25*eye(2,2); % Weighting matrices (controls)
-%
+Q = zeros(4,4); Q(1,1)=20; Q(2,2) =20 ;Q(3,3) =4 ;Q(4,4) =4 ; % Weighting matrices (states)
+R = .125*eye(2,2); % Weighting matrices (controls)
+Term_cost = zeros(4,4); Term_cost(1,1)=10; Term_cost(2,2) =10 ;Term_cost(3,3) =1 ;Term_cost(4,4) =1 ; % Weighting matrices (states)
+
 st = X(:,1); 
 g = [g; (st-P(1:4))]; % Initial Constraint via Defined Initial Condition
+
 
 
 % Compute Objective function from Stage Cost 
 for k=1:N
     % Symbolically Computes Graph for the objective function
     st = X(:,k); con = U(:,k); ref = P(5:8); 
+  
+%     if k < N
+%             obj = obj + (st - ref)'*Q*(st - ref) + con'*R*con; % Construct Symbolic representation of objective function at time step "K"   
+% 
+%     elseif k ==N 
+%             obj = obj + (st - ref)'*Term_cost*(st - ref) ; % Construct Symbolic representation of objective function at time step "K"   
+% 
+%     end 
+
     obj = obj + (st - ref)'*Q*(st - ref) + con'*R*con; % Construct Symbolic representation of objective function at time step "K"   
+  
     st_next = X(:,(k+1));
     f_value = f(st,con); 
     st_next_euler = st + (T*f_value); 
-    g = [g; st_next-st_next_euler];
+    
+    if k < N 
+      g = [g; st_next-st_next_euler];
+    elseif k == N 
+      g = [g; st_next-st_next_euler; st_next_euler - ref];
+
+    end 
+    
+    
+%     g = [g; st_next-st_next_euler];
 end 
+
 
 
 
@@ -89,9 +111,17 @@ solver = nlpsol('solver','ipopt', nlp_prob, opts);
 % Define Problem Arguments 
 args = struct;
 
-% Inequality Constraints, for Entire Trajectory over Horizon
+% Equality Constraints, for Entire Trajectory over Horizon
+% args.lbg(1:4*(N+1)) = 0; 
+% args.ubg(1:4*(N+1)) = 0; 
+
 args.lbg(1:4*(N+1)) = 0; 
 args.ubg(1:4*(N+1)) = 0; 
+
+args.lbg(4*(N+1):4*(N+1)+4) = 0; 
+args.ubg(4*(N+1):4*(N+1)+4) = 0; 
+
+
 
 %Combined State & Input Constraints (due to multishooting formulation)  
 args.lbx(1:4:4*(N+1),1) = -inf; % THETA1 Lower Bound
