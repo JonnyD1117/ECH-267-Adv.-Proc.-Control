@@ -15,7 +15,7 @@ p.L1 = .25;
 p.L2 = .25; 
 p.g = 9.81;
 
-N = 15;
+N = 5;
 T = .2;
 
 % Control Input Saturation Limits
@@ -50,7 +50,7 @@ obj = 0; % Initialize the Objective Func. to zero
 g = [] ; % Initialize the Constraints as Empty 
 
 % Define Loss function Weights on the States and Control Inputs
-Q = zeros(4,4); Q(1,1)=20; Q(2,2) =20 ;Q(3,3) =4 ;Q(4,4) =4 ; % Weighting matrices (states)
+Q = zeros(4,4); Q(1,1)=10; Q(2,2) =10 ;Q(3,3) =4 ;Q(4,4) =4 ; % Weighting matrices (states)
 R = .125*eye(2,2); % Weighting matrices (controls)
 Term_cost = zeros(4,4); Term_cost(1,1)=10; Term_cost(2,2) =10 ;Term_cost(3,3) =1 ;Term_cost(4,4) =1 ; % Weighting matrices (states)
 
@@ -63,14 +63,6 @@ g = [g; (st-P(1:4))]; % Initial Constraint via Defined Initial Condition
 for k=1:N
     % Symbolically Computes Graph for the objective function
     st = X(:,k); con = U(:,k); ref = P(5:8); 
-  
-%     if k < N
-%             obj = obj + (st - ref)'*Q*(st - ref) + con'*R*con; % Construct Symbolic representation of objective function at time step "K"   
-% 
-%     elseif k ==N 
-%             obj = obj + (st - ref)'*Term_cost*(st - ref) ; % Construct Symbolic representation of objective function at time step "K"   
-% 
-%     end 
 
     obj = obj + (st - ref)'*Q*(st - ref) + con'*R*con; % Construct Symbolic representation of objective function at time step "K"   
   
@@ -80,16 +72,17 @@ for k=1:N
     
     if k < N 
       g = [g; st_next-st_next_euler];
+      
     elseif k == N 
-      g = [g; st_next-st_next_euler; st_next_euler - ref];
+      g = [g; st_next-st_next_euler; st_next - ref];
 
     end 
     
     
-%     g = [g; st_next-st_next_euler];
 end 
 
 
+obj = obj + (st_next - ref)'*Term_cost*(st_next - ref); % Construct Symbolic representation of objective function at time step "K"   
 
 
 % Define Nonlinear Programming Structure 
@@ -102,7 +95,7 @@ opts = struct;
 opts.ipopt.max_iter =200; 
 opts.ipopt.print_level=0; % 0 - 3
 opts.print_time  = 0 ; 
-opts.ipopt.acceptable_tol = 1e-8; 
+opts.ipopt.acceptable_tol = 1e-6; 
 opts.ipopt.acceptable_obj_change_tol = 1e-6; 
 
 % Enstantiate nlpsol class using ipopt 
@@ -147,7 +140,7 @@ args.ubx(4*(N+1)+1:2: 4*(N+1) + 2*N,1) = tau_2_max;   % Input Upper Bound TAU2
 % SIMULATION LOOP 
 t0 = 0; 
 x0 = [deg2rad(25); deg2rad(45); 0;0] ;
-x_ref = [deg2rad(180);deg2rad(-45); 0; 0] ;
+x_ref = [pi;-pi/4; 0; 0] ;
 
 x_list(:,1) = x0; 
 t(1) = t0; 
@@ -234,6 +227,9 @@ for i=1:1:(sim_time/T)
     plot_robot(x_vec, y_vec);
     pause(.1)
 end 
+
+disp(rad2deg(x_list(1,end)))
+close all
 
 
 %% End Effector Trajectory 

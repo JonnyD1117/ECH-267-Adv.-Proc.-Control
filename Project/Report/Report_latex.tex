@@ -1,0 +1,248 @@
+\documentclass[journal]{IEEEtran}
+
+\usepackage{biblatex}
+\addbibresource{citations.bib}
+
+% \hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Nonlinear MPC for Robotic Arm Path Planning \\ ECH-267 Final Project Report}
+
+
+\author{Jonathan~Dorsey}
+
+
+
+% The paper headers
+\markboth{Journal of Graduate Schooling Assignments, March~2021}%
+{Dorsey \MakeLowercase{\textit{et al.}}: Nonlinear MPC for Robotic Arm Path Planning ECH-267 Final Project Report}
+
+% make the title area
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+\begin{abstract}
+  The objective of this project is to implement simulated optimal \underline{Path Planner} using Model Predictive Control (MPC) to plan and control the behavior of a 3 degree of freedom (3DOF) robotic arm. The responsibility of the MPC planner will be to generate the `optimal' path and to drive the arm from its current position to the next. The main challenges faced in completing this project consist of solving for the \textbf{nonlinear equations of motion} (as well as any required forward/inverse kinematics) of the robotic arm as well as formulating and solving the \textbf{MPC controller}, at each timestep, both control and planning using the CasADi optimization framework, to test the scenario of simulated real-time performance.
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+Model Predictive Control, Robot Arm, Lagrange Equations, Path Planning, Obsticle Avoidance, .
+\end{IEEEkeywords}
+
+
+
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Introduction}
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps.
+%
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+%
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by the IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+%
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+%
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+\IEEEPARstart{T}{his} objective of this paper is to design, program, and test the use of MPC for near real-time path planning and control, for robotic arm. In the world of robotics, many constraints are placed upon a robotic system, such as metrics of performance, physical construction and limitation of the hardware, it performance, and soft constraints such as safety around unexpeted obsticles such as humans, other robots, or miscellaneous obsticles. While the subjects of model predictive control (MPC) and robotic manipulators (for both design and control), there is exists a lack of targeted literature covering the question about how MPC and robotics can be used in the domain of real-time path planning. It has long be known that MPC is viable controller with many flavors and versions for different applications; however, in practice MPC only sees limited use due to the computational lag resulting from using numerical optimization as the basis for feedback control. To this end, MPC might be too slow for use in the control of a system, but if the optimal trajectory can be estimated using MPC, other controllers might be better suited for the task of tracking the optimal path which the MPC controller is able to generate. Since this path is only updated as needed, the speed of the MPC solution is no longer a significant obsticle since we can effectively offload the task of controller to a less computationally expensive methodology.
+
+
+\subsection{Subsection Heading Here}
+Subsection text here.
+
+% needed in second column of first page if using \IEEEpubid
+%\IEEEpubidadjcol
+
+\subsubsection{Subsubsection Heading Here}
+Subsubsection text here.
+
+
+\section{Background}
+
+Some background information
+\section{Literature Review}
+Literature review goes here
+
+\subsection{Model Predictive Control}
+
+\subsection{Path Planning}
+
+\subsection{Robotics}
+
+\subsubsection{Equations of Motion}
+
+\subsubsection{Denavit-Hartenberg Paramters}
+
+\subsubsection{Forward Kinematics}
+
+
+
+\section{MPC Formulation}
+
+Describe MPC formulation
+
+\section{Path Planner}
+
+How to use MPC as a Path Planner
+
+\section{Dynamic Model}
+
+Derive or explain the dynamics model
+
+\subsection{Nonlinear Model}
+
+\subsection{Linearized Model}
+
+\section{Tracking Controllers}
+
+ \subsection{PID Control}
+
+ \subsection{LQR}
+
+ \subsection{MPC}
+
+ \subsection{H \infity}
+
+ \subsection{Feedback Linerization}
+
+ \section{Results}
+
+Results go here
+
+\section{Discussion}
+
+Dicussion and points of note.
+
+
+\section{Conclusion}
+The conclusion goes here.
+
+
+
+
+
+% if have a single appendix:
+%\appendix[Proof of the Zonklar Equations]
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to start each appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+%
+
+
+\appendices
+\section{Proof of the First Zonklar Equation}
+Appendix one text goes here.
+
+% you can choose not to have a title for an appendix
+% if you want by leaving the argument blank
+\section{}
+Appendix two text goes here.
+
+
+% use section* for acknowledgment
+\section*{Acknowledgment}
+
+
+The authors would like to thank Mountain Dew and his matress for constant support and comfort.
+
+
+% Can use something like this to put references on a page
+% by themselves when using endfloat and the captionsoff option.
+\ifCLASSOPTIONcaptionsoff
+  \newpage
+\fi
+
+
+% Let's cite! The Einstein's journal paper \cite{einstein} and the Dirac's
+% book \cite{dirac} are physics related items. \cite{knuth-fa}
+%
+% \printbibliography
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+
+% \begin{thebibliography}{1}
+%
+% \bibitem{IEEEhowto:kopka}
+% H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+%   0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+%
+%       \bibitem{}  J. B. Rawlings, M. M. Diehl, and D. Q. Mayne, Model predictive control: theory, computation and design. Madison: Nob Hill, 2017.
+%
+%       \bibitem{} B. Armstrong, O. Khatib and J. Burdick, "The explicit dynamic model and inertial parameters of the PUMA 560 arm," Proceedings. 1986 IEEE International Conference on Robotics and Automation, San Francisco, CA, USA, 1986, pp. 510-518, doi: 10.1109/ROBOT.1986.1087644.
+%
+% \end{thebibliography}
+\cite{craig_introduction_2005}
+\cite{khalil_nonlinear_2002}
+\cite{rawlings_model_2017}
+\cite{armstrong_explicit_1986}
+\cite{ogata_modern_2010}
+\cite{meriam_engineering_1993}
+\cite{greenwood_advanced_2006}
+\cite{borrelli_predictive_2017}
+\cite{boyd_convex_2004}
+\cite{slotine_applied_1991}
+
+\printbibliography
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{Jonathan Dorsey}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% that's all folks
+\end{document}

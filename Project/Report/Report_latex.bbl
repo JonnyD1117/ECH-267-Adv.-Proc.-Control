@@ -1,0 +1,406 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{armstrong_explicit_1986}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=b3443bdd013d620422c6283ea8c720ed}{%
+           family={Armstrong},
+           familyi={A\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+        {{hash=0a9bcb07c557a30beb3c13b8fab1ad99}{%
+           family={Khatib},
+           familyi={K\bibinitperiod},
+           given={O.},
+           giveni={O\bibinitperiod}}}%
+        {{hash=2847c37d7d3ed99f3fbe25bebacca6f6}{%
+           family={Burdick},
+           familyi={B\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {San Francisco, CA, USA}%
+      }
+      \list{publisher}{2}{%
+        {Institute of Electrical}%
+        {Electronics Engineers}%
+      }
+      \strng{namehash}{e2694275adaa6b39dbbc804aacb1169d}
+      \strng{fullhash}{e2694275adaa6b39dbbc804aacb1169d}
+      \strng{bibnamehash}{e2694275adaa6b39dbbc804aacb1169d}
+      \strng{authorbibnamehash}{e2694275adaa6b39dbbc804aacb1169d}
+      \strng{authornamehash}{e2694275adaa6b39dbbc804aacb1169d}
+      \strng{authorfullhash}{e2694275adaa6b39dbbc804aacb1169d}
+      \field{sortinit}{A}
+      \field{sortinithash}{a3dcedd53b04d1adfd5ac303ecd5e6fa}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings. 1986 {IEEE} {International} {Conference} on {Robotics} and {Automation}}
+      \field{title}{The explicit dynamic model and inertial parameters of the {PUMA} 560 arm}
+      \field{urlday}{5}
+      \field{urlmonth}{3}
+      \field{urlyear}{2021}
+      \field{volume}{3}
+      \field{year}{1986}
+      \field{urldateera}{ce}
+      \field{pages}{510\bibrangedash 518}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1109/ROBOT.1986.1087644
+      \endverb
+      \verb{urlraw}
+      \verb http://ieeexplore.ieee.org/document/1087644/
+      \endverb
+      \verb{url}
+      \verb http://ieeexplore.ieee.org/document/1087644/
+      \endverb
+    \endentry
+    \entry{borrelli_predictive_2017}{book}{}
+      \name{author}{3}{}{%
+        {{hash=23f97b926e58810b9d3d65d50516ca6e}{%
+           family={Borrelli},
+           familyi={B\bibinitperiod},
+           given={Francesco},
+           giveni={F\bibinitperiod}}}%
+        {{hash=08cd00186045f5193f38f238d6caee47}{%
+           family={Bemporad},
+           familyi={B\bibinitperiod},
+           given={Alberto},
+           giveni={A\bibinitperiod}}}%
+        {{hash=b2bb39eb75a828fec1d25d655c9d7372}{%
+           family={Morari},
+           familyi={M\bibinitperiod},
+           given={Manfred},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {English}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{8bf770e149c642df939c0c1052ac1e31}
+      \strng{fullhash}{8bf770e149c642df939c0c1052ac1e31}
+      \strng{bibnamehash}{8bf770e149c642df939c0c1052ac1e31}
+      \strng{authorbibnamehash}{8bf770e149c642df939c0c1052ac1e31}
+      \strng{authornamehash}{8bf770e149c642df939c0c1052ac1e31}
+      \strng{authorfullhash}{8bf770e149c642df939c0c1052ac1e31}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Model Predictive Control (MPC), the dominant advanced control approach in industry over the past twenty-five years, is presented comprehensively in this unique book. With a simple, unified approach, and with attention to real-time implementation, it covers predictive control theory including the stability, feasibility, and robustness of MPC controllers. The theory of explicit MPC, where the nonlinear optimal feedback controller can be calculated efficiently, is presented in the context of linear systems with linear constraints, switched linear systems, and, more generally, linear hybrid systems. Drawing upon years of practical experience and using numerous examples and illustrative applications, the authors discuss the techniques required to design predictive control laws, including algorithms for polyhedral manipulations, mathematical and multiparametric programming and how to validate the theoretical properties and to implement predictive control policies. The most important algorithms feature in an accompanying free online MATLAB toolbox, which allows easy access to sample solutions. Predictive Control for Linear and Hybrid Systems is an ideal reference for graduate, postgraduat.}
+      \field{isbn}{9781139061759}
+      \field{note}{OCLC: 999637552}
+      \field{title}{Predictive {Control} for {Linear} and {Hybrid} {Systems}.}
+      \field{urlday}{5}
+      \field{urlmonth}{3}
+      \field{urlyear}{2021}
+      \field{year}{2017}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://public.ebookcentral.proquest.com/choice/publicfullrecord.aspx?p=4913401
+      \endverb
+      \verb{url}
+      \verb https://public.ebookcentral.proquest.com/choice/publicfullrecord.aspx?p=4913401
+      \endverb
+    \endentry
+    \entry{boyd_convex_2004}{book}{}
+      \name{author}{2}{}{%
+        {{hash=5cd9791a43b8812be4e3f9d64521947a}{%
+           family={Boyd},
+           familyi={B\bibinitperiod},
+           given={Stephen\bibnamedelima P.},
+           giveni={S\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=2608d599a0bc2a784c301329a8da5f7b}{%
+           family={Vandenberghe},
+           familyi={V\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge, UK ; New York}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{51b5c5e76e19784bb7c212d8d9235828}
+      \strng{fullhash}{51b5c5e76e19784bb7c212d8d9235828}
+      \strng{bibnamehash}{51b5c5e76e19784bb7c212d8d9235828}
+      \strng{authorbibnamehash}{51b5c5e76e19784bb7c212d8d9235828}
+      \strng{authornamehash}{51b5c5e76e19784bb7c212d8d9235828}
+      \strng{authorfullhash}{51b5c5e76e19784bb7c212d8d9235828}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9780521833783}
+      \field{title}{Convex optimization}
+      \field{year}{2004}
+      \keyw{Mathematical optimization,Convex functions}
+    \endentry
+    \entry{craig_introduction_2005}{book}{}
+      \name{author}{1}{}{%
+        {{hash=57c29b307f6e70b7216c8c696af16b58}{%
+           family={Craig},
+           familyi={C\bibinitperiod},
+           given={John\bibnamedelima J.},
+           giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {eng}%
+      }
+      \list{location}{1}{%
+        {Upper Saddle River, NJ}%
+      }
+      \list{publisher}{1}{%
+        {Pearson, Prentice Hall}%
+      }
+      \strng{namehash}{57c29b307f6e70b7216c8c696af16b58}
+      \strng{fullhash}{57c29b307f6e70b7216c8c696af16b58}
+      \strng{bibnamehash}{57c29b307f6e70b7216c8c696af16b58}
+      \strng{authorbibnamehash}{57c29b307f6e70b7216c8c696af16b58}
+      \strng{authornamehash}{57c29b307f6e70b7216c8c696af16b58}
+      \strng{authorfullhash}{57c29b307f6e70b7216c8c696af16b58}
+      \field{sortinit}{C}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{edition}{3. ed., international ed}
+      \field{isbn}{9780131236295}
+      \field{note}{OCLC: 249488662}
+      \field{series}{Pearson education international}
+      \field{shorttitle}{Introduction to robotics}
+      \field{title}{Introduction to robotics: mechanics and control}
+      \field{year}{2005}
+    \endentry
+    \entry{greenwood_advanced_2006}{book}{}
+      \name{author}{1}{}{%
+        {{hash=add4c3e1dbea31342b4c7b9da620b9d1}{%
+           family={Greenwood},
+           familyi={G\bibinitperiod},
+           given={Donald\bibnamedelima T.},
+           giveni={D\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge ; New York}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{fullhash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{bibnamehash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{authorbibnamehash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{authornamehash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \strng{authorfullhash}{add4c3e1dbea31342b4c7b9da620b9d1}
+      \field{sortinit}{G}
+      \field{sortinithash}{62eb2aa29549e4fdbd3cb154ec5711cb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{Digitally printed 1st pbk. version}
+      \field{isbn}{9780521029933 9780521826129}
+      \field{title}{Advanced dynamics}
+      \field{year}{2006}
+      \keyw{Dynamics}
+    \endentry
+    \entry{khalil_nonlinear_2002}{book}{}
+      \name{author}{1}{}{%
+        {{hash=c687708249e29c8fa3d8d0c0ff1612f9}{%
+           family={Khalil},
+           familyi={K\bibinitperiod},
+           given={Hassan\bibnamedelima K.},
+           giveni={H\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Upper Saddle River, N.J}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{c687708249e29c8fa3d8d0c0ff1612f9}
+      \strng{fullhash}{c687708249e29c8fa3d8d0c0ff1612f9}
+      \strng{bibnamehash}{c687708249e29c8fa3d8d0c0ff1612f9}
+      \strng{authorbibnamehash}{c687708249e29c8fa3d8d0c0ff1612f9}
+      \strng{authornamehash}{c687708249e29c8fa3d8d0c0ff1612f9}
+      \strng{authorfullhash}{c687708249e29c8fa3d8d0c0ff1612f9}
+      \field{sortinit}{K}
+      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{3rd ed}
+      \field{isbn}{9780130673893}
+      \field{title}{Nonlinear systems}
+      \field{year}{2002}
+      \keyw{Nonlinear theories}
+    \endentry
+    \entry{meriam_engineering_1993}{book}{}
+      \name{author}{2}{}{%
+        {{hash=ee68b112a3e131c8752630072bb2a595}{%
+           family={Meriam},
+           familyi={M\bibinitperiod},
+           given={J.\bibnamedelimi L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=bf6b733ca619aaee2bc85ae0d13bfad2}{%
+           family={Kraige},
+           familyi={K\bibinitperiod},
+           given={L.\bibnamedelimi G.},
+           giveni={L\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{1659ee2f6d6852124e9dae171614a32d}
+      \strng{fullhash}{1659ee2f6d6852124e9dae171614a32d}
+      \strng{bibnamehash}{1659ee2f6d6852124e9dae171614a32d}
+      \strng{authorbibnamehash}{1659ee2f6d6852124e9dae171614a32d}
+      \strng{authornamehash}{1659ee2f6d6852124e9dae171614a32d}
+      \strng{authorfullhash}{1659ee2f6d6852124e9dae171614a32d}
+      \field{sortinit}{M}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{3rd ed}
+      \field{isbn}{9780471592723 9780471592730}
+      \field{title}{Engineering mechanics}
+      \field{year}{1993}
+      \keyw{Mechanics,Applied}
+    \endentry
+    \entry{ogata_modern_2010}{book}{}
+      \name{author}{1}{}{%
+        {{hash=72cb1e667ce543119df1b777c0db24de}{%
+           family={Ogata},
+           familyi={O\bibinitperiod},
+           given={Katsuhiko},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Boston}%
+      }
+      \list{publisher}{1}{%
+        {Prentice-Hall}%
+      }
+      \strng{namehash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{fullhash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{bibnamehash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{authorbibnamehash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{authornamehash}{72cb1e667ce543119df1b777c0db24de}
+      \strng{authorfullhash}{72cb1e667ce543119df1b777c0db24de}
+      \field{sortinit}{O}
+      \field{sortinithash}{ff8d4eeb5101e3cf3809959b3592d942}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{5th ed}
+      \field{isbn}{9780136156734}
+      \field{series}{Prentice-{Hall} electrical engineering series. {Instrumentation} and controls series}
+      \field{title}{Modern control engineering}
+      \field{year}{2010}
+      \keyw{Automatic control,Control theory}
+    \endentry
+    \entry{rawlings_model_2017}{book}{}
+      \name{author}{3}{}{%
+        {{hash=a28ab6b1da316879310a82410e4e8dc4}{%
+           family={Rawlings},
+           familyi={R\bibinitperiod},
+           given={James\bibnamedelima B.},
+           giveni={J\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=6c38c35a89eea5106453dfc184f884e7}{%
+           family={Mayne},
+           familyi={M\bibinitperiod},
+           given={David\bibnamedelima Q.},
+           giveni={D\bibinitperiod\bibinitdelim Q\bibinitperiod}}}%
+        {{hash=5ebda09826c79d41f09f9d3c6cf85ce9}{%
+           family={Diehl},
+           familyi={D\bibinitperiod},
+           given={Moritz\bibnamedelima M.},
+           giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {eng}%
+      }
+      \list{location}{1}{%
+        {Madison, Wisconsin}%
+      }
+      \list{publisher}{1}{%
+        {Nob Hill Publishing}%
+      }
+      \strng{namehash}{d66551b47d480483dfb21f2de51ff12f}
+      \strng{fullhash}{d66551b47d480483dfb21f2de51ff12f}
+      \strng{bibnamehash}{d66551b47d480483dfb21f2de51ff12f}
+      \strng{authorbibnamehash}{d66551b47d480483dfb21f2de51ff12f}
+      \strng{authornamehash}{d66551b47d480483dfb21f2de51ff12f}
+      \strng{authorfullhash}{d66551b47d480483dfb21f2de51ff12f}
+      \field{sortinit}{R}
+      \field{sortinithash}{b9c68a358aea118dfa887b6e902414a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{edition}{2nd edition}
+      \field{isbn}{9780975937730}
+      \field{note}{OCLC: 1020170256}
+      \field{shorttitle}{Model predictive control}
+      \field{title}{Model predictive control: theory, computation, and design}
+      \field{year}{2017}
+    \endentry
+    \entry{slotine_applied_1991}{book}{}
+      \name{author}{2}{}{%
+        {{hash=ca625b2dc2c9110cbe11f1a4f82f8d56}{%
+           family={Slotine},
+           familyi={S\bibinitperiod},
+           given={J.-J.\bibnamedelimi E.},
+           giveni={J\bibinithyphendelim J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=56a2cc9043bd27ea8b4615a383f2b778}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Weiping},
+           giveni={W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Englewood Cliffs, N.J}%
+      }
+      \list{publisher}{1}{%
+        {Prentice Hall}%
+      }
+      \strng{namehash}{466346ef27d54efebe359a40730a87d6}
+      \strng{fullhash}{466346ef27d54efebe359a40730a87d6}
+      \strng{bibnamehash}{466346ef27d54efebe359a40730a87d6}
+      \strng{authorbibnamehash}{466346ef27d54efebe359a40730a87d6}
+      \strng{authornamehash}{466346ef27d54efebe359a40730a87d6}
+      \strng{authorfullhash}{466346ef27d54efebe359a40730a87d6}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9780130408907}
+      \field{title}{Applied nonlinear control}
+      \field{year}{1991}
+      \keyw{Nonlinear control theory}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
