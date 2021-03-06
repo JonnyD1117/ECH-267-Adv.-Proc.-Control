@@ -15,8 +15,8 @@ p.L1 = .25;
 p.L2 = .25; 
 p.g = 9.81;
 
-N = 5;
-T = .2;
+N = 15;
+T = .1;
 
 % Control Input Saturation Limits
 tau_1_max = 10; % N*m
@@ -57,6 +57,10 @@ Term_cost = zeros(4,4); Term_cost(1,1)=10; Term_cost(2,2) =10 ;Term_cost(3,3) =1
 st = X(:,1); 
 g = [g; (st-P(1:4))]; % Initial Constraint via Defined Initial Condition
 
+% con_ref = [0;0];
+con_ref = Tau_Ref(P(5:6), p);
+
+
 
 
 % Compute Objective function from Stage Cost 
@@ -64,7 +68,7 @@ for k=1:N
     % Symbolically Computes Graph for the objective function
     st = X(:,k); con = U(:,k); ref = P(5:8); 
 
-    obj = obj + (st - ref)'*Q*(st - ref) + con'*R*con; % Construct Symbolic representation of objective function at time step "K"   
+    obj = obj + (st - ref)'*Q*(st - ref) + (con- con_ref)'*R*(con-con_ref); % Construct Symbolic representation of objective function at time step "K"   
   
     st_next = X(:,(k+1));
     f_value = f(st,con); 
@@ -74,11 +78,10 @@ for k=1:N
       g = [g; st_next-st_next_euler];
       
     elseif k == N 
+      
       g = [g; st_next-st_next_euler; st_next - ref];
 
     end 
-    
-    
 end 
 
 
@@ -214,7 +217,7 @@ disp("DONE");
 
 
 figure(3)
-for i=1:1:(sim_time/T)
+for i=2:1:length(x_list)
     
     
     theta = x_list(1:2,i); 
@@ -229,7 +232,7 @@ for i=1:1:(sim_time/T)
 end 
 
 disp(rad2deg(x_list(1,end)))
-close all
+% close all
 
 
 %% End Effector Trajectory 
@@ -241,7 +244,7 @@ x2_traj = [];
 y2_traj = [];
 
 
-for i=1:1:100
+for i=1:1:length(x_list)
     
     
     theta = x_list(1:2,i); 
@@ -370,8 +373,6 @@ end
 
 
 
-
-
 function q1_ddot = RobotModel_q1_ddot(p, q1, q2, q1_dot, q2_dot,tau1, tau2)
 
 tau = [tau1;tau2] ;
@@ -430,6 +431,25 @@ f = [q1_dot*.25;q2_dot*.25];
  q_ddot = m\(tau - v -g - f); 
  
  q2_ddot = q_ddot(2);
+
+
+end 
+
+
+function out = Tau_Ref(theta, p)
+
+q1 = theta(1);
+q2 = theta(2);
+
+
+m1 = p.m1; 
+m2 = p.m2; 
+L1 = p.L1; 
+L2 = p.L2; 
+g = p.g; 
+
+out = [(m1 + m2)*L1*g*cos(q1)+ m2*g*L2*cos(q1+ q2); ...
+     m2*g*L2*cos(q1+q2)];
 
 
 end 
