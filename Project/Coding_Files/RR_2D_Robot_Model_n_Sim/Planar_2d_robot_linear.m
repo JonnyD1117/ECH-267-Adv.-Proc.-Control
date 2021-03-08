@@ -1,6 +1,5 @@
 
 clear all 
-
 close all 
 p = struct ;
 
