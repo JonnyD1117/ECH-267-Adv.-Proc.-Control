@@ -21,9 +21,24 @@ t2 = zeros(1,150);
 % tau = [ [t1;t2] ,zeros(2,200)];
 tau = [0;0];
 
+syms q1 q2 q1_dot q2_dot Tau1 Tau2
+
+q0 = [q1; q2];
+q0_dot = [q1_dot; q2_dot];
+
+in = [Tau1; Tau2];
+
+% q0_ddot = Planar2D_Robot(p,q0, q0_dot, [0;0]);
+q0_ddot = Planar2D_Robot(p,q0, q0_dot, in);
+
+one = vpa(simplify(q0_ddot(1)),4); 
+two = vpa(simplify(q0_ddot(2)),4); 
+latex(one)
+latex(two)
 
 
-q0_ddot = Planar2D_Robot(p,q0, q0_dot, [0;0]);
+%%
+
 
 for i=2:1:350
     figure(1);
@@ -123,6 +138,8 @@ g = [(m1 + m2)*L1*g*cos(theta(1))+ m2*g*L2*cos(theta(1)+ theta(2)); ...
 f = [theta_dot(1)*.25;theta_dot(2)*.25];
  
  q_ddot = m\(tau - v -g - f); 
+
+
 
 
 end 

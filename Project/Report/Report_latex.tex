@@ -75,7 +75,7 @@ In general robots typically possess prismatic (linear) or revolute (rotational) 
 
 \includegraphics[scale=.5]{./images/puma}
 
-For this project, the size and complexity even the 3 DOF  dynamics required to control the first three links of the PUMA 560 are too extensive to be derived or used in any practical fashion. As this is the case, the simplier case for the planar two link robot will be used as the test platform for this project. 
+For this project, the size and complexity even the 3 DOF  dynamics required to control the first three links of the PUMA 560 are too extensive to be derived or used in any practical fashion. As this is the case, the simplier case for the planar two link robot will be used as the test platform for this project.
 
 In general,
 \subsection{Trajectory vs Path Generation}
@@ -306,10 +306,90 @@ In general, the serially articulated robots with revolute joints will produce eq
 
 In this formulation, $M$ is the mass matrix which models the effects of mass and moments of inertia which are related to the angular accelerations of the joints. The $V$ vector models the centrifugal and Coriolis forces which are typically functions of velocities, while the $G$ vector models the effects of gravity. Finally, the $F$ vector is added to explictly include the effects of friction/damping.
 
+\begin{equation}
+\begin{aligned}
+M(\theta)=\left[\begin{array}{ll}
+ m_{11} & m_{12}  \\
+ m_{21} & m_{22} \end{array}\right]
+\end{aligned}
+\end{equation}
+
+Where
+
+\begin{equation*}
+\begin{aligned}
+  m_{11} & = m_{1} L_{1}^{2}+m_{2}\left(L_{1}^{2}+2 L_{1} L_{2} \cos \left(\theta_{1}\right)+L_{2}^{2}\right) + \varepsilon \\
+  m_{12} & = m_{2}\left(L_{1} L_{2} \cos \left(\theta_{2}\right)+L_{2}^{2}\right) \\
+  m_{21} & = m_{2}\left(L_{1} L_{2} \cos \left(\theta_{2}\right)+L_{2}^{2}\right)\\
+  m_{22} & = m_{2} L_{2}^{2}+\varepsilon
+\end{aligned}
+\end{equation*}
 
 
 
-\subsection{Linearized Model}
+\begin{equation}
+V(\theta, \dot{\theta})=\left[\begin{array}{c}
+-m_{2} L_{1} L_{2} \sin \left(\theta_{2}\right)\left(2 \dot{\theta}_{1} \dot{\theta}_{2}+\dot{\theta}_{2}^{2}\right) \\
+m_{2} L_{1} L_{2} \dot{\theta}_{1}^{2} \sin \left(\theta_{2}\right)
+\end{array}\right]
+\end{equation}
+
+
+\begin{equation}
+G(\theta)=\left[\begin{array}{c}
+\left(m_{1}+m_{2}\right) L_{1} g \cos \left(\theta_{1}\right)+m_{2} g_{2} \cos \left(\theta_{1}+\theta_{2}\right) \\
+m_{2} g L_{2} \cos \left(\theta_{1}+\theta_{2}\right)
+\end{array}\right]
+\end{equation}
+
+
+\begin{equation}
+F(\dot{\theta})=\left[\begin{array}{c}
+c_{f} \cdot \dot{\theta}_{1} \\
+c_{f} \cdot \dot{\theta}_{2}
+\end{array}\right]
+\end{equation}
+
+
+It should be noted for simulation purposes, the equations of motion need to express $\tau$ as the input to the robot and the angular accelerations $\ddot{\Theta}$ as the outputs.
+
+\begin{equation}
+\ddot{\theta}=\operatorname{inv}(M)[\tau-V-G-F]
+\end{equation}
+
+However, expressing the governing equations in this form result in numerical instabilties during simulation which arise from inverting the mass matrix $M(\Theta)$. Since the mass matrix is function if the angular positions $\Theta$, certain angular positions will cause the mass matrix to near a singularity, when inverted, at which the numerical values explode until they become \textbf{INF} or \textbf{NAN}. To avoid this, the value of $varepsilon$ can be added to the diagonal terms of $M$ to garuntee that the system will never become singular, during inversion.
+
+
+With equation (EQN NUMBER), we can now write the equivalent nonlinear state space for the system. By defining the states such that, $x_{1}=\theta_{1}$, $x_{2}=\theta_{2}$, $x_{3}=\dot{\theta}_{1}$, and $x_{4}=\dot{\theta}_{2}$, we can
+
+
+\begin{equation}
+\begin{array}{l}
+\dot{x}_{1}=f_{1}(x, \dot{x}, u) \\
+\dot{x}_{2}=f_{2}(x, \dot{x}, u) \\
+\dot{x}_{3}=f_{3}(x, \dot{x}, u) \\
+\dot{x}_{4}=f_{4}(x, \dot{x}, u)
+\end{array}
+\end{equation}
+
+
+Such that
+
+
+\begin{equation}
+\begin{array}{l}
+\dot{x}_{1}=x_{3} \\
+\dot{x}_{2}=x_{4} \\
+\dot{x}_{3}=\ddot{\theta}_{1} \\
+\dot{x}_{4}=\ddot{\theta}_{2}
+\end{array}
+\end{equation}
+
+
+
+Linearizing the system required computing the Jacobian of the nonlinear state space, and evaluating the resulting matrix at specified equilibrium points, such that around a small neighborhood the system will behavior linearly.
+
+
 
 \section{Tracking Controllers}
 
