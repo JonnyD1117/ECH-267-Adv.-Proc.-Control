@@ -1,5 +1,5 @@
-clear all 
-
+% clear all 
+clearvars -except x_list
 % close all 
 
 
@@ -81,9 +81,184 @@ f = [q1_dot*.25;q2_dot*.25];
       d_f4_du1,d_f4_du2];
   
   C = eye(4);
+%% PID Controller 
+
+x0 = [0,0,0,0];         % Equilibrium Point
+states_sym = [q1, q2, q1_dot, q2_dot]; % State Symbols
+params_sym = [L1, L2, m1, m2, g_val];  % Parameter Symbols
+params_val = [.25,.25, .5, .25, 9.84];
 
 
-%% Full-State Feedback Regulator
+A_mat = vpa(subs(A, [states_sym, params_sym],[x0, params_val]),4);
+B_mat = vpa(subs(B, [states_sym, params_sym],[x0, params_val]),4);
+A_mat = double(A_mat);
+B_mat = double(B_mat);
+
+% Linear State Space System
+Gp_ss = ss(A_mat, B_mat, C, zeros(4,2));
+
+% Transfer function System 
+Gp_tf = tf(Gp_ss);
+
+% Plant TF: wrt Input #1
+Gp_x1_u1 = Gp_tf(1,1);
+Gp_x2_u1 = Gp_tf(2,1);
+Gp_x3_u1 = Gp_tf(3,1);
+Gp_x4_u1 = Gp_tf(4,1);
+
+% Plant TF: wrt Input #2
+Gp_x1_u2 = Gp_tf(1,2);
+Gp_x2_u2 = Gp_tf(2,2);
+Gp_x3_u2 = Gp_tf(3,2);
+Gp_x4_u2 = Gp_tf(4,2);
+
+% PID Gains and Controller TF
+k_i = 5;
+k_p = 20; 
+k_d = 5; 
+
+G_c = tf([k_d, k_p, k_i],[1, 0]);
+
+% Feedforward Gains: Input #1
+FF_x1_u1 =G_c*Gp_x1_u1; 
+FF_x2_u1 =G_c*Gp_x2_u1; 
+FF_x3_u1 =G_c*Gp_x3_u1; 
+FF_x4_u1 =G_c*Gp_x4_u1; 
+
+% Feedforward Gains: Input #2
+FF_x1_u2 =G_c*Gp_x1_u2; 
+FF_x2_u2 =G_c*Gp_x2_u2; 
+FF_x3_u2 =G_c*Gp_x3_u2; 
+FF_x4_u2 =G_c*Gp_x4_u2; 
+
+% Closed Loop Gains: Input #1
+G_cl_x1_u1 = (FF_x1_u1)/(1+FF_x1_u1);
+G_cl_x2_u1 = (FF_x2_u1)/(1+FF_x2_u1);
+G_cl_x3_u1 = (FF_x3_u1)/(1+FF_x3_u1);
+G_cl_x4_u1 = (FF_x4_u1)/(1+FF_x4_u1);
+
+% Closed Loop Gains: Input #2
+G_cl_x1_u2 = (FF_x1_u2)/(1+FF_x1_u2);
+G_cl_x2_u2 = (FF_x2_u2)/(1+FF_x2_u2);
+G_cl_x3_u2 = (FF_x3_u2)/(1+FF_x3_u2);
+G_cl_x4_u2 = (FF_x4_u2)/(1+FF_x4_u2);
+
+
+
+% % Bode Plots
+% figure()
+% bode(G_cl_x1_u1)
+% figure()
+% nyquist(G_cl_x1_u1)
+
+% figure()
+% hold on 
+% step(G_cl_x1_u1)
+% step(G_cl_x2_u1)
+% step(G_cl_x3_u1)
+% step(G_cl_x4_u1)
+% 
+% 
+% legend('q1','q2','q1_dot','q2_dot')
+
+%% 
+
+dt = .1;
+t = 0:dt:(7-dt);
+
+u1 = x_list(1,:);
+u2 = x_list(2,:);
+
+
+figure() 
+hold on
+lsim(G_cl_x1_u1,u1,t)
+lsim(G_cl_x2_u2,u2,t)
+% lsim(G_cl_x3_u1,u1,t)
+% lsim(G_cl_x4_u2,u2,t)
+legend('q1','q2')
+
+
+
+
+
+
+
+
+%% MIMO Simulation 
+
+
+
+dt = .1;
+t = [0:dt:(7-dt)]';
+
+u1 = x_list(1,:);
+u2 = x_list(2,:);
+
+sys_1 = [G_cl_x1_u1 G_cl_x2_u2];
+inputs = [u1', u2'];
+
+figure() 
+lsim(sys_1,inputs, t)
+
+
+%%
+
+
+x_targ = [pi; deg2rad(-45);0;0];
+
+x_init = [0;-pi/2; 0; 0] ;
+
+x_new = [];
+u_new = []; 
+dt = .1;
+
+for k = 1:1:100
+    u = -K*(x_init-x_targ);
+    x_dot = A_mat*x_init + B_mat*(u);
+    
+    x_new(:,k) = x_init + dt.*x_dot;
+    u_new(:,k) = u; 
+    x_init = x_new(:,k);
+end 
+
+figure()
+subplot(4,1,1)
+plot(x_new(1,:))
+ylabel('Q1')
+title('Full State Feedback Stabilizing Controller X_0=[0,-.5*pi,0,0], X_{ref}=[pi, -.25*pi,0,0]')
+
+subplot(4,1,2)
+plot(x_new(2,:))
+ylabel('Q2')
+
+subplot(4,1,3)
+plot(x_new(3,:))
+ylabel('Q1_{dot}')
+
+subplot(4,1,4)
+plot(x_new(4,:))
+ylabel('Q2_{dot}')
+xlabel('Time')
+
+
+
+figure()
+subplot(2,1,1)
+plot(u_new(1,:))
+ylabel('Tau_1')
+title('Full State Feedback Stabilizing Controller Torque Inputs')
+
+subplot(2,1,2)
+plot(u_new(2,:))
+ylabel('Tau_2')
+ 
+
+
+  
+  
+  
+  %% Full-State Feedback Regulator
 
 x0 = [0,0,0,0];         % Equilibrium Point
 params_sym = [L1, L2, m1, m2, g_val];  % Parameter Symbols

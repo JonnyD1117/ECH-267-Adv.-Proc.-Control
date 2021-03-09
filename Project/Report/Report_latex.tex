@@ -1,6 +1,11 @@
 \documentclass[journal]{IEEEtran}
 
 \usepackage{biblatex}
+
+\usepackage[fleqn]{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{cancel}
 \addbibresource{citations.bib}
 
 % \hyphenation{op-tical net-works semi-conduc-tor}
@@ -8,10 +13,10 @@
 
 \begin{document}
 
-\title{Nonlinear MPC for Robotic Arm Path Planning \\ ECH-267 Final Project Report}
+\title{Nonlinear MPC for Robotic Arm Path Planning and Control \\ ECH-267 Final Project Report}
 
 
-\author{Jonathan~Dorsey}
+\author{Jonathan~Dorsey \IEEEmembership{Member: No Sleep Club: est. 2017}}
 
 
 
@@ -25,12 +30,12 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-  The objective of this project is to implement simulated optimal \underline{Path Planner} using Model Predictive Control (MPC) to plan and control the behavior of a 3 degree of freedom (3DOF) robotic arm. The responsibility of the MPC planner will be to generate the `optimal' path and to drive the arm from its current position to the next. The main challenges faced in completing this project consist of solving for the \textbf{nonlinear equations of motion} (as well as any required forward/inverse kinematics) of the robotic arm as well as formulating and solving the \textbf{MPC controller}, at each timestep, both control and planning using the CasADi optimization framework, to test the scenario of simulated real-time performance.
+  The objective of this project is to implement a simulated optimal \underline{Path Planner} using Model Predictive Control (MPC) to plan and control the behavior of a 2 degree of freedom (2DOF) robotic arm. The responsibility of the MPC planner will be to generate the `optimal' path and to drive the arm from its current position to the next. The main challenges faced in completing this project consist of solving for the \textbf{nonlinear equations of motion} (as well as any required forward/inverse kinematics) of the robotic arm as well as formulating and solving the \textbf{MPC controller}, at each timestep, both control and planning using the CasADi optimization framework, to test the scenario of simulated real-time performance.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Model Predictive Control, Robot Arm, Lagrange Equations, Path Planning, Obsticle Avoidance, .
+Model Predictive Control, Robot Arm, Lagrange Equations, Path Planning, Obsticle Avoidance, DH Parameters, Trajectory Generation.
 \end{IEEEkeywords}
 
 
@@ -38,49 +43,271 @@ Model Predictive Control, Robot Arm, Lagrange Equations, Path Planning, Obsticle
 
 \section{Introduction}
 
-\IEEEPARstart{T}{his} objective of this paper is to design, program, and test the use of MPC for near real-time path planning and control, for robotic arm. In the world of robotics, many constraints are placed upon a robotic system, such as metrics of performance, physical construction and limitation of the hardware, it performance, and soft constraints such as safety around unexpeted obsticles such as humans, other robots, or miscellaneous obsticles. While the subjects of model predictive control (MPC) and robotic manipulators (for both design and control), there is exists a lack of targeted literature covering the question about how MPC and robotics can be used in the domain of real-time path planning. It has long be known that MPC is viable controller with many flavors and versions for different applications; however, in practice MPC only sees limited use due to the computational lag resulting from using numerical optimization as the basis for feedback control. To this end, MPC might be too slow for use in the control of a system, but if the optimal trajectory can be estimated using MPC, other controllers might be better suited for the task of tracking the optimal path which the MPC controller is able to generate. Since this path is only updated as needed, the speed of the MPC solution is no longer a significant obsticle since we can effectively offload the task of controller to a less computationally expensive methodology.
+\IEEEPARstart{T}{he} world of robotics is full of constraints and demands that humans handle naturally and with ease on a daily basis. However, for robotic systems, planning motion or tasks around constraints, limitations, and desired outcomes is a non-trivial task which demands solutions techniques (control and planning) that capable of integrating both hard and soft constraints. Such constraints could manifest across many domains including system performance, physical mobility, design factors, actuation and hardware limitations, to application or task specific processes. One of the many challenges faced in the control design for robotic manipulators conerns how to take all of these constraints into consideration while still performing the assigned tasks. \\
+
+Model Predictive Control (MPC) is an optimal control methodology which solves the a given optimal control problem (OCP) in a receding fashion, over a finite horizon. While these controllers are far more sophisticated than standard classical or modern control strategies, the increased complexity and computation can be applied to a wider class of control problems. \\
+
+One such class of systems are Multiple-Input-Multiple-Output (MIMO), where classical controllers (PID... etc.) become much more involved and less straightforward to utilize effectively. This problem is only exacerbated when the system is nonlinear, which might require techiniques like linearization, feedback-linearization, or gain-scheduling, to effectively control the system using classical or modern control methods. \\
+
+MPC, on the other hand, is a versitile methodology which naturally extends to MIMO systems and seamlessly integrates constraint handling. This flexibility is a property of the underlying structure of the optimal control problem. However, unlike other optimal control solutions such as Linear Quadratic Regulators (LQR), MPC benefits from feedback and thereby increases robustness for modeling or stoichastic uncertainties.  \\
+
+While still fundamentally a control strategy, one of the unique benefits of MPC is that (over its prediction horizon) it provides the optimal inputs to achieve a desired objective. Since a model of the system is required for MPC to work, we can propigate the predicted state(s) of the system by using the current initial condition, and the optimal control inputs. This in turn produces the optimal state trajectory, at the given time step over the prediction horizon. \\
+
+The objective of this project is to use MPC to plan and control the motion of a 2D robotic manipulator. Additionally, I want to compare and contrast the tracking performance of different controllers to over the
 
 
-\subsection{Subsection Heading Here}
-Subsection text here.
+\section{Problem Statement}
 
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+Problem Statement Here
+
+\includegraphics[scale=.5]{./images/2d_arm_2}
+
 
 
 \section{Background}
+To discuss the subject of this project in any detail, it is requisite to cover the basic terminology, constructs, and definitions which will be used throughout the remainder of this paper.
 
-Some background information
-\section{Literature Review}
-Literature review goes here
+\subsection{Robotic Manipulators}
+
+The worlds of robotics and industrial automation are a extremely broad. For the purposes of this project, I plan to reduce the scope of this field to the study of a 2-Link Planar robotic manipulator, subject to gravity. \\
+
+In general robots typically possess prismatic (linear) or revolute (rotational) joints. The PUMA 560 robot (INLCUDE FIGURE), is a typical example of an industry standard manipulator, with 6 degrees of freedom (DOF).
+
+\includegraphics[scale=.5]{./images/puma}
+
+For this project, the size and complexity even the 3 DOF  dynamics required to control the first three links of the PUMA 560 are too extensive to be derived or used in any practical fashion. As this is the case, the simplier case for the planar two link robot will be used as the test platform for this project. 
+
+In general,
+\subsection{Trajectory vs Path Generation}
+
+One of the details that often gets overlooked in the difference between a \underline{path} and a \underline{trajectory}. There is, however, a significant and meaningful distinction the two. Paths are independ of time and only consists of a sequence of positions which are meaningful in some way. Trajectories, on the other hand, are dependent on time. This means that for every position in a given trajectory, there is an associated time. This terminology dictates that velocity and acceleration sequences desribe trajectories since both quantities are time dependent. It should be noted that paths can be converted into trajectories by restricting that positions on the path are tracked according to some dependence on time. \\
+
+In the context of this paper, \textbf{path generation} will suffice, since I am only interested in making sure that robotic arm is driven to desired pose (position and orientation) regardless of the time it takes to do so. This is nice simplification to studying and solving trajectory tracking problems and has the nice analytical benefit of making the system dynamics autonomous.
+
+\subsection{Optimal Path Generation}
+
+One interest fact about path planning is that there are infinitely many ways to traverse to two fixed points in continuous space. Therefore one of the engineering challenges is to generate a path with desirable characteristics, for the system being studied. In many cases, it is desirable to obtain the path which defines the shortest distance or time between two points, achievable for a given system. \\
+
+In a broader sense, this means finding the \underline{optimal path} according to some measure of fitness. In the context of robot arm manipulation, the optimal path is that which will direct the robot from an initial pose to a final pose without violating system or path constraints and could even be extended to avoiding obsticles which would otherwise collide with the robot manipulator. \\
+
+% One of the interesting side benefits of using MPC is that we can directly use it to guide the control signal, but we can also use it as a means of online path generation.
+%
+%
+% Being able to generate the optimal state trajectory is a very useful property. Assuming that the objective of the control methodology is actually achieve an optimal path or trajectory can be used as the optimal reference for a variety of other tasks. \\
+%
+% In this capacity, we can view the MPC system as more or less of an optimal path/trajectory solver; in addition to have the explicity ability to drive the system (as far as physically possible) along this trajectory.
+%
+%
+% Hybrid Control (Supervising Controller)
+%
+%
+%
+% While the subjects of model predictive control (MPC) and robotic manipulators (for both design and control), there is exists a lack of targeted literature covering the question about how MPC and robotics can be used in the domain of real-time path planning.
+%
+%
+%   It has long be known that MPC is viable controller with many flavors and versions for different applications; however, in practice MPC only sees limited use due to the computational lag resulting from using numerical optimization as the basis for feedback control.
+%
+%   To this end, MPC might be too slow for use in the control of a system, but if the optimal trajectory can be estimated using MPC, other controllers might be better suited for the task of tracking the optimal path which the MPC controller is able to generate.
+%
+%   Since this path is only updated as needed, the speed of the MPC solution is no longer a significant obsticle since we can effectively offload the task of controller to a less computationally expensive methodology.
 
 \subsection{Model Predictive Control}
 
-\subsection{Path Planning}
+As previously illuded to, MPC is an optimization based controller that solves for the
 
-\subsection{Robotics}
+
+
+\subsection{Path Planner}
+
+\subsection{Articulated Robotic Systems}
+
+
 
 \subsubsection{Equations of Motion}
 
+
+
 \subsubsection{Denavit-Hartenberg Paramters}
+
+
+The Denavit-Hartenberg (DH) parameters are an important tool in analyzing the geometry of any given robot as well as in the formulation of joint transformations which enable a concise and universal means of deriving important quanties for kinematic and dynamic analysis of the robot.
+
+The purpose of DH parameters is to standardize the description of geometry of robots into a universal parameterization such that arbitary construction of different robots can all be described concisely in a single and intuitive notation. \\
+
+\noindent The DH Parameters are defined to be...
+$$
+\begin{array}{l}
+a_{i}=\text { the distance from } \hat{Z}_{i} \text { to } \hat{Z}_{i+1} \text { measured along } \hat{X}_{i} \\
+\alpha_{i}=\text { the angle from } \hat{Z}_{i} \text { to } \hat{Z}_{i+1} \text { measured about } \hat{X}_{i} \\
+d_{i}=\text { the distance from } \hat{X}_{i-1} \text { to } \hat{X}_{i} \text { measured along } \hat{Z}_{i} ; \text { and } \\
+\theta_{i}=\text { the angle from } \hat{X}_{i-1} \text { to } \hat{X}_{i} \text { measured about } \hat{Z}_{i}
+\end{array}
+$$
+
+The primary usage of DH Parameters is the generation of transformations to and from joint frame origins. Before this can be achieved, there needs to exist the notion of a general transformation which captures both position and orientation (e.g. pose) from one frame to another. By coupling position vectors to the origin of each joint frame and the corresponding rotation matrix, we arrive at the following \textbf{homogeneous transforms}.
+
+
+$$
+\left[\begin{array}{c}
+{}^{A}P \\
+1
+\end{array}\right]=\left[\begin{array}{ccc|c}
+{} & {}^{A}_{B}R & & {}^{A}P_{B org} \\
+\hline 0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{c}
+{}^{B}P \\
+1
+\end{array}\right]
+$$
+
+
+
+Which can be further simplified to...
+
+$$
+P={ }_{B}^{A} T^{B} P
+$$
+
+Since the DH Parameters provide a universal notation for describing the the position and orientation of a robot, it is natural to want to express the homogeneous transformation of each coordinate frame using this parameterization. For a single transformation from a frame $\{ i\}$ to frame $\{ i-1 \}$, we can use the homogeneous transformation for explicit rotations about a joint axis or specific translations along a joint axis as dictated by the DH parameters.The matrices $R$ and $D$ represent the homogeneous transformation for rotation and translations repsectively, with the subscript of each providing the axis upon which the operation should be performed.
+
+$$
+{ }_{i}^{i-1} T=R_{X}\left(\alpha_{i-1}\right) D_{X}\left(a_{i-1}\right) R_{Z}\left(\theta_{i}\right) D_{Z}\left(d_{i}\right)
+$$
+
+
+By using the universal, DH paramterization with homogeneous transformation we can now describe the relationships to or from any joint of the robot to any other joint of the robot. This is a powerful concept which facilitates the analysis of any robot whose joints are based on revolute or prismatic members.
+
+
+
+
 
 \subsubsection{Forward Kinematics}
 
+\section{Literature Review}
+Literature review goes here
 
+
+
+
+\section{Project Methodology}
+
+\subsection{CasADi Software}
+
+\subsection{}
+
+\subsection{}
+
+\subsection{}
 
 \section{MPC Formulation}
 
-Describe MPC formulation
+The mathematical basis for MPC stems from the standard optimal control problem. However, with a few slight adjustments and relaxations, the formulation for MPC can be
+
+
+\subsection{MPC Assumptions}
+
+\begin{enumerate}
+  \item Internal dynamic model of system exists
+  \item Finite (and receding) prediction horizion
+  \item Piecewise constant input at each time-step \\
+\end{enumerate}
+
+After applying these restrictions to the standard optimal control problem, the mathematical formulation for standard MPC reduces to the following expression.
+
+\begin{equation}
+\begin{aligned}
+& \min _{n} J_{x}\left(\mathbf{x}_{0}, \mathbf{u}\right)=\sum_{k=0}^{N-1} \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) \\
+\text { s.t: }: & \mathbf{x}_{\mathbf{n}}(k+1)=\mathbf{f}\left(\mathbf{x}_{\mathbf{n}}(k), \mathbf{u}(k)\right) \\
+& \mathbf{x}_{\mathbf{u}}(0)=\mathbf{x}_{0}, \\
+& \mathbf{u}(k) \in U, \forall k \in[0, N-1] \\
+& \mathbf{x}_{\mathbf{u}}(k) \in X, \forall k \in[0, N]
+\end{aligned}
+\end{equation}
+
+In this formulation, the cost function is only propagated to the end of the prediction horizon $N$, from the current initial state of the system. The first equality constraint restricts future states of the system to be feasible with respect to the system model. The second equality constraints requires the initial state of the solver to be the current initial state of the system, while the final constraints require the inputs and states determined by the solver to be valid elements of feasible input and state sets respectively. \\
+
+
+The particular flavor of MPC used in this project utilized the following quadratic stage cost.
+
+\begin{equation}
+  \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) = (x-x_d)Q(x-x_d) + (u-u_d)R(u-u_d)
+\end{equation}
+
+This parameterization stage cost can be further simplified using norms.
+
+
+\begin{equation}
+  \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) = \left\Vert x - x_d \right\Vert^{2}_{Q} + \left\Vert u -u_d \right\Vert^{2}_{R}
+\end{equation}
+
+The quadratic nature of this cost function is eligant in how simple and intuitive it is comprehend as as well how simple it is to tune using the matrices $Q$ and $R$. \\
+
+It should be further noted that this projet will be using \textbf{Multiple Shooting} formulation of MPC as this approach has shown to produce better results and obtained solutions far faster than the naive single shooting approach.
+
+
+
 
 \section{Path Planner}
 
-How to use MPC as a Path Planner
+An addition benefit to using multiple shooting is that since the state predictions over the time horizon are included as decision variables along with the input sequence, the very produce of solving for the optimal inputs (over the prediction horizon) also yields the predicted states without necessitating forward propigating the optimal input and current state through the system model.\\
 
-\section{Dynamic Model}
+Because of this fact, at any given instance, the MPC controller not only yields the optimal inputs, but specifies the optimal state trajectory over the prediction horizion. \\
 
-Derive or explain the dynamics model
+By leveraging this fact, we can fit a cubic spline through those discrete state predictions. Once calculated, this spline can be used to as a refernce path to calculate reference joint positions for a controller to track. \\
+
+Naturally, as the prediction horizon used for MPC probably does not span the entire path required to drive the robot from its initial pose to its desired pose, the reference path will be need to be recomputed occationally, if the predictions from the model deviate from the actual measurements of the system (or state estimator outputs).
+
+
+
+\section{Dynamics Model}
+
+For this project, the model of the robot will only include the dynamics of the physical system and not the dynamics of the actuators. However, it would be trivial to include these effects for a more realistic model of how the system operates, but for the purposes of simplicity, we will assume that the joint motors have perfect torque control. \\
+
+A further simplification to modeling this system is that we assume massless links and that each point can be modeled as a point mass. Under these assumptions, we can ignore contributions by moments of inertia. This simplifies the process of deriving equations of motion. \\
+
+The method to derive the dynamics of the modeled system uses the \textbf{Euler-Lagrange Equations}. This is variational method which uses the kinetic and potential energies of the system to derive the dynamics of the robot. While equivalent to the Newton-Euler Equations, Lagrange Equations do not require the computing of accelerations and typically simplify the derivation of
+
+\begin{equation}
+k_{i}=\frac{1}{2} m_{i} v_{C_{i}}^{T} v_{C_{i}}+\frac{1}{2}^{i} \omega_{i}^{T} C_{i} I_{i}^{i} \omega_{i}
+\end{equation}
+
+
+\begin{equation}
+u_{i}=-m_{i}^{0} g^{T}{ }^{0} P_{C_{i}}+u_{r e f_{i}}
+\end{equation}
+
+\begin{equation}
+k=\sum_{i=1}^{n} k_{i}
+\end{equation}
+
+\begin{equation}
+u=\sum_{i=1}^{n} u_{i}
+\end{equation}
+
+\begin{equation}
+  L = k - u
+\end{equation}
+
+\begin{equation}
+\frac{d}{d t} \frac{\partial L}{\partial \dot{\boldsymbol{q}}}-\frac{\partial L}{\partial \boldsymbol{q}}=\left[\begin{array}{l}
+\tau_{1} \\
+\tau_{2}
+\end{array}\right]
+\end{equation}
+
 
 \subsection{Nonlinear Model}
+In general, the serially articulated robots with revolute joints will produce equations of motion (EOM) that take the following form.
+
+\begin{equation}
+  \tau = M(\Theta)\ddot{\Theta} + V(\Theta, \dot{\Theta}) + G(\Theta) + F(\dot{\Theta})
+\end{equation}
+
+
+In this formulation, $M$ is the mass matrix which models the effects of mass and moments of inertia which are related to the angular accelerations of the joints. The $V$ vector models the centrifugal and Coriolis forces which are typically functions of velocities, while the $G$ vector models the effects of gravity. Finally, the $F$ vector is added to explictly include the effects of friction/damping.
+
+
+
 
 \subsection{Linearized Model}
 
@@ -92,7 +319,7 @@ Derive or explain the dynamics model
 
  \subsection{MPC}
 
- \subsection{H \infity}
+ \subsection{H Infinity}
 
  \subsection{Feedback Linerization}
 
