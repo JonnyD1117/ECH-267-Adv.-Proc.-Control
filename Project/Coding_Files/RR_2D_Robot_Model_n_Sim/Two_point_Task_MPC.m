@@ -139,17 +139,27 @@ args.ubx(4*(N+1):2: 4*(N+1) + 2*N,1) = tau_1_max;   % Input Upper Bound TAU1
 args.lbx(4*(N+1)+1:2: 4*(N+1) + 2*N,1) = tau_2_min;   % Input Lower Bound TAU2
 args.ubx(4*(N+1)+1:2: 4*(N+1) + 2*N,1) = tau_2_max;   % Input Upper Bound TAU2
 
+%% Start Location -> Initial Goal Location 
+
+% Robots Arbitrary initial Position
+x0 = [deg2rad(0); deg2rad(0); 0;0] ;
+
+% Inverse Kinematics
+x1_ref = .258; 
+y1_ref = .3686;
+angles_0 = Inverse_Kinematics(x1_ref,y1_ref, .25, .25); 
+
+q1_ref = angles_0(1);
+q2_ref = angles_0(2);
+
+x2_ref = -.42;
+y2_ref = 0; 
+ 
+x0_ref = [q1_ref;q2_ref; 0; 0] ; 
+
 
 % SIMULATION LOOP 
 t0 = 0; 
-% x0 = [deg2rad(25); deg2rad(45); 0;0] ;
-% x0 = [deg2rad(-90); deg2rad(0); 0;0] ;
-% x0 = [deg2rad(90); deg2rad(0); 0;0] ;
-x0 = [deg2rad(220); deg2rad(25); 0;0] ;
-
-
-
-x_ref = [pi;-pi/4; 0; 0] ;
 
 x_list(:,1) = x0; 
 t(1) = t0; 
@@ -163,12 +173,11 @@ xxl = [ ];
 u_cl = [ ];
 
 
-% Main Loop 
+% Initial Point -> Initial Target Position 
 main_loop = tic;
-
-while(norm((x0 - x_ref),2) > 1e-4 && mpc_iter < sim_time/T)
+while(norm((x0 - x0_ref),2) > 1e-4 && mpc_iter < sim_time/T)
     
-    args.p = [x0;x_ref];
+    args.p = [x0;x0_ref];
     args.x0 =  [reshape(X0', 4*(N+1),1); reshape(u0,2*N,1)];
     sol = solver('x0', args.x0, 'lbx', args.lbx, 'ubx', args.ubx,'lbg', args.lbg, 'ubg', args.ubg, 'p', args.p); 
     
@@ -189,54 +198,9 @@ end
 u_cl = u_cl';
 main_loop_time = toc(main_loop)
 
-figure(1)
-subplot(211) 
-plot(x_list(1,:));
-ylabel('Theta_1 [rads]'); 
-title('Nominal MPC Positions')
-
-
-subplot(212) 
-plot(x_list(2,:));
-ylabel('Theta_2 [rads]');
-
-figure(2)
-subplot(211)
-plot(x_list(3,:)); 
-ylabel('Ang. Vel Theta_1 [rad/s]'); 
-xlabel('Time [seconds]');
-title('Nominal MPC Velocities')
-
-
-subplot(212)
-plot(x_list(4,:)); 
-ylabel('Ang. Vel Theta_2 [rad/s]'); 
-xlabel('Time [seconds]');
-
-
 figure(3)
-grid on
-subplot(211)
-stairs(t,u_cl(1,:),'k','linewidth',1.5)
-ylabel('Torque_1 (N*m)')
-title('Nominal MPC Torque Inputs')
-
-subplot(212)
-stairs(t,u_cl(2,:),'k','linewidth',1.5); axis([0 t(end) -0.35 0.75])
-xlabel('time (seconds)')
-ylabel('Torque_2 (N*m)')
-disp("DONE");
-
-
-
-%% Animation 
-
-
-
-v = VideoWriter('robot_MPC.avi'); 
-v.FrameRate = 30;
-open(v); 
-for i=2:1:length(x_list)
+for i=1:1:(sim_time/T)
+    
     
     theta = x_list(1:2,i); 
     theta_dot = x_list(3:4,i); 
@@ -245,61 +209,147 @@ for i=2:1:length(x_list)
     x_vec = pos.x;
     y_vec = pos.y;
     
-    plot_robot(x_vec, y_vec);
-    
-     title('Planar 2D Robot: MPC');
-        frame=getframe(gcf); 
-        writeVideo(v, frame);
-end 
-
-close(v)
-
-
-
-
-
-
-% x1 = x_traj(1); 
-% x2 = x_traj(2);
-% 
-% % sim_len = (sim_time / dt);
-% 
-% figure(3)
-%     for k=2:length(x1)
-%         %Plot for Video 
-%         hold  on
-%         
-%         FK = forward_kinematics(p,x_traj, theta_dot);
-%         plot_robot(FK.x, FK.y)
-% 
-% %         xlim([-1-0.2*1 1+0.2*1]); 
-% %         ylim([-1-0.2*1 1+0.2*1]);
-%         title('Planar 2D Robot: MPC');
-%         frame=getframe(gcf); 
-%         writeVideo(v, frame);
-%     end 
-%     
-%  close(v)
-
-
-%% Visualization
-
-figure(4)
-for i=2:1:length(x_list)
-    
-    theta = x_list(1:2,i); 
-    theta_dot = x_list(3:4,i); 
-    pos = forward_kinematics(p,theta, theta_dot);
-    
-    x_vec = pos.x;
-    y_vec = pos.y;
-    
-    plot_robot(x_vec, y_vec);
+    plot_robot(x_vec, y_vec, x1_ref, y1_ref, x2_ref, y2_ref);
     pause(.1)
 end 
 
 disp(rad2deg(x_list(1,end)))
-% close all
+
+
+%% Initial Goal -> Final Goal
+
+x1_ref = .258; 
+y1_ref = .3686;
+angles_0 = Inverse_Kinematics(x1_ref,y1_ref, .25, .25); 
+
+q1_ref = angles_0(1);
+q2_ref = angles_0(2);
+
+
+ 
+x0_ref = [q1_ref;q2_ref; 0; 0] ; 
+
+x2_ref = -.48;
+y2_ref = 0; 
+angles_f = Inverse_Kinematics(x2_ref,y2_ref, .25, .25); 
+
+q1f_ref = pi + angles_f(1); 
+q2f_ref = angles_f(2);
+
+xf_ref = [q1f_ref;q2f_ref; 0; 0] ;
+
+
+% SIMULATION LOOP 
+t0 = 0; 
+
+% x_list(:,1) = x0_ref; 
+x_list = [x_list, x0_ref]; 
+
+t(1) = t0; 
+u0 = zeros(2,N);
+X0 = repmat(x0_ref,1, N+1)';
+sim_time = 20; 
+
+% Start MPC 
+mpc_iter = 0; 
+xxl = [ ]; 
+u_cl = [ ];
+
+
+main_loop = tic;
+
+while(norm((x0_ref - xf_ref),2) > 1e-3 && mpc_iter < sim_time/T)
+    
+    args.p = [x0_ref;xf_ref];
+    args.x0 =  [reshape(X0', 4*(N+1),1); reshape(u0,2*N,1)];
+    sol = solver('x0', args.x0, 'lbx', args.lbx, 'ubx', args.ubx,'lbg', args.lbg, 'ubg', args.ubg, 'p', args.p); 
+    
+    u = reshape(full(sol.x(4*(N+1)+1:end))',2,N)'; 
+    xxl(:, 1:4, mpc_iter +1) = reshape(full(sol.x(1:4*(N+1)))',4,N+1)';
+    u_cl = [u_cl; u(1,:)];
+    
+    t(mpc_iter +1) = t0; 
+    [t0, x0_ref, u0] = shift(T, t0, x0_ref, u, f);
+%     x_list(:,mpc_iter+2) = x0_ref; 
+    x_list = [x_list, x0_ref]; 
+
+    mpc_iter = mpc_iter +1 ;     
+    
+end 
+
+u_cl = u_cl';
+main_loop_time = toc(main_loop)
+
+figure(3)
+for i=1:1:length(x_list)
+    
+    
+    theta = x_list(1:2,i); 
+    theta_dot = x_list(3:4,i); 
+    pos = forward_kinematics(p,theta, theta_dot);
+    
+    x_vec = pos.x;
+    y_vec = pos.y;
+    plot_robot_with_object(x_vec, y_vec)
+%     plot_robot(x_vec, y_vec, x1_ref, y1_ref, x2_ref, y2_ref);
+    pause(.1)
+end 
+
+disp(rad2deg(x_list(1,end)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 %% End Effector Trajectory 
@@ -342,42 +392,6 @@ ylabel("Y-Axis")
 legend(["Joint 1"," Joint 2"])
 
 
-figure(5)
-hold on
-plot(x1_traj, y1_traj, 'b')
-plot(x2_traj, y2_traj,'r')
-title("Joint Trajectories")
-xlabel("X-Axis")
-ylabel("Y-Axis")
-legend(["Joint 1"," Joint 2"])
-
-%% Splined 
-
-t_list = [0:.1:6.3]; 
-t_query_list = [0:.1:6.3];
-
-x1_list = x1_traj(2:end);
-x2_list = x2_traj(2:end);
-y1_list = y1_traj(2:end);
-y2_list = y2_traj(2:end);
-
-
-x1_path = spline(x1_list, t_list, t_query_list);
-x2_path = spline(x2_list, t_list, t_query_list);
-y1_path = spline(y1_list, t_list, t_query_list); 
-y2_path = spline(y2_list, t_list, t_query_list); 
-
-
-figure()
-% plot(x1_path, y1_path)
-
-% plot(t_query_list, x1_path)
-% path_output = spline(q1_list, t_list, t_query_list);
-
-% plot(t_query_list, path_output)
-
-
-
 %%
 
 function [t0, x0, u0] = shift(T, t0, x0, u, f)
@@ -393,8 +407,7 @@ u0 = [u(2:size(u,1),:); u(size(u,1),:) ];
 
 end
 
-
-function plot_robot(x_vec, y_vec)
+function plot_robot(x_vec, y_vec, x0_ref, y0_ref, xf_ref, yf_ref)
 
 x1 = x_vec(1); 
 x2 = x_vec(2); 
@@ -408,9 +421,13 @@ fill([-1-0.2*1 1+0.2*1 1+0.2*1 -1-0.2*1], [-1-0.2*1 -1-0.2*1 1+0.2*1 1+0.2*1], '
 
 plot([ 0, x1], [0, y1], "b");
 plot([ x1, x2], [y1, y2], "r");
+
+plot(x0_ref, y0_ref, '-*r')
+plot(xf_ref, yf_ref, '-*g')
+
 hold off
 
-title('Planar 2D Robot: MPC')
+title('Planar 2D Robot in Workspace')
 xlim([-.6,.6])
 ylim([-.6,.6])
 
@@ -418,6 +435,33 @@ xlabel("X-Axis")
 ylabel("Y-Axis") 
 
 
+
+end
+
+function plot_robot_with_object(x_vec, y_vec)
+
+x1 = x_vec(1); 
+x2 = x_vec(2); 
+y1 = y_vec(1); 
+y2 = y_vec(2); 
+
+hold on
+fill([-1-0.2*1 1+0.2*1 1+0.2*1 -1-0.2*1], [-1-0.2*1 -1-0.2*1 1+0.2*1 1+0.2*1], 'w'); % Clears Background
+
+plot([ 0, x1], [0, y1], "b");
+plot([ x1, x2], [y1, y2], "r");
+
+plot(x2, y2, '-*b')
+
+
+hold off
+
+title('Planar 2D Robot in Workspace')
+xlim([-.6,.6])
+ylim([-.6,.6])
+
+xlabel("X-Axis")
+ylabel("Y-Axis") 
 
 end
 
@@ -444,33 +488,14 @@ pos.y = y;
 
 end 
 
-function Animate_pendulum(x_traj, dt)
+function angles = Inverse_Kinematics(x,y, L1, L2)
 
-v = VideoWriter('robot_MPC.avi'); 
-v.FrameRate = 30;
-open(v); 
+q2 = acos(((x)^2 +(y)^2-(L1)^2-(L2)^2)/(2*L1*L2));
+q1 = atan(y/x) - atan((L2*sin(q2))/(L1+L2*cos(q2)));
 
-x1 = x_traj(1); 
-x2 = x_traj(2);
+angles = [q1,q2];
 
-% sim_len = (sim_time / dt);
 
-figure(3)
-    for k=2:length(x1)
-        %Plot for Video 
-        hold  on
-        
-        FK = forward_kinematics(p,x_traj, theta_dot);
-        plot_robot(FK.x, FK.y)
-
-%         xlim([-1-0.2*1 1+0.2*1]); 
-%         ylim([-1-0.2*1 1+0.2*1]);
-        title('Planar 2D Robot: MPC');
-        frame=getframe(gcf); 
-        writeVideo(v, frame);
-    end 
-    
- close(v)
 end 
 
 function q1_ddot = RobotModel_q1_ddot(p, q1, q2, q1_dot, q2_dot,tau1, tau2)
@@ -534,7 +559,6 @@ f = [q1_dot*.25;q2_dot*.25];
 
 
 end 
-
 
 function out = Tau_Ref(theta, p)
 

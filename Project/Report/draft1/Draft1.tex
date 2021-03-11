@@ -53,7 +53,26 @@ MPC, on the other hand, is a versitile methodology which naturally extends to MI
 
 While still fundamentally a control strategy, one of the unique benefits of MPC is that (over its prediction horizon) it provides the optimal inputs to achieve a desired objective. Since a model of the system is required for MPC to work, we can propigate the predicted state(s) of the system by using the current initial condition, and the optimal control inputs. This in turn produces the optimal state trajectory, at the given time step over the prediction horizon. \\
 
-The objective of this project is to use MPC to plan and control the motion of a 2D robotic manipulator. Additionally, I want to compare and contrast the tracking performance of different controllers to over the
+The objective of this project is to investigate the use of MPC in both planning and control tasks, on a simple dynamic system and weigh how the results compare against other methods for controlling or planning the motion of robotic systems.
+
+
+\section{Problem Statement}
+
+The system being used for this project is a two link planar robot arm subject to gravity, as shown in figure (ADD FIGURE). While this robot is simple and does not allow for the more interesting aspects of path planning that occur in 3D space, it is sufficient to understanding the benefits and draw backs of implementing MPC on a conceptually simple and easily derivable model, unlike more conventional robot manipulators whose dynamics are large and highly coupled.
+
+
+Instead, this project will utilize a simplified 2-link planar robot which offers many of the same physical challenges a more complex manipulator would but is more suited to be design and test platform for this project, due it relative simplicity.
+
+
+\includegraphics[scale=.5]{../images/2d_arm_2}
+
+
+As shown in figure (ADD FIGURE NUMBER), the robot itself has two independently actuated links, connected in a serial fashion. Each link is model as a point mass instead of a rigid body for dynamic simplifications.
+
+The overaching objective of this project is to investigate how to use MPC to both control this robot directly, and as a path planner which could be used to supply a reference input to an external controller.
+
+
+
 
 \section{Background}
 To discuss the subject of this project in any detail, it is requisite to cover the basic terminology, constructs, and definitions which will be used throughout the remainder of this paper.
@@ -62,7 +81,7 @@ To discuss the subject of this project in any detail, it is requisite to cover t
 
 In general robotic arms possess prismatic (linear motion) or revolute (rotational motion) joints. The PUMA 560 robot (INLCUDE FIGURE), is a typical example of an industry standard manipulator, with 6 degrees of freedom (DOF), that utilizes six revolute joints, connected in a serial fashion. This configuration of only rotating joints makes the PUMA 560 an \textbf{articulated robot}. \\
 
-\includegraphics[scale=.5]{./images/puma}
+\includegraphics[scale=.5]{../images/puma}
 
 While the study of 6 DOF robots is well researched, the scale and complexity of modeling the governing dynamic equations make robots like the PUMA infeasible for use in this project. Instead, this project will utilize a simplified 2-link planar robot which offers many of the same physical challenges a more complex manipulator would but is more suited to be design and test platform for this project, due it relative simplicity.
 
@@ -189,34 +208,6 @@ Inverse Kinematics (IK) is the study of the joint positions and velocities given
 
 
 
-
-% \section{Literature Review}
-% Literature review goes here
-%
-%
-%
-
-\section{Problem Statement}
-
-Problem Statement Here
-
-\includegraphics[scale=.5]{./images/2d_arm_2}
-
-
-
-
-
-\section{Project Methodology}
-
-\subsection{}
-
-\subsection{CasADi Software}
-
-\subsection{MPC Planner and Control Baseline}
-
-\subsection{Offline Simulation and Control}
-
-\subsection{}
 
 \section{MPC Formulation}
 
@@ -376,7 +367,7 @@ It should be noted for simulation purposes, the equations of motion need to expr
 \ddot{\theta}=\operatorname{inv}(M)[\tau-V-G-F]
 \end{equation}
 
-However, expressing the governing equations in this form result in numerical instabilties during simulation which arise from inverting the mass matrix $M(\Theta)$. Since the mass matrix is function if the angular positions $\Theta$, certain angular positions will cause the mass matrix to near a singularity, when inverted, at which the numerical values explode until they become \textbf{INF} or \textbf{NAN}. To avoid this, a small constant value of $\varepsilon$ can be added to the diagonal terms of $M$ to garuntee that the system will never become singular, during inversion.
+However, expressing the governing equations in this form result in numerical instabilties during simulation which arise from inverting the mass matrix $M(\Theta)$. Since the mass matrix is function if the angular positions $\Theta$, certain angular positions will cause the mass matrix to near a singularity, when inverted, at which the numerical values explode until they become \textbf{INF} or \textbf{NAN}. To avoid this, the value of $\varepsilon$ can be added to the diagonal terms of $M$ to garuntee that the system will never become singular, during inversion.
 
 
 With equation (EQN NUMBER), we can now write the equivalent nonlinear state space for the system. By defining the states such that, $x_{1}=\theta_{1}$, $x_{2}=\theta_{2}$, $x_{3}=\dot{\theta}_{1}$, and $x_{4}=\dot{\theta}_{2}$, we can
@@ -425,38 +416,74 @@ Linearizing the system required computing the Jacobian of the nonlinear state sp
 
 \section{Results}
 
-\subsection{Nominal MPC Performance}
+\subsection{Direct Control via MPC}
+
+From a purely controls perspective, MPC performed quite well. The nonlinear nature of the system made would have made required simplifications to the system model to be made before a
+
+\includegraphics[scale = 0.5]{../images/Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/Torques}
+
+
+\includegraphics[scale = 0.5]{../images/Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/AngularPositions}
+
+
+\includegraphics[scale = 0.5]{../images/Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/AngularVelocities}
+
+
+
+
+\includegraphics[scale = 0.5]{../images/Nominal_MPC/T4_X_init_220_25_0_0_X_ref_180_n45_0_0/Torques}
+
+
+\includegraphics[scale = 0.5]{../images/Nominal_MPC/T4_X_init_220_25_0_0_X_ref_180_n45_0_0/AngularPositions}
+
+
+\includegraphics[scale = 0.5]{../images/Nominal_MPC/T4_X_init_220_25_0_0_X_ref_180_n45_0_0/AngularVelocities}
+
+
+
+
 
 \subsection{Model/System Mismatch}
 
-\subsection{MPC with Obsticle Avoidance}
+\subsection{}
 
-\subsection{Linearized System Performance}
+\subsection{}
 
-\subsection{Hybrid Control}
+\subsection{}
 
-\subsection{Path Planning }
+\subsection{}
 
-\subsubsection{}
+\subsection{}
 
-\subsubsection{}
+\subsection{}
 
 \subsection{}
 
 \section{Discussion}
 
-\subsection{MPC for Control }
-
-The most obvious benefit of using MPC for path planner, is that as a valid controller, we can control the system we are interested directly, without requiring the need to extract the optimal path for a different controller to track. The naive implementation of MPC as not only a planner but also the controller for the system function. especially for the 2D robot, where the system dynamics are small simple and the task space of the robot is highly restricted, using MPC was a via planner/controller.
-
-\subsection{PID for Control}
+Dicussion and points of note.
 
 
-\subsection{MPC for Planning Around Obstacles}
+\subsection{Direct Control via MPC}
 
-One of the downsides of using MPC as a planner is that, unlike systems which can be abstracted with simple spatial envelopes,
+In general, control of the robot using MPC was very successful. In each ``pose-to-pose" test performed, MPC was able to drive the system from its initial state to the final state within 4 decimals of precision In addition to achieving the stated objective, MPC was able to keep the able to handle the limits of the actuators even
+
+Since this robot is subject to gravity,
+
+\subsection{MPC with System Constraints}
+
+One interested test case for directly using MPC to control the robot is the situatation where there exist physical limits on the rotation of the each link, that prevents the robot from being able to actuate beyond a certain range. In this case, it is desireable to for the controller to recognize these limitations and find the best possible path to get to the goal position.
 
 
+
+
+
+Additionally, it was interesting to see how MPC performed when the goal state was by virtue of physical constraints of the robot in an infeasible location. In such a case, I found that while the controller did not ever violate the constraints, it would converge to an apparently random position fr
+
+
+\subsection{Path Planning via MPC}
+
+While definitely able to generate paths using MPC, path planning was significantly more challenging than anticipated. I be
 
 
 
