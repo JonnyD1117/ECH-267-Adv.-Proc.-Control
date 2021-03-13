@@ -2179,20 +2179,9 @@
   <!-- CITATION DATA -->
   <!-- SECTION 0 -->
   <bcf:bibdata section="0">
-    <bcf:datasource type="file" datatype="bibtex">citations.bib</bcf:datasource>
+    <bcf:datasource type="file" datatype="bibtex">bib_file.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">craig_introduction_2005</bcf:citekey>
-    <bcf:citekey order="2">khalil_nonlinear_2002</bcf:citekey>
-    <bcf:citekey order="3">rawlings_model_2017</bcf:citekey>
-    <bcf:citekey order="4">armstrong_explicit_1986</bcf:citekey>
-    <bcf:citekey order="5">ogata_modern_2010</bcf:citekey>
-    <bcf:citekey order="6">meriam_engineering_1993</bcf:citekey>
-    <bcf:citekey order="7">greenwood_advanced_2006</bcf:citekey>
-    <bcf:citekey order="8">borrelli_predictive_2017</bcf:citekey>
-    <bcf:citekey order="9">boyd_convex_2004</bcf:citekey>
-    <bcf:citekey order="10">slotine_applied_1991</bcf:citekey>
-    <bcf:citekey order="11">soft_constraints</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
@@ -2224,13 +2213,4 @@
     </bcf:sort>
   </bcf:sortingtemplate>
   <!-- DATALISTS -->
-  <bcf:datalist section="0"
-                name="nty/global//global/global"
-                type="entry"
-                sortingtemplatename="nty"
-                sortingnamekeytemplatename="global"
-                labelprefix=""
-                uniquenametemplatename="global"
-                labelalphanametemplatename="global">
-  </bcf:datalist>
 </bcf:controlfile>

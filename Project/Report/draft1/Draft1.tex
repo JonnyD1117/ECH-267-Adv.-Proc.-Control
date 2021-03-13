@@ -51,14 +51,14 @@ One such class of systems are Multiple-Input-Multiple-Output (MIMO), where class
 
 MPC, on the other hand, is a versitile methodology which naturally extends to MIMO systems and seamlessly integrates constraint handling. This flexibility is a property of the underlying structure of the optimal control problem. However, unlike other optimal control solutions such as Linear Quadratic Regulators (LQR), MPC benefits from feedback and thereby increases robustness for modeling or stoichastic uncertainties.  \\
 
-While still fundamentally a control strategy, one of the unique benefits of MPC is that (over its prediction horizon) it provides the optimal inputs to achieve a desired objective. Since a model of the system is required for MPC to work, we can propigate the predicted state(s) of the system by using the current initial condition, and the optimal control inputs. This in turn produces the optimal state trajectory, at the given time step over the prediction horizon. \\
+Additionally, MPC can be used to develop an optimal state trajectory or path. This is known as path planning. Due to the predictive nature of MPC, it can not only predict the optimal sequence of inputs, given the current state, it can predict the optimal states required to achieve its objective. By using this ability to predict optimal future states as well as being able to update these predictions required, we can use MPC as a crude path planner. This is often beneficial when direct control of the system is not possible using MPC, but where the planned path can be used as a reference input to the actually controller. \\
 
-The objective of this project is to investigate the use of MPC in both planning and control tasks, on a simple dynamic system and weigh how the results compare against other methods for controlling or planning the motion of robotic systems.
+This paper will investigate the use of MPC in both planning and control tasks, on a simple robot.
 
 
 \section{Problem Statement}
 
-The system being used for this project is a two link planar robot arm subject to gravity, as shown in figure (ADD FIGURE). While this robot is simple and does not allow for the more interesting aspects of path planning that occur in 3D space, it is sufficient to understanding the benefits and draw backs of implementing MPC on a conceptually simple and easily derivable model, unlike more conventional robot manipulators whose dynamics are large and highly coupled.
+The system being used for this project is a two link planar robot arm subject to gravity, as shown in figure (ADD FIGURE). While this robot is simple, it is sufficient to understanding the benefits and draw backs of implementing MPC on a conceptually simple and easily derivable model, unlike more conventional robot manipulators whose dynamics are large and highly coupled.
 
 
 Instead, this project will utilize a simplified 2-link planar robot which offers many of the same physical challenges a more complex manipulator would but is more suited to be design and test platform for this project, due it relative simplicity.
@@ -478,7 +478,7 @@ One interested test case for directly using MPC to control the robot is the situ
 
 
 
-Additionally, it was interesting to see how MPC performed when the goal state was by virtue of physical constraints of the robot in an infeasible location. In such a case, I found that while the controller did not ever violate the constraints, it would converge to an apparently random position fr
+Additionally, it was interesting to see how MPC performed when the goal state was infeasible by virtue of physical constraints of the robot. In such a case, I found that while the controller did not ever violate the constraints, it would drive the robot into an apparently random pose.
 
 
 \subsection{Path Planning via MPC}
@@ -534,6 +534,7 @@ The authors would like to thank Mountain Dew and his matress for constant suppor
 \cite{borrelli_predictive_2017}
 \cite{boyd_convex_2004}
 \cite{slotine_applied_1991}
+\cite{soft_constraints}
 
 \printbibliography
 
