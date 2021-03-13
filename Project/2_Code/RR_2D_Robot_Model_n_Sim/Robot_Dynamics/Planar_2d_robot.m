@@ -40,6 +40,66 @@ latex(two)
 %%
 
 
+syms m1 m2 L1 L2 g q1 q2 q1_dot q2_dot
+
+
+eps = .1 ;
+
+m = [m1*(L1)^2 + m2*(L1^2 + 2*L1*L2*cos(q2) + (L2)^2) + eps, m2*(L1*L2*cos(q2)+ (L2)^2); ...
+     m2*(L1*L2*cos(q2) + (L2)^2), m2*(L2)^2+eps];
+
+v = [-m2*L1*L2*sin(q2)*(2*q1_dot*q2_dot + (q2_dot)^2);...
+     m2*L1*L2*(q1_dot)^2*sin(q2)] ; 
+
+g = [(m1 + m2)*L1*g*cos(q1)+ m2*g*L2*cos(q1+ q2); ...
+     m2*g*L2*cos(q1+q2)];
+ 
+
+f = [q1_dot*.25;q2_dot*.25];
+ 
+ q_ddot = m\(tau - v -g - f); 
+
+
+
+
+
+latex(simplify(q_ddot(1)))
+latex(simplify(q_ddot(2)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%
+
+
 for i=2:1:350
     figure(1);
 
