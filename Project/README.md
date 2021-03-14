@@ -1,11 +1,19 @@
 # ECH 267 Advance Process Control: Final Project 
 
-#Introduction: 
+# Introduction: 
 
-The goal of this project is to design, develope, and implement a MPC based Trajectory-Generator for a Robot arm. The desired outcome of this project is to use MPC on a nonlinear discrete dynamics model of the robot and generate a trajectory for it to follow using the principle of optimal contol as applied via MPC. The secondary goal of this project is to further develope a controller capable of following the 'optimal' trajectory it is being given. Time permitting it would get to actually develop a sensor model for this robot and include obstacles so tha the trajectory might need to change "in close to real-time" as soon as the sensor detects an obsticle. 
+The goal of this project is to design, develop, and implement a MPC controller and path planner which is capable of driving a simple two link robot from one pose to another. Ideally, this would include avoiding ** static ** obstacles which obstruct the controller from simplest and direct path, as well as obeying constraints on the permitted range of motion which the system is subject to. 
+
 
 # Directions: 
 
+To run the scripts in the following `2_Code` folder, please follow the instructions below. 
+
+1. Install Matlab 
+2. Download and install Casadi from the instructions below. 
+3. Clone this repository to a folder on your local PC. 
+4. Add this folder to the Matlab path. 
+5. Run scripts
 
 
 # System Details: 
@@ -22,7 +30,7 @@ CasADi, is an opensource numerical/symbolic optimization and automatic different
 
 ## Installing CasADi:
 
-The tentative language which this project will most likely use is MATLAB as there are variety of well documented implementations of the control, optimization, and visualization elements which are not nearly as straightforward in python. 
+The language which this project uses is MATLAB as there are variety of well documented implementations of the control, optimization, and visualization elements which are not nearly as straightforward in python, in the authors opinion. 
 
 To install CasADi ... 
 1. Click the following link: https://web.casadi.org/get/
