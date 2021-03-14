@@ -2,7 +2,7 @@
 
 # Introduction: 
 
-The goal of this project is to design, develop, and implement a MPC controller and path planner which is capable of driving a simple two link robot from one pose to another. Ideally, this would include avoiding ** static ** obstacles which obstruct the controller from simplest and direct path, as well as obeying constraints on the permitted range of motion which the system is subject to. 
+The goal of this project is to design, develop, and implement a MPC controller and path planner which is capable of driving a simple two link robot from one pose to another. Ideally, this would include avoiding **static** obstacles which obstruct the controller from simplest and direct path, as well as obeying constraints on the permitted range of motion which the system is subject to. 
 
 
 # Directions: 
