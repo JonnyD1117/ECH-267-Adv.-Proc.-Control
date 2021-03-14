@@ -1,0 +1,25 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Problem Statement}{}% 2
+\BOOKMARK [1][-]{section.3}{Background}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Robotics}{section.3}% 4
+\BOOKMARK [3][-]{subsubsection.3.1.1}{}{subsection.3.1}% 5
+\BOOKMARK [3][-]{subsubsection.3.1.2}{}{subsection.3.1}% 6
+\BOOKMARK [3][-]{subsubsection.3.1.3}{}{subsection.3.1}% 7
+\BOOKMARK [2][-]{subsection.3.2}{}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{Methodology}{}% 9
+\BOOKMARK [2][-]{subsection.4.1}{Formulation of Robot Dynamics}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.2}{MPC Formulation}{section.4}% 11
+\BOOKMARK [3][-]{subsubsection.4.2.1}{Cost Function Design}{subsection.4.2}% 12
+\BOOKMARK [2][-]{subsection.4.3}{Develop Symbolic Model in CasADi}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.4}{Controller \046 Planner Simulation}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.5}{Controller Testing}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.6}{Planner Testing }{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Results}{}% 17
+\BOOKMARK [2][-]{subsection.5.1}{Controller Results}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.2}{Planner Results}{section.5}% 19
+\BOOKMARK [1][-]{section.6}{Discussion}{}% 20
+\BOOKMARK [2][-]{subsection.6.1}{Control}{section.6}% 21
+\BOOKMARK [2][-]{subsection.6.2}{Planning}{section.6}% 22
+\BOOKMARK [1][-]{section.7}{Conclusion}{}% 23
+\BOOKMARK [1][-]{IEEEbiography.0}{Biographies}{}% 24
+\BOOKMARK [2][-]{IEEEbiography.1}{Jonathan Dorsey}{IEEEbiography.0}% 25
