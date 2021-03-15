@@ -502,7 +502,9 @@ The basic premise behind path planning using MPC is to utilize the optimal state
 
 \subsubsection{Joint Paths}
 
+Paths in the joint space, represent the angular position necessary to move from one pose to another. In [Fig. \ref{fig:joint_path}], the joint paths for each joint of the robot (blue: joint1, red: joint2). By following these angular position synchronously, the manipulator would move from the inital pose (black *) to the final pose (green *).
 
+One of the benefits of computing this joint paths is that they can be used by non-MPC controllers. This is particularly useful when MPC is functioning as \textbf{supervisory controller}. By generating joint paths that are continuously defined, no matter what much faster the lower-level controller (under the supervirory controller), the path can be sampled and used as a set point to achieve the desired motion. This is more suitable for system where it is desirable to control the rate at which the robot traverses the path.
 
 \begin{figure}[ht]
     \centering
@@ -515,13 +517,15 @@ The basic premise behind path planning using MPC is to utilize the optimal state
 
 \subsubsection{End Effector Paths }
 
+While functionally very similar to the joint paths, the end effector path defines the path over which any tools or devices connected to the robot will move through. For more sophistocated robot tasks, understanding the motion of the end effector is very important as that is where all of the interaction with the world will happen. As seen in [Fig. \ref{fig:effector_path}] the effector path can also be defined by a continuous function, such as a cubic spline, allowing for the ability to sample the predicted path generated from MPC at any discrete interval.
+
 
 \begin{figure}[ht]
     \centering
     % \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{joint_path} }}%
     % \qquad
     \includegraphics[width=.75\linewidth]{path_planning/path3_1}
-    \caption{Joint Paths }%
+    \caption{End Effector Path}%
     \label{fig:effector_path}%
 \end{figure}
 
@@ -535,7 +539,7 @@ After testing the system, it is clear that MPC is a very straightforward control
 
 However, from the testing performed in this paper, it does appear that the addition of obstacles does significantly complicate the easy of using MPC for control. While there are many configurations of the end effector and the obstacle, that work seamlessly, other required significantly more computation and often failed to guide the end effector around the object, often resulting in very oscillatory behavior or inducing rapid wipping motions of the manipulator, to bypass an object.
 
-This is behavior is likely a result of a poorly design cost functionl. As mentioned previously, the trade-off between constraining the system for colliding with the object versus heavy penalizing the controller if it collides with the object is unclear to the author, and would require deeper research. However, from the simulation data collected, it appears that by implementing a obstacle collision penalty in the stage cost, that the controller \textbf{could} be presented with situations where the penalty incurred is insufficient to prevention collision.
+This is behavior is likely a result of a poorly design cost function. As mentioned previously, the trade-off between constraining the system for colliding with the object versus heavy penalizing the controller if it collides with the object is unclear to the author, and would require deeper research. However, from the simulation data collected, it appears that by implementing a obstacle collision penalty in the stage cost, that the controller \textbf{could} be presented with situations where the penalty incurred is insufficient to prevention collision.
 
 Another aspect about using MPC for obstacle avoidance is the difficulty in tuning the controller such that it could be effectively utilized on a wide number of configurations. This is most notably seen in conditions where the controller actually avoids the desired obstacle, but proceeds to oscillate due to poor tuning.
 
@@ -546,19 +550,11 @@ This is most likely the result of the estimated reference input. This torque ref
 
 \subsection{Planning}
 
-Possible To use MPC as a supervisory controller/planner for other\\
-
-MPC planner is able to update the best path (given the current state) and can account for model uncertainties or object/obstacles in the direct path.\\
-
-Planning with MPC allows the planner to track smoothly though the optimal state horizon which can then be leveraged by other controllers ...etc. which function at faster speeds than the base MPC controller could.\\
+As can be seen, plath planning with MPC is a relatively simple extension of using MPC for control, which facilitates a wide range of intersting applications which are frequently used in robotics. In particular, the ability generate an optimal path, at a given state, that incorporates model uncertainties and constaints as well as external factors such as obstacles, makes MPC based path planning a very interesting playground for robotics research as well as work on autonomous vehicle and drones. \\
 
 Unlike the most commonly used path planning algorithms (A*, Djikstra, RRT, RRT*, PRM, D*, and other discretized, graph, or heuristic search algorithms, such as Artifial potential fields) Path planning with MPC is a very control theoretic approach.\\
 
-While the use case seen in this paper is not very impressive, predicting and controlling the path which the end effector of a robot takes from one position to another can quicker be seen in the three dimensional case where discretizing the entire feasible can be computationally intensive.\\
-
-
-
-
+Unfortunately, while the usecase of a 2D planar robot used in this paper is not very impressive, predicting and controlling the path which the end effector of a robot takes from one position to another can applied to more complex three dimensional models where discretizing the entire workspace space could be computationally infeasible for the speed or performance required. \\
 
 \section{Conclusion}
 The conclusion goes here.
@@ -586,10 +582,10 @@ The authors would like to thank Mountain Dew and his matress for constant suppor
 \cite{boyd_convex_2004}
 \cite{slotine_applied_1991}
 
-% \printbibliography
+\printbibliography
 
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{monty1}}]{Jonathan Dorsey}
-  I've already told you once. It is an ex parrot. Its has ceased to be. Recieved his Bachelors Degree in Mechanical Engineering from the San Jose State University. With a focus on mechatronics and control systems, he has developed an interest in reinforcement learning, computer vision, and control and design of autonomous systems.
+  Recieved his Bachelors Degree in Mechanical Engineering from the San Jose State University, in 2018. Graduating with a focus on mechatronics and control systems, he is currently studying at UC Davis in the field of applied machine learning, in the Department of Mechanical \& Aerospace Engineering. In recent years he has developed an interest in reinforcement learning and computer vision in addition to continuing to study control and design of autonomous systems.
 \end{IEEEbiography}
 
 
