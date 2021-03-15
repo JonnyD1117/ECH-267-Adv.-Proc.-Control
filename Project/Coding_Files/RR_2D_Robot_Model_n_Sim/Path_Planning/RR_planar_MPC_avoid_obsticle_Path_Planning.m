@@ -1,3 +1,4 @@
+%% Model Predictive Control Setup 
 import casadi.*
 
 clear all 
@@ -63,7 +64,7 @@ con_ref = Tau_Ref(P(5:6), p);
 % obj_x = -.20;
 % obj_y = .30;
 
-obj_x = -.3;
+obj_x = -.35;
 obj_y = .35;
 
 % obj_x = -.15;
@@ -87,7 +88,7 @@ for k=1:N
     x = L1*cos(X(1,k)) + L2*cos(X(1,k) + X(2,k));
     y = L1*sin(X(1,k)) + L2*sin(X(1,k) + X(2,k));
     
-    c = -sqrt((x - obj_x )^2 + (y - obj_y)^2) + (end_effect_dia + obj_dia +.01);
+    c = -sqrt((x - obj_x )^2 + (y - obj_y)^2) + (end_effect_dia + obj_dia +.0125);
    
     obj = obj + (st - ref)'*Q*(st - ref) + (con- con_ref)'*R*(con-con_ref) + 50000*(norm(max(c,0))); % Construct Symbolic representation of objective function at time step "K"   
   
@@ -187,6 +188,157 @@ args.ubx(4*(N+1):2: 4*(N+1) + 2*N,1) = tau_1_max;   % Input Upper Bound TAU1
 args.lbx(4*(N+1)+1:2: 4*(N+1) + 2*N,1) = tau_2_min;   % Input Lower Bound TAU2
 args.ubx(4*(N+1)+1:2: 4*(N+1) + 2*N,1) = tau_2_max;   % Input Upper Bound TAU2
 
+
+%% Full-State Feedback Steady State Reference 
+
+syms m1 m2 m3 L1 L2 L3 q1 q2 q3 q1_dot q2_dot g_val t1 t2
+
+tau = [t1;t2];
+
+eps = .1 ;
+
+m = [m1*(L1)^2 + m2*(L1^2 + 2*L1*L2*cos(q2) + (L2)^2) + eps, m2*(L1*L2*cos(q2)+ (L2)^2); ...
+     m2*(L1*L2*cos(q2) + (L2)^2), m2*(L2)^2+eps];
+
+v = [-m2*L1*L2*sin(q2)*(2*q1_dot*q2_dot + (q2_dot)^2);...
+     m2*L1*L2*(q1_dot)^2*sin(q2)] ; 
+
+g = [(m1 + m2)*L1*g_val*cos(q1)+ m2*g_val*L2*cos(q1+ q2); ...
+     m2*g_val*L2*cos(q1+q2)];
+ 
+
+f = [q1_dot*.25;q2_dot*.25];
+ 
+ q_ddot = m\(tau - v -g - f);
+ 
+ f1 = q1_dot; 
+ f2 = q2_dot;
+ f3 = q_ddot(1);
+ f4 = q_ddot(2);
+ 
+ d_f1_dx1 = diff(f1,q1);
+ d_f1_dx2 = diff(f1,q2);
+ d_f1_dx3 = diff(f1,q1_dot);
+ d_f1_dx4 = diff(f1,q2_dot);
+ 
+ d_f2_dx1 = diff(f2,q1);
+ d_f2_dx2 = diff(f2,q2);
+ d_f2_dx3 = diff(f2,q1_dot);
+ d_f2_dx4 = diff(f2,q2_dot);
+ 
+ d_f3_dx1 = diff(f3,q1);
+ d_f3_dx2 = diff(f3,q2);
+ d_f3_dx3 = diff(f3,q1_dot);
+ d_f3_dx4 = diff(f3,q2_dot);
+
+ d_f4_dx1 = diff(f4,q1);
+ d_f4_dx2 = diff(f4,q2);
+ d_f4_dx3 = diff(f4,q1_dot);
+ d_f4_dx4 = diff(f4,q2_dot);
+ 
+ A = [d_f1_dx1, d_f1_dx2, d_f1_dx3, d_f1_dx4;...
+      d_f2_dx1, d_f2_dx2, d_f2_dx3, d_f2_dx4;...
+      d_f3_dx1, d_f3_dx2, d_f3_dx3, d_f3_dx4; ...
+      d_f4_dx1, d_f4_dx2, d_f4_dx3, d_f4_dx4];
+  
+ A = simplify(A); 
+   
+ d_f1_du1 = diff(f1,t1);
+ d_f1_du2 = diff(f1,t2);
+
+ d_f2_du1 = diff(f2,t1);
+ d_f2_du2 = diff(f2,t2);
+ 
+ d_f3_du1 = diff(f3,t1);
+ d_f3_du2 = diff(f3,t2);
+
+ d_f4_du1 = diff(f4,t1);
+ d_f4_du2 = diff(f4,t2);
+ 
+ B = [d_f1_du1,d_f1_du2;...
+      d_f2_du1,d_f2_du2;...
+      d_f3_du1,d_f3_du2;...
+      d_f4_du1,d_f4_du2];
+  
+ C = eye(4); 
+
+x0 = [0,0,0,0];                        % Equilibrium Point
+states_sym = [q1, q2, q1_dot, q2_dot]; % State Symbols
+params_sym = [L1, L2, m1, m2, g_val];  % Parameter Symbols
+params_val = [.25,.25, .5, .25, 9.84];
+
+% State Space Matrices
+A_mat = vpa(subs(A, [states_sym, params_sym],[x0, params_val]),4);
+B_mat = vpa(subs(B, [states_sym, params_sym],[x0, params_val]),4);
+A_mat = double(A_mat);
+B_mat = double(B_mat);
+
+state_matrices = struct;
+state_matrices.A = A_mat; 
+state_matrices.B = B_mat; 
+state_matrices.C = C; 
+
+% State Space Object
+G_ss = ss(A_mat, B_mat, C, zeros(4,2));
+
+% Pole Placement
+K = place(A_mat, B_mat, [-7, -5, -4, -3]);
+
+state_matrices.K = K; 
+
+% Initial and Target States
+% x_targ = [pi; deg2rad(-45);0;0];
+% x_init = [0;-pi/2; 0; 0] ;
+
+x_new = [];
+u_new = []; 
+dt = .1;
+
+
+% for i = 1:1:100
+%     
+%     [new_state, u_prev] = feedback_controller(state_matrices, x_init, x_targ, dt);
+%     
+%     x_new(:,i) = new_state;  
+%     u_new(:,i) = u_prev;
+%     
+%     x_init = x_new(:,i);
+%     
+% end 
+% 
+% figure()
+% subplot(4,1,1)
+% plot(x_new(1,:))
+% ylabel('Q1')
+% title('Full State Feedback Stabilizing Controller X_0=[0,-.5*pi,0,0], X_{ref}=[pi, -.25*pi,0,0]')
+% 
+% subplot(4,1,2)
+% plot(x_new(2,:))
+% ylabel('Q2')
+% 
+% subplot(4,1,3)
+% plot(x_new(3,:))
+% ylabel('Q1_{dot}')
+% 
+% subplot(4,1,4)
+% plot(x_new(4,:))
+% ylabel('Q2_{dot}')
+% xlabel('Time')
+% 
+% figure()
+% subplot(2,1,1)
+% plot(u_new(1,:))
+% ylabel('Tau_1')
+% title('Full State Feedback Stabilizing Controller Torque Inputs')
+% 
+% subplot(2,1,2)
+% plot(u_new(2,:))
+% ylabel('Tau_2')
+
+
+
+%% MPC Path Planning with Full State Regulator Setup
+
 % Initial Goal -> Final Goal
 
 x1_ref = .258; 
@@ -281,12 +433,109 @@ length(t)*T
 u_cl = u_cl';
 main_loop_time = toc(main_loop)
 
+
+%% Path Generation 
+
+time = [0:T:T*length(xxl(1,1,:))];
+
+for k = 1:1:length(xxl(1,1,:))
+    
+    t_counter = 0;      %     
+    path = xxl(:,:,k);  %
+    
+    for j = 1:1:N
+        
+        t_pred_horizion = [t_counter*T:T:(t_counter*T + N*T)-T];
+        
+        current_state = path(j, :);
+        
+        q1_pred(j) = current_state(1) ; 
+        q2_pred(j) = current_state(2); 
+        q1_dot_pred(j) = current_state(3); 
+        q2_dot_pred(j) = current_state(4);
+        
+        L1 = .25; 
+        L2 = .25; 
+        g = 9.81;
+        
+        x1_pred(j) = L1*cos(q1_pred(j)) ; 
+        x2_pred(j) = L1*cos(q1_pred(j)) + L2*cos(q1_pred(j) + q2_pred(j)); 
+        y1_pred(j) = L1*sin(q1_pred(j)); 
+        y2_pred(j) = L1*sin(q1_pred(j)) + L2*sin(q1_pred(j) + q2_pred(j)); 
+          
+    end   
+    
+        t_path  = [t_counter*T:.001:(t_counter*T + N*T)]; 
+
+        q1_path(k,:) = spline(t_pred_horizion, q1_pred,t_path); 
+        q2_path(k,:) = spline(t_pred_horizion, q2_pred, t_path); 
+
+        figure(3)
+        subplot(2,1,1)
+        plot(t_path, q1_path(k,:), '-*g')
+        plot(t_pred_horizion, q1_pred, 'b')
+        title("MPC Base: Continuous Path Planner")
+        xlabel("Time")
+        ylabel('Theta 1')
+
+        subplot(2,1,2)
+        plot(t_path, q2_path(k,:), '-*r')
+        plot(t_pred_horizion, q2_pred, 'k')
+        
+        xlabel("Time")
+        ylabel('Theta 2')
+        
+        x1_path(k,:) = spline(t_pred_horizion, x1_pred,t_path); 
+        x2_path(k,:) = spline(t_pred_horizion, x2_pred,t_path); 
+        y1_path(k,:) = spline(t_pred_horizion, y1_pred,t_path); 
+        y2_path(k,:) = spline(t_pred_horizion, y2_pred,t_path); 
+        
+        
+        
+        
+%         figure(4)   
+%         clf(figure(4))
+%         hold on
+%         plot(x2_path(k,:), y2_path(k,:), 'b') 
+
+% plot_robot_with_object_with_path_pred(x_vec, y_vec, obj_x, obj_y, goal1, goal2, start1, start2, x2_path(k,:), y2_path(k,:))
+
+
+
+        pause(.1)
+    
+        t_counter = t_counter + 1; 
+end 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %%
-figure(3)
-video_path = 'C:\Users\Indy-Windows\Documents\ECH-267-Adv.-Proc.-Control\Project\Report\images\OBS_Avoid_TEST';
-v = VideoWriter(strcat(video_path, fold_name,'\robot_MPC.avi')); 
-v.FrameRate = 20;
-open(v); 
+
+figure(5)
+% video_path = 'C:\Users\Indy-Windows\Documents\ECH-267-Adv.-Proc.-Control\Project\Report\images\OBS_Avoid_TEST';
+% v = VideoWriter(strcat(video_path, fold_name,'\robot_MPC.avi')); 
+% v.FrameRate = 20;
+% open(v); 
 for i=1:1:length(x_list)-1
     
     
@@ -300,7 +549,7 @@ for i=1:1:length(x_list)-1
 %     plot_robot(x_vec, y_vec, x1_ref, y1_ref, x2_ref, y2_ref);
     
     var = size(xxl);
-    hold on
+%     hold on
     for k = 1:1:var(1)
 
         q1 = xxl(k, 1, i);
@@ -313,13 +562,21 @@ for i=1:1:length(x_list)-1
         y = pos.y;
         
 %         viscircles([x(2), y(2)], .0625,'LineStyle','--', 'Color', 'k');
-          plot(x(2), y(2), '*k')
-    end 
-        plot_robot_with_object(x_vec, y_vec, obj_x, obj_y, x2_ref, y2_ref,x1_ref, y1_ref)
+%           plot(x(2), y(2), '*k')
 
-    hold off
-      frame=getframe(gcf); 
-        writeVideo(v, frame);
+%     plot(x2_path(k,:), y2_path(k,:), 'b') 
+    end 
+    
+            plot(x2_path(i,:), y2_path(i,:), 'b') 
+
+        plot_robot_with_object(x_vec, y_vec, obj_x, obj_y, x2_ref, y2_ref,x1_ref, y1_ref)
+%             hold off
+
+%         plot_robot_with_object_with_path_pred(x_vec, y_vec, obj_x, obj_y, x2_ref, y2_ref,x1_ref, y1_ref, x2_path(k,:), y2_path(k,:))
+
+
+%       frame=getframe(gcf); 
+%         writeVideo(v, frame);
     pause(.25)
     fill([-1-0.2*1 1+0.2*1 1+0.2*1 -1-0.2*1], [-1-0.2*1 -1-0.2*1 1+0.2*1 1+0.2*1], 'w'); % Clears Background
 
@@ -327,14 +584,14 @@ for i=1:1:length(x_list)-1
   
 end 
 
-close(v)
-
-%%
-
-main_loop_time = toc(main_loop)
+% close(v)
 
 
-u_cl = u_cl;
+
+% main_loop_time = toc(main_loop)
+% 
+% 
+% u_cl = u_cl;
  
 figure(1)
 subplot(211) 
@@ -372,8 +629,8 @@ subplot(212)
 stairs(t,u_cl(2,:),'k','linewidth',1.5); axis([0 t(end) -0.35 0.75])
 xlabel('time (seconds)')
 ylabel('Torque_2 (N*m)')
-% disp("DONE");
-% disp(rad2deg(x_list(1,end)))
+disp("DONE");
+disp(rad2deg(x_list(1,end)))
 
 
 %% Graphs
@@ -448,8 +705,25 @@ legend(["Joint 1"," Joint 2"])
 %%
 
 
+function [new_state, current_input] = feedback_controller(state_matrices, x_init, x_targ, dt)
+    
+    % State Space Matrices 
+    A = state_matrices.A; 
+    B = state_matrices.B; 
+    %C = state_matrices.C; 
 
+    % Full State Feedback Gain matrix    
+    K = state_matrices.K; 
 
+    % Control Input
+    u = -K*(x_init-x_targ);
+    
+    % State Update Law.
+    x_dot = A*x_init + B*(u);
+    new_state = x_init + dt.*x_dot;
+    current_input = u; 
+
+end 
 
 
 function [t0, x0, u0] = shift(T, t0, x0, u, f)
@@ -539,6 +813,57 @@ xlabel("X-Axis")
 ylabel("Y-Axis") 
 
 end
+
+function plot_robot_with_object_with_path_pred(x_vec, y_vec, obj_x, obj_y, goal1, goal2, start1, start2, x2_path, y2_path)
+
+x1 = x_vec(1); 
+x2 = x_vec(2); 
+y1 = y_vec(1); 
+y2 = y_vec(2); 
+
+x_goal = goal1;
+y_goal = goal2;
+
+x_start = start1; 
+y_start = start2; 
+
+
+hold on
+% fill([-1-0.2*1 1+0.2*1 1+0.2*1 -1-0.2*1], [-1-0.2*1 -1-0.2*1 1+0.2*1 1+0.2*1], 'w'); % Clears Background
+
+
+viscircles([obj_x,obj_y], .0625,'LineStyle','--');
+
+
+plot([ 0, x1], [0, y1], "b");
+plot([ x1, x2], [y1, y2], "r");
+
+plot(x2, y2, '-*b')
+
+viscircles([x2, y2], .0625,'LineStyle','--', 'Color', 'b'); % End Effector Position
+
+
+% clf(figure(4))
+%         hold on
+        plot(x2_path, y2_path, 'b') 
+%         hold off
+
+plot(obj_x,obj_y, '*r') % Obstacle Position 
+plot(x_start,y_start, '*k') % Start Position
+plot(x_goal,y_goal, '*g') % End Position 
+
+hold off
+
+title('Planar 2D Robot in Workspace')
+xlim([-.6,.6])
+ylim([-.6,.6])
+
+xlabel("X-Axis")
+ylabel("Y-Axis") 
+
+end
+
+
 
 function pos = forward_kinematics(p,theta, theta_dot)
  
@@ -672,16 +997,6 @@ g = p.g;
 
 out = [(m1 + m2)*L1*g*cos(q1)+ m2*g*L2*cos(q1+ q2); ...
      m2*g*L2*cos(q1+q2)];
-
-
-end 
-
-
-
-function [x0_2, y0_2] = T0_2(q1, q2)
-
-
-
 
 
 end 

@@ -477,46 +477,28 @@ One side effect of this delayed action to prevent collision is that, typically, 
 
 
 
-\noindent Notice in [Fig. \ref{fig:obs_avoid_control_action}], the sudden changes in velocity.
+\noindent Notice in [Fig. \ref{fig:obs_avoid_control_action}], the sudden changes in velocity, which roughly correlate to the large swings of the actuator action, on the robot. \\
 
-As shown in [fig.\ref{fig:obs_avoid_path}], when obstacle avoidance (under the current MPC formulation) does work, it is very compelling. By the simple addition of an extra term in the objective function or an added constraint, the controller can achieve nontrivial goals which other control strategies would have required explicit planning to reproduce. In this way, MPC with obstacle avoidance is very nearly packaged general methodology for hitting control objectives without designing custom planning to avoid undesirable states. \\
-
-
-
-
-
-However, as previously mentioned, the results for obstacle avoidance, seen in simulation, were mixed at best. As seen in [fig. \ref{fig:obs_avoid_path_bad}], the relative configuration between the end effector and the object are such that even though other solutions exist to navigate around the object, the controller has determined that the path over the obstacle is the only way. This is seen as an oscillation and does not produce any useful solutions. Even if the prediction horizon and MPC gains are tuned, this behavior appears to persist or the controller is so tuned that the penalty for collision is not becomes insignificant and the resulting control action slams the obstacle in on its way to the goal pose.
+As shown in [fig.\ref{fig:obs_avoid_path}], when obstacle avoidance (under its current cost function formulation) does work, it is very compelling. By the simple addition of an extra term in the objective function or an added constraint, the controller can achieve nontrivial goals which other control strategies would have required explicit planning to reproduce. In this way, MPC with obstacle avoidance presents a very neatly packaged general methodology for hitting control objectives without designing custom planning to avoid undesirable states. \\
 
 \begin{figure}[ht]%
     \centering
-    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path3_1} }}%
-    \qquad
-    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path3_2} }}%
+    \subfloat[\centering Obs. Avoidance: Oscillating Velocity]{{\includegraphics[width=.72\linewidth]{MPC_w_Obs_Avoid/osc_vel} }}%
+    % \qquad
+    % \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path3_2} }}%
     % \caption{2 Figures side by side}%
     \\
-    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path3_3} }}%
-    \caption{Obstacle Avoidance Control System}%
+    \subfloat[\centering Obs. Avoidance: Oscillating Torque]{{\includegraphics[width=.72\linewidth]{MPC_w_Obs_Avoid/osc_tor} }}%
+    \caption{Nonresolving Obs. Avoidance Oscillations}%
     \label{fig:obs_avoid_path_bad}%
 \end{figure}
 
+However, as previously mentioned, the results sean under the current formulation for obstacle avoidance via MPC are mixed at best. As seen in [fig. \ref{fig:obs_avoid_path_bad}], the system is often unstable and does not resolve to any steady state value, but merely oscillates, while the controller is stuck between getting to the final pose and avoiding the obstacle with the smallest possible deviation from the original optimal path. Even though other solutions exist, the controller appears stuck in a local minimima. Even if the prediction horizon and MPC gains are tuned, this behavior appears to persist or the controller is so tuned that the penalty for collision is not becomes insignificant and the resulting control action slams the obstacle in on its way to the goal pose. This problem would benefit from a more rigorous and sophisticated treat of MPC based control with obstacle avoidance
 
-\subsubsection{Infeasible Goal Pose (Constraint Violation)}
-
-\begin{figure}%
-    \centering
-    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{MPC_sys_Constraints_violation/T4_X_init_25_45_0_0_X_ref_260_n15_0_0/pos} }}%
-    \qquad
-    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{MPC_sys_Constraints_violation/T4_X_init_25_45_0_0_X_ref_260_n15_0_0/vel} }}%
-    % \caption{2 Figures side by side}%
-    \\
-    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{MPC_sys_Constraints_violation/T4_X_init_25_45_0_0_X_ref_260_n15_0_0/tor} }}%
-    % \qquad
-    % \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
-    \caption{Infeasible Goal MPC}%
-    \label{fig:infeasible_goal}%
-\end{figure}
 
 \subsection{Planner Results}
+
+The basic premise behind path planning using MPC is to utilize the optimal states over the prediction horizon as a guide to define a continuous path. In this paper, this is accomplished by using the extracting the optimal states, from within in the controller, which are then used to define cubic splines from the inital pose to the final pose. This technique can be applied to either the joint space or the end effector space of the robot, providing several ways in which this path can be utilized. 
 
 \subsubsection{Joint Paths}
 
