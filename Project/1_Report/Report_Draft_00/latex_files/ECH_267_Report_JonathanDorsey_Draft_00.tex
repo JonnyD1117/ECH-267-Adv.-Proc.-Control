@@ -131,7 +131,7 @@ In general robotic arms are classified as either prismatic (linear motion) or re
     \label{puma560}
 \end{figure}
 
-While the study of high DOF robots is well researched and would be present interesting and complicated scenarios for both control and planning, the scale and complexity of modeling the governing dynamic equations make robots like those in [Fig. \ref{puma560}] impractical for the scope and time restrictions of this paper. This paper, instead, opts to use the dynamically simple RR-robot described above, as its design and test platform for implementing MPC.
+While the study of high DOF robots is well researched and would be present interesting and complicated scenarios for both control and planning, the scale and complexity of modeling the governing dynamic equations make robots like those in [Fig. \ref{puma560}] impractical for the scope and time restrictions of this paper. This paper, instead, opts to use the dynamically simple RR-robot described above, as its design and test platform for implementing MPC.\\
 
 
 
@@ -235,7 +235,7 @@ u_{i}=-m_{i}^{0} g^{T}{ }^{0} P_{C_{i}}+u_{r e f_{i}}
 
 By computing $i$ Lagrange equations, as expressed above, the equations of motion for the system will be determined. While simple, this process depends on the ability of taking derivatives, which for robotic systems can be highly coupled and result in massive expressions. Typically this would be done using a symbolic math libary or by using the itterative form of the Newton-Euler Equations instead.\\
 
-In general, the serially articulated robots with revolute joints will produce equations of motion (EOM) that take the following form.
+In general, serially articulated robots with revolute joints will produce equations of motion (EOM) that take the following form.
 \begin{equation}\label{eq:robot_dyn}
   \tau = M(\Theta)\ddot{\Theta} + V(\Theta, \dot{\Theta}) + G(\Theta) + F(\dot{\Theta})
 \end{equation}
@@ -378,21 +378,18 @@ By virtue of using muliple shooting, the decision variable for this MPC formulat
 
 Since the first objective of this paper is to test the efficacy of MPC, there are several interesting scenarios which are of general interest when evaluating how effective MPC based control is, on this type of system. \\
 
-% The controller testing for this section, included nominal performance of MPC as MIMO controller, performance with model/parameter mismatch, the behavior of MPC for infeasible targets, and finally obstacle avoidnace
+\subsubsection{Pose-to-Pose Control}
+The primary task of any controller is to drive the system from its initial condition to a desirable end result. For MPC on a robotic arm, this is equivalent to determining whether MPC can guide the robot from any initial pose (position and orientation) to any other arbitrary feasible pose without driving the system in to actuator saturation, or causing the system to violate any constraints or performance objectives. To test this in simulation, MPC will be used to control both of the actuated links independently of each other, to achieved the desired final pose.\\
 
+\subsubsection{Model/Parameter Mismatch}
+An important characteristic of any controller is its robustness to uncertainty. Since MPC makes heavy use of a system model for prediction, one important test is to determine how MPC performs when the system being controlled and the model used in the controller a mismatched. To test this in simulation, the system and controller models are intentionally mismatched, such that the system states are continually used to update the controller.\\
 
-\begin{enumerate}
-    \item Pose-to-Pose Control
-    \item Model/Parameter Mismatch
-    \item Infeasible Target behavior
-    \item Obstacle Avoidance (static)
-\end{enumerate}
-
-
+\subsubsection{Obstacle Avoidance}
+In robotics and autonomous systems, it is often desireable to design a system that is capable of intelligently using sensory data to predicted the best way to acheive its objective, without external intervention. For robotic manipulators, a common task is for the end effector to avoid collisions with obstacle in its workspace. This paper will test the ability of MPC to avoid obstacle by tailoring the cost function to maintain specified working distance way from a static object in its path.
 
 \subsection{Planner Testing}
 
-The objectives for MPC based path planning are to implement path planning,
+The second primary objective of this paper is to implement MPC such that the state predictions can be used to effectively plan the path which the end effector takes. The objectives for MPC based path planning are to implement path planning,
 
 
 \begin{enumerate}
@@ -442,11 +439,11 @@ The plots in [Fig.\ref{fig:pose2pose_control_action}] show the steady performanc
 
 \subsubsection{Model/Parameter Mismatch}
 
-An important characteristic of any controller is its robustness to uncertainty. Since MPC makes heavy use of the model for prediction, one important test is how the MPC performs when the system being controlled and the model used in the controller a mismatched.    
 
-about One of the other main results, is the steady state performance of the system during model and system parameter mismatch. For this test, the lengths of each link of the robot are is assumed to be directly measurable and that only the masses of each link are mismatched.\\
 
-The following table investigates the percent error of the steady state performance of the regular MPC controller, including a terminal cost.\\
+One of the other main results, is the steady state performance of the system during model and system parameter mismatch. For this test, the lengths of each link of the robot are is assumed to be directly measurable and that only the masses of each link are mismatched.\\
+
+The following table investigates the percent error of the steady state performance of the MPC, including a terminal cost.\\
 
 \begin{table}[ht]\caption{Plant Model Mismatch}
     \centering

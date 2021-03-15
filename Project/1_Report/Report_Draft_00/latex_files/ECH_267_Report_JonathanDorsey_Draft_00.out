@@ -13,19 +13,22 @@
 \BOOKMARK [2][-]{subsection.4.3}{Controller Development in CasADi}{section.4}% 13
 \BOOKMARK [2][-]{subsection.4.4}{Controller \046 Planner Simulation}{section.4}% 14
 \BOOKMARK [2][-]{subsection.4.5}{Controller Testing}{section.4}% 15
-\BOOKMARK [2][-]{subsection.4.6}{Planner Testing}{section.4}% 16
-\BOOKMARK [1][-]{section.5}{Results}{}% 17
-\BOOKMARK [2][-]{subsection.5.1}{Controller Results}{section.5}% 18
-\BOOKMARK [3][-]{subsubsection.5.1.1}{Pose-to-Pose}{subsection.5.1}% 19
-\BOOKMARK [3][-]{subsubsection.5.1.2}{Model/Parameter Mismatch}{subsection.5.1}% 20
-\BOOKMARK [3][-]{subsubsection.5.1.3}{Obstacle Avoidance}{subsection.5.1}% 21
-\BOOKMARK [3][-]{figure.caption.10}{Infeasible Goal Pose \(Constraint Violation\)}{subsection.5.1}% 22
-\BOOKMARK [2][-]{subsection.5.2}{Planner Results}{section.5}% 23
-\BOOKMARK [3][-]{figure.caption.11}{Joint Paths}{subsection.5.2}% 24
-\BOOKMARK [3][-]{subsubsection.5.2.2}{End Effector Paths }{subsection.5.2}% 25
-\BOOKMARK [1][-]{section.6}{Discussion}{}% 26
-\BOOKMARK [2][-]{subsection.6.1}{Control}{section.6}% 27
-\BOOKMARK [2][-]{subsection.6.2}{Planning}{section.6}% 28
-\BOOKMARK [1][-]{section.7}{Conclusion}{}% 29
-\BOOKMARK [1][-]{IEEEbiography.0}{Biographies}{}% 30
-\BOOKMARK [2][-]{IEEEbiography.1}{Jonathan Dorsey}{IEEEbiography.0}% 31
+\BOOKMARK [3][-]{subsubsection.4.5.1}{Pose-to-Pose Control}{subsection.4.5}% 16
+\BOOKMARK [3][-]{subsubsection.4.5.2}{Model/Parameter Mismatch}{subsection.4.5}% 17
+\BOOKMARK [3][-]{subsubsection.4.5.3}{Obstacle Avoidance}{subsection.4.5}% 18
+\BOOKMARK [2][-]{subsection.4.6}{Planner Testing}{section.4}% 19
+\BOOKMARK [1][-]{section.5}{Results}{}% 20
+\BOOKMARK [2][-]{subsection.5.1}{Controller Results}{section.5}% 21
+\BOOKMARK [3][-]{subsubsection.5.1.1}{Pose-to-Pose}{subsection.5.1}% 22
+\BOOKMARK [3][-]{subsubsection.5.1.2}{Model/Parameter Mismatch}{subsection.5.1}% 23
+\BOOKMARK [3][-]{subsubsection.5.1.3}{Obstacle Avoidance}{subsection.5.1}% 24
+\BOOKMARK [3][-]{figure.caption.10}{Infeasible Goal Pose \(Constraint Violation\)}{subsection.5.1}% 25
+\BOOKMARK [2][-]{subsection.5.2}{Planner Results}{section.5}% 26
+\BOOKMARK [3][-]{figure.caption.11}{Joint Paths}{subsection.5.2}% 27
+\BOOKMARK [3][-]{subsubsection.5.2.2}{End Effector Paths }{subsection.5.2}% 28
+\BOOKMARK [1][-]{section.6}{Discussion}{}% 29
+\BOOKMARK [2][-]{subsection.6.1}{Control}{section.6}% 30
+\BOOKMARK [2][-]{subsection.6.2}{Planning}{section.6}% 31
+\BOOKMARK [1][-]{section.7}{Conclusion}{}% 32
+\BOOKMARK [1][-]{IEEEbiography.0}{Biographies}{}% 33
+\BOOKMARK [2][-]{IEEEbiography.1}{Jonathan Dorsey}{IEEEbiography.0}% 34
