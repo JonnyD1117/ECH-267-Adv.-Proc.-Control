@@ -80,41 +80,10 @@ The manipulator used in this paper is a two link planar robot arm subject to gra
 
 \begin{figure}
     \centering
-    \includegraphics[scale=.5]{2d_arm_2}
+    \includegraphics[scale=.70]{2d_arm_2}
     \caption{RR Planar Manipulator subject to gravity}
     \label{RRrobot}
 \end{figure}
-
-% \subsection{MPC Control Objectives}
-% From a strictly control perspective, this paper seeks to investigate how to formulate MPC for the robot arm, to determine the effectiveness of MPC in , to
-%
-%
-%
-% for as a
-%
-% \begin{enumerate}
-%     \item How can MPC be used to control a simple robot?
-%     \item How effective is MPC over other control schemes?
-%     \item Can MPC be used for obstacle avoidance?
-%     \item How long does it take MPC to generate a solution for each time step
-% \end{enumerate}
-%
-% \subsection{Path Planning Objectives}
-%
-% \begin{enumerate}
-%     \item How can MPC be used as a simple path planner
-%     \item how reliable is form of path planner
-%     \item Can this planner be used reference for
-%     \item What restriction on the performance of the sytem does using using this path planner enforce
-% \end{enumerate}
-%
-%
-%
-%
-%
-%
-% to performance of standard Multiple Shooting MPC on simplified robotic manipulator, quantify the computational burden of implementing MPC, test the flexibility MPC as a framework for advanced control objectives (obstacle avoidance), and to
-
 
 \section{Background}
 
@@ -126,7 +95,7 @@ In general robotic arms are classified as either prismatic (linear motion) or re
 
 \begin{figure}
     \centering
-    \includegraphics[scale=.5]{puma}
+    \includegraphics[scale=.4]{puma}
     \caption{Puma560 Robot with Joint Coordinate Frames}
     \label{puma560}
 \end{figure}
@@ -456,31 +425,50 @@ Another primary result obtained is the impact which Model/Parameter Mismatch has
 \end{table}
 
 
-For the sake of brevity, only the cases were both masses are changed by the same percentage are included in [Table \ref{table:mismatch}]. This treatment roughly approximates a constant measurement or estimation bias when specifying parameter values. This bias is varied beteen 5-30\% to investigate how the system performs, even when the model is vastly different from the actual parameters of the physical system. \\
-
-It is clear from [Fig.\ref{fig:model_param_mismatch}] that, all else being equal, the mismatch between the system and controller models has the potential to effect the steady state performance of the robot. In fact, [Table.\ref{table:mismatch}] demonstrates that the magnitude of the parameterization mismatch is proportional to the magnitude of the steady state error.
+For the sake of brevity, only the cases were both masses are changed by the same percentage are included in [Table \ref{table:mismatch}]. This treatment roughly approximates a constant measurement or estimation bias when specifying parameter values. This bias is varied beteen 5-30\% to investigate how the system performs, even when the model is vastly different from the actual parameters of the physical system.
 
 \begin{figure}[ht]%
     \centering
-    \includegraphics[width=.98\linewidth]{Model Param Mismatch/steady_state_pos_error}
+    \includegraphics[width=.99\linewidth]{Model Param Mismatch/steady_state_pos_error}
     \caption{Model Parameter Mismatch: Steady State Solutions}%
     \label{fig:model_param_mismatch}%
 \end{figure}
 
+
+From the results in [Fig.\ref{fig:model_param_mismatch}], all else being equal, the mismatch between the system and controller models has the potential to effect the steady state performance of the robot. In fact, [Table.\ref{table:mismatch}] demonstrates that the magnitude of the parameterization mismatch is proportional to the magnitude of the steady state error.\\
+
 \subsubsection{Obstacle Avoidance}
 
-Probably the most interesting applications of MPC within this paper, is the use of MPC for obstacle avoidance. The performance of the obstacle avoidance witnessed was greatly varied throughout the testing of this. While, in general, obstacle avoidance worked, the success of the controll oftened seemed to be dependent on the relative positions of the robots end effector and the static object being avoided. While there are cases such as in [fig. \ref{fig:obs_avoid_control_action}], where MPC does a fantastic job of avoiding the obstacle, there are many others where the positing of the robot and the object appear to cause the solver to neglect the collision penalty. \\
+Probably the most interesting application and results obtained from this paper, concern the use of MPC for obstacle avoidance. It was slightly disappointing to see that, as a whole, the performance of obstacle avoidance greatly varied greatly throughout simulated testing.
 
-Often this behavior is coupled with large command torques that result in large velocity spikes.
+While the controller was successfully able to avoid objects which were directly in the most convient path between the initial state and the goal, many of these trials resulted in oscillatory behavior of robot, theoretical collisions between the end effector and the obstacle, and/or the robot never reaching its desire final pose. Even with static objects, the success of the controller oftened appeared predicated on the relative positions of the end effector and the nearest object. \\
 
 \begin{figure}[ht]%
     \centering
-    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{OBS_Avoid_TEST/T6/pos} }}%
+    \subfloat[\centering Initial Pose]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_1} }}%
     \qquad
-    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{OBS_Avoid_TEST/T6/vel} }}%
+    \subfloat[\centering Avoid Obstacle]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_2} }}%
+    \\
+    \subfloat[\centering Avoid Obstacle]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_3} }}%
+    \qquad
+    \subfloat[\centering Final Pose]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_final} }}%
+    \caption{Obstacle Avoidance Control System}%
+    \label{fig:obs_avoid_path}%
+\end{figure}
+
+In [Fig.\ref{fig:obs_avoid_path}], the robot arm can be seen circumventing the red static object, in its path. However, it should be noted that the initial state prediction horizon (seen as black *) violates the collision penalty, and that it is only as the robot nears the obstacle that MPC reroutes the predicted path. This behavior corresponds to the increasing penalty which the cost function enforces as the distance between the robot and the object gets smaller. Due to this behavior, it is believed that the formulation of obstacle avoidance as part of the cost function and not an explicit constraint on the optimization problem, which MPC is runnings is at least part of the reason that obstacle avoidance was finicky and severly inconsistent.
+
+One side effect of this delayed action to prevent collision is that, typically, this sudden rerouting is often accompanied by large commanded torques. While not an explicit problem, these large torques often result in significant velocity pikes. Depending on the application of the robot, these sudden movements may not be undesirable. \\
+
+\begin{figure}[ht]%
+    \centering
+    % \subfloat[\centering MPC Obs. Avoidance: Angular Pos.]{{\includegraphics[width=.43\linewidth]{OBS_Avoid_TEST/T6/pos} }}%
+    % \qquad
+    % \\
+    \subfloat[\centering MPC Obs. Avoidance: Angular Vel.]{{\includegraphics[width=.74\linewidth]{OBS_Avoid_TEST/T6/vel} }}%
     % \caption{2 Figures side by side}%
     \\
-    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{OBS_Avoid_TEST/T6/torque} }}%
+    \subfloat[\centering MPC Obs. Avoidance: Actuator Torques]{{\includegraphics[width=.74\linewidth]{OBS_Avoid_TEST/T6/torque} }}%
     % \qquad
     % \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
     \caption{Obstacle Avoidance Control via MPC}%
@@ -488,23 +476,13 @@ Often this behavior is coupled with large command torques that result in large v
 \end{figure}
 
 
+
+\noindent Notice in [Fig. \ref{fig:obs_avoid_control_action}], the sudden changes in velocity.
+
 As shown in [fig.\ref{fig:obs_avoid_path}], when obstacle avoidance (under the current MPC formulation) does work, it is very compelling. By the simple addition of an extra term in the objective function or an added constraint, the controller can achieve nontrivial goals which other control strategies would have required explicit planning to reproduce. In this way, MPC with obstacle avoidance is very nearly packaged general methodology for hitting control objectives without designing custom planning to avoid undesirable states. \\
 
 
 
-\begin{figure}[ht]%
-    \centering
-    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_1} }}%
-    \qquad
-    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_2} }}%
-    % \caption{2 Figures side by side}%
-    \\
-    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_3} }}%
-    \qquad
-    \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_final} }}%
-    \caption{Obstacle Avoidance Control System}%
-    \label{fig:obs_avoid_path}%
-\end{figure}
 
 
 However, as previously mentioned, the results for obstacle avoidance, seen in simulation, were mixed at best. As seen in [fig. \ref{fig:obs_avoid_path_bad}], the relative configuration between the end effector and the object are such that even though other solutions exist to navigate around the object, the controller has determined that the path over the obstacle is the only way. This is seen as an oscillation and does not produce any useful solutions. Even if the prediction horizon and MPC gains are tuned, this behavior appears to persist or the controller is so tuned that the penalty for collision is not becomes insignificant and the resulting control action slams the obstacle in on its way to the goal pose.
