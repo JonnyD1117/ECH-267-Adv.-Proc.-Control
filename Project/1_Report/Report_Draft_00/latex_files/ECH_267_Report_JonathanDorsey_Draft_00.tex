@@ -6,6 +6,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{cancel}
+\usepackage{tabularx}
 
 \usepackage{caption}
 % \usepackage{subcaption}
@@ -375,35 +376,40 @@ By virtue of using muliple shooting, the decision variable for this MPC formulat
 
 \subsection{Controller Testing}
 
-5 Test MPC as Controller
-    5.1 MIMO pose to pose Controller
-    5.2 Controller with Model/Parameter Mismatch
-    5.3 Limited Position Constraints
-    5.4 Obstacle avoding controller
+Since the first objective of this paper is to test the efficacy of MPC, there are several interesting scenarios which are of general interest when evaluating how effective MPC based control is, on this type of system. \\
+
+% The controller testing for this section, included nominal performance of MPC as MIMO controller, performance with model/parameter mismatch, the behavior of MPC for infeasible targets, and finally obstacle avoidnace
 
 
-\subsection{Planner Testing }
+\begin{enumerate}
+    \item Pose-to-Pose Control
+    \item Model/Parameter Mismatch
+    \item Infeasible Target behavior
+    \item Obstacle Avoidance (static)
+\end{enumerate}
 
-6 Test MPC as Path Planner
-    6.1 Generate Optimal State Prediction over horizon
-    6.2 Use Cubic Splines to define a continuous path from end effector ``start'' position to end effector ``end'' position.
-    6.3 Use a faster controller to follow path that MPC generated Path predicts
 
-6.1 Test MPC generated Path with Fullstate Feedback Controller
+
+\subsection{Planner Testing}
+
+The objectives for MPC based path planning are to implement path planning,
+
+
+\begin{enumerate}
+    \item Generate State Prediction Horizon
+    \item Create continuous defined path using cubic splines
+    \item Test how performance of the system
+\end{enumerate}
 
 
 \section{Results}
-
-Type results here
-
-
 \subsection{Controller Results}
-
-This section talks about controller results
 
 \subsubsection{Pose-to-Pose}
 
-\begin{figure}[ht]%
+As to be expected, the use of MPC on this two link robot, under nominal operating conditions and using a perfect system model performed exceedingly well. As seen in [Fig.\ref{fig:pose2pose}], the controller is able to drive the system from its initial state to the desired final goal to with in an accuracy of .0001\% of the reference value.
+
+\begin{figure}[hb]%
     \centering
     \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{no_obj_path_1} }}%
     \qquad
@@ -417,8 +423,6 @@ This section talks about controller results
     \label{fig:pose2pose}%
 \end{figure}
 
-Control Action and blah blah blah
-
 \begin{figure}[ht]%
     \centering
     \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/pos} }}%
@@ -427,15 +431,46 @@ Control Action and blah blah blah
     % \caption{2 Figures side by side}%
     \\
     \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/tor} }}%
-    % \qquad
-    % \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
     \caption{Nominal MPC Curves: Ang. Position, Ang. Velocity, Torque}%
     \label{fig:pose2pose_control_action}%
 \end{figure}
 
+The plots in [Fig.\ref{fig:pose2pose_control_action}] demonstrate the steady performance of the controller to a constant reference. It should be noted that the torques of the system never converge to zero. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to the effect of gravity. This requires the controller to offset the command torques inorder to maintain the commanded position. This would not occur if the robot was oriented in the horizontal plane. In addition, for this reason, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working with or against the controller, as a function of the robots initial and goal configurations. \\
+
 \subsubsection{Model/Parameter Mismatch}
 
-Enter Model parameter mismatch here.
+One of the other main results, is the steady state performance of the system during model and system parameter mismatch. In this situation the predicted model the controller is using for prediction is not correctly matched to the actual system which the controller is controlling. The results from this study are relatively straightforward. \\
+
+For steady state references, the controller is fairly robust to the parametric uncertainty.
+
+\begin{table}[ht]\caption{Nonlinear Model Results}
+    \centering
+    \begin{tabular}{c c c c c}
+          & Mass1 (kg) & Mass2 (kg) & Link1 (m) & Link2 (m)  \\
+        \hline\hline
+
+        Model Params. & .5 & .25 & .25 & .25  \\
+        \hline
+        & & System Parameters. & & \\
+        \hline
+        (+5\%)  & .525 & .2625 & .2625 & .2625   \\
+        (+10\%) & .55 & .275 & .275 & .275  \\
+        (+15\%) & .575 & .2875 & .2875 & .2875 \\
+        (+20\%) & .6 & .3 & .3 & .3 \\
+        (+25\%) & .625 & .3125 & .3125 & .3125 \\ [1ex]
+        (+30\%) & .65 & .325 & .325 & .325 \\ [1ex]
+
+    \end{tabular}
+    \label{table:nonlin}
+\end{table}
+
+
+\begin{figure}[ht]%
+    \centering
+    \includegraphics[width=.95\linewidth]{Model Param Mismatch/per_error_pos}
+    \caption{Model Parameter Mismatch Steady State Results}%
+    \label{fig:model_param_mismatch}%
+\end{figure}
 
 \subsubsection{Obstacle Avoidance}
 
@@ -506,22 +541,6 @@ This is obstacle avoidance with MPC
 \end{figure}
 
 \subsubsection{End Effector Paths }
-
-\begin{figure}%
-    \centering
-    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{no_obj_path_1} }}%
-    \qquad
-    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{no_obj_path_2} }}%
-    % \caption{2 Figures side by side}%
-    \\
-    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{no_obj_path_3} }}%
-    \qquad
-    \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
-    \caption{Pose-to-Pose control using MPC}%
-    \label{fig:end_eff_paths}%
-\end{figure}
-
-
 
 \section{Discussion}
 
