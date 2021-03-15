@@ -389,15 +389,7 @@ In robotics and autonomous systems, it is often desireable to design a system th
 
 \subsection{Planner Testing}
 
-The second primary objective of this paper is to implement MPC such that the state predictions can be used to effectively plan the path which the end effector takes. The objectives for MPC based path planning are to implement path planning,
-
-
-\begin{enumerate}
-    \item Generate State Prediction Horizon
-    \item Create continuous defined path using cubic splines
-    \item Test how performance of the system
-\end{enumerate}
-
+The second primary objective of this paper is to implement MPC such that the state predictions can be used to plan the path which the end effector takes, from one pose to another. While this paper will not go into depth about the application of path planning for robotic manipulators, it intends to cover how to obtain a continuous path from discrete state predictions supplied by MPC for simple motion from one feasible pose to another, as well the simple obstacle avoidance metioned above.
 
 \section{Results}
 \subsection{Controller Results}
