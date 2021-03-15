@@ -47,7 +47,7 @@ filecolor=magenta,
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-  The objective of this project is to implement a simulated optimal \underline{Path Planner} using Model Predictive Control (MPC) to plan and control the behavior of a 2 degree of freedom (2DOF) robotic arm. The responsibility of the MPC planner will be to generate the `optimal' path and to drive the arm from its current position to the next. The main challenges faced in completing this project consist of solving for the \textbf{nonlinear equations of motion} (as well as any required forward/inverse kinematics) of the robotic arm as well as formulating and solving the \textbf{MPC controller}, at each timestep, both control and planning using the CasADi optimization framework, to test the scenario of simulated real-time performance.
+  The objective of this project is to implement a simulated \underline{Path Planner and Controller} using Model Predictive Control (MPC) to plan and control the behavior of a 2 degree of freedom (2DOF) robotic arm. The responsibility of the MPC planner will be to generate the `optimal' path and to drive the arm from its current position to the next. This paper, uses the CasADi framework to implement, test, and identify the benefits and limitations of MPC for this robotic arm.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -190,7 +190,7 @@ Both forward an inverse kinematics are important for simulating joint positions 
 
 \subsection{Path Planning vs Trajectory Generation}
 
-While frequently used as synonyms, \textbf{path planning} and \textbf{trajectory generation} (in the strict sense) describe two very quantities. A path is typically defined as a sequence of function of position from some point A to another point B. Paths are independent of time and therefore, cannot encode information such as velocity or acceleration, that depend on time. Trajectories, on the other hand, are paths with a dependency on time. Trajectory generation has substantially larger scope than path planning, and possesses substantial body of research.  \\
+While frequently used as synonyms, \textbf{path planning} and \textbf{trajectory generation} (in the strict sense) describe two very quantities. A path is typically defined as a function of position connecting some point A to another point B. Paths are independent of time and therefore, cannot encode information such as velocity or acceleration, that depend on time. Trajectories, on the other hand, are paths with a dependency on time. Trajectory generation has substantially larger scope than path planning, and possesses substantial body of research.  \\
 
 While trajectory generation is typically of greater utility, as it provides more information about the behavior of system, for the context and scope of this paper, path planning will be a sufficient to describe the behavior of the system from a starting pose to an ending pose.
 
@@ -211,7 +211,7 @@ The Euler-Lagrange Equations are used to derive the explicit dynamics of the sys
  \quad \quad \text{for i} = 1,2,...
 \end{equation}
 
-\noindent Where the lagrangian is the difference between the total kinetic and total potential energy of the system.
+\noindent Where the lagrangian $L$ is the difference between the total kinetic and total potential energy of the system.
 \begin{equation}
   L = k - u
 \end{equation}
@@ -343,7 +343,7 @@ This parameterization of the stage cost can be further simplified using norm not
 
 The quadratic nature of this cost function is eligant in how simple and intuitive it is comprehend as as well how simple it is to tune using the matrices $Q$ and $R$. \\
 
-However for the scenario testing \textbf{obstacle avoidance}, it is neccessary to append the origin stage cost with an addition term. By adding an obstacle penalty to the stage cost the controller is incentivized to avoid letting the end effector of the robot get too close the specified object. By specifying circular envelopes around the end effector and the obstacle, it is possible to define the minimum distance between the two object such that they do not approach any closer to each other than the sum of radii which define the circular boundaries.
+However for the scenario testing \textbf{obstacle avoidance}, it is neccessary to append the origin stage cost with an addition term. By adding an obstacle penalty to the stage cost the controller is incentivized to avoid letting the end effector of the robot get too close the specified object. By specifying circular envelopes around the end effector and the obstacle, it is possible to define the minimum distance between the two objects such that they do not approach any closer to each other than the sum of radii which define the circular boundaries. This can be expressed mathematically by computing the euclidean distance between the obstacle and the end effector.
 
 \begin{equation}
 \text{min. dist} = -\sqrt{\left(x-x_{0}\right)^{2}+\left(y-y_{o}\right)^{2}}+\left(r+r_{o}\right) \leq 0
@@ -407,44 +407,46 @@ The objectives for MPC based path planning are to implement path planning,
 
 \subsubsection{Pose-to-Pose}
 
-As to be expected, the use of MPC on this two link robot, under nominal operating conditions and using a perfect system model performed exceedingly well. As seen in [Fig.\ref{fig:pose2pose}], the controller is able to drive the system from its initial state to the desired final goal to with in an accuracy of .0001\% of the reference value.
+As to be expected, the use of MPC on this two link robot, under nominal operating conditions and using a perfect system model performed exceedingly well. As seen in [Fig.\ref{fig:pose2pose}], the controller is able to drive the system from its initial state to the desired final goal to with in an accuracy of .001\% of the reference value.
 
 \begin{figure}[hb]%
     \centering
-    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{no_obj_path_1} }}%
+    \subfloat[\centering Pose at .5 seconds ]{{\includegraphics[width=.43\linewidth]{no_obj_path_1} }}%
     \qquad
-    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{no_obj_path_2} }}%
+    \subfloat[\centering Pose at 1.5 seconds ]{{\includegraphics[width=.43\linewidth]{no_obj_path_2} }}%
     % \caption{2 Figures side by side}%
     \\
-    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{no_obj_path_3} }}%
+    \subfloat[\centering Pose at 3 seconds]{{\includegraphics[width=.43\linewidth]{no_obj_path_3} }}%
     \qquad
-    \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
-    \caption{Pose-to-Pose control using MPC}%
+    \subfloat[\centering Pose at .6 seconds ]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
+    \caption{Pose-to-Pose control via MPC}%
     \label{fig:pose2pose}%
 \end{figure}
 
+On average the controller takes between 8-10ms to compute a solution at each iteration of the solver. This roughly equates to a 80-120Hz control frequency, which is more than sufficient for requirements of this system. This holds for a variety of different initial and end poses of the manipulator. \\
+
+The plots in [Fig.\ref{fig:pose2pose_control_action}] show the steady performance of the controller for a constant reference. It should be noted that the torques of the system never converge to zero. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to the effect of gravity. This requires the controller to offset the command torques inorder to maintain the commanded position. This would not occur if the robot was oriented in the horizontal plane. In addition, for this reason, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working with or against the controller, as a function of the robots initial and goal configurations. \\
+
 \begin{figure}[ht]%
     \centering
-    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/pos} }}%
-    \qquad
-    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/vel} }}%
+    \subfloat[\centering Angular Position vs Time ]{{\includegraphics[width=.75\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/pos} }}%
+    % \qquad
+    % \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/vel} }}%
     % \caption{2 Figures side by side}%
     \\
-    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/tor} }}%
-    \caption{Nominal MPC Curves: Ang. Position, Ang. Velocity, Torque}%
+    \subfloat[\centering Torque vs Time ]{{\includegraphics[width=.75\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/tor} }}%
+    \caption{Pose-to-Pose MPC Curves:}%
     \label{fig:pose2pose_control_action}%
 \end{figure}
 
 
-On average the controller took between 8-10ms to compute a solution at each iteration of the solver. This rough equates to around 80-120Hz control frequency for a variety of different initial and end poses of the manipulator, for the simulated system. \\
-
-The plots in [Fig.\ref{fig:pose2pose_control_action}] demonstrate the steady performance of the controller to a constant reference. It should be noted that the torques of the system never converge to zero. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to the effect of gravity. This requires the controller to offset the command torques inorder to maintain the commanded position. This would not occur if the robot was oriented in the horizontal plane. In addition, for this reason, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working with or against the controller, as a function of the robots initial and goal configurations. \\
-
 \subsubsection{Model/Parameter Mismatch}
 
-One of the other main results, is the steady state performance of the system during model and system parameter mismatch. For this test, the lengths of each link of the robot are is assumed to be directly measurable and that only the masses of each link are mismatched.
+An important characteristic of any controller is its robustness to uncertainty. Since MPC makes heavy use of the model for prediction, one important test is how the MPC performs when the system being controlled and the model used in the controller a mismatched.    
 
-The following table investigates the percent error of the steady state performance of the regular MPC controller, including a terminal cost.
+about One of the other main results, is the steady state performance of the system during model and system parameter mismatch. For this test, the lengths of each link of the robot are is assumed to be directly measurable and that only the masses of each link are mismatched.\\
+
+The following table investigates the percent error of the steady state performance of the regular MPC controller, including a terminal cost.\\
 
 \begin{table}[ht]\caption{Plant Model Mismatch}
     \centering
@@ -470,12 +472,12 @@ The following table investigates the percent error of the steady state performan
 
 For the sake of time, the both masses of the individual links are changed by the same percentage, to roughly approximate measurement or estimation bias when determining the parameter values for the MPC model. This bias is varied beteen 5-30\% to investigate how the system performs, even when the model is vastly different from the actual parameters of the physical system. \\
 
-As can be seen in [table.\ref{table:mismatch}] as the magnitude of the parameterization mismatch is increased, so to is the magnitude of the steady state error.
+From [table.\ref{table:mismatch}] and [fig.\ref{fig:model_param_mismatch}], it can be shown that as the magnitude of the parameterization mismatch is increased, so to is the magnitude of the steady state error.
 
 \begin{figure}[ht]%
     \centering
     \includegraphics[width=.95\linewidth]{Model Param Mismatch/steady_state_pos_error}
-    \caption{Model Parameter Mismatch Steady State Results}%
+    \caption{Model Parameter Mismatch: Steady State Solutions}%
     \label{fig:model_param_mismatch}%
 \end{figure}
 
@@ -500,6 +502,10 @@ Often this behavior is coupled with large command torques that result in large v
 \end{figure}
 
 
+As shown in [fig.\ref{fig:obs_avoid_path}], when obstacle avoidance (under the current MPC formulation) does work, it is very compelling. By the simple addition of an extra term in the objective function or an added constraint, the controller can achieve nontrivial goals which other control strategies would have required explicit planning to reproduce. In this way, MPC with obstacle avoidance is very nearly packaged general methodology for hitting control objectives without designing custom planning to avoid undesirable states. \\
+
+
+
 \begin{figure}[ht]%
     \centering
     \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_1} }}%
@@ -515,9 +521,19 @@ Often this behavior is coupled with large command torques that result in large v
 \end{figure}
 
 
+However, as previously mentioned, the results for obstacle avoidance, seen in simulation, were mixed at best. As seen in [fig. \ref{fig:obs_avoid_path_bad}], the relative configuration between the end effector and the object are such that even though other solutions exist to navigate around the object, the controller has determined that the path over the obstacle is the only way. This is seen as an oscillation and does not produce any useful solutions. Even if the prediction horizon and MPC gains are tuned, this behavior appears to persist or the controller is so tuned that the penalty for collision is not becomes insignificant and the resulting control action slams the obstacle in on its way to the goal pose.
 
-
-
+\begin{figure}[ht]%
+    \centering
+    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path3_1} }}%
+    \qquad
+    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path3_2} }}%
+    % \caption{2 Figures side by side}%
+    \\
+    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path3_3} }}%
+    \caption{Obstacle Avoidance Control System}%
+    \label{fig:obs_avoid_path_bad}%
+\end{figure}
 
 
 \subsubsection{Infeasible Goal Pose (Constraint Violation)}
