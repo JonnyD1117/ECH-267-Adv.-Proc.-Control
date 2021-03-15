@@ -392,29 +392,34 @@ In robotics and autonomous systems, it is often desireable to design a system th
 The second primary objective of this paper is to implement MPC such that the state predictions can be used to plan the path which the end effector takes, from one pose to another. While this paper will not go into depth about the application of path planning for robotic manipulators, it intends to cover how to obtain a continuous path from discrete state predictions supplied by MPC for simple motion from one feasible pose to another, as well the simple obstacle avoidance metioned above.
 
 \section{Results}
+
+
 \subsection{Controller Results}
 
-\subsubsection{Pose-to-Pose}
+\subsubsection{Pose-to-Pose Control}
 
-As to be expected, the use of MPC on this two link robot, under nominal operating conditions and using a perfect system model performed exceedingly well. As seen in [Fig.\ref{fig:pose2pose}], the controller is able to drive the system from its initial state to the desired final goal to with in an accuracy of .001\% of the reference value.
+As anticipated, MPC performed very successfully in the simplest and most direct usecase for the RR-robot. Under nominal conditions, with a perfect system model, a clear workspace, and few extraneous system constraints, MPC was consistently able to drive the robot from one pose to another. The behavior seen in [Fig.\ref{fig:pose2pose}] is representitive of the typical behavior of this system. Under these slightly idealized conditions, the controller was able to locate the end effector of the robot within a tolerance of smaller than .001\% of the desired reference state.
 
 \begin{figure}[hb]%
     \centering
-    \subfloat[\centering Pose at .5 seconds ]{{\includegraphics[width=.43\linewidth]{no_obj_path_1} }}%
+    \subfloat[\centering Pose at .5 seconds ]{{\includegraphics[width=.44\linewidth]{no_obj_path_1} }}%
     \qquad
-    \subfloat[\centering Pose at 1.5 seconds ]{{\includegraphics[width=.43\linewidth]{no_obj_path_2} }}%
+    \subfloat[\centering Pose at 1.5 seconds ]{{\includegraphics[width=.44\linewidth]{no_obj_path_2} }}%
     % \caption{2 Figures side by side}%
     \\
-    \subfloat[\centering Pose at 3 seconds]{{\includegraphics[width=.43\linewidth]{no_obj_path_3} }}%
+    \subfloat[\centering Pose at 3 seconds]{{\includegraphics[width=.44\linewidth]{no_obj_path_3} }}%
     \qquad
-    \subfloat[\centering Pose at .6 seconds ]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
+    \subfloat[\centering Pose at 6 seconds ]{{\includegraphics[width=.44\linewidth]{no_obj_path_final} }}%
     \caption{Pose-to-Pose control via MPC}%
     \label{fig:pose2pose}%
 \end{figure}
 
-On average the controller takes between 8-10ms to compute a solution at each iteration of the solver. This roughly equates to a 80-120Hz control frequency, which is more than sufficient for requirements of this system. This holds for a variety of different initial and end poses of the manipulator. \\
+On average, over a random sampling of initial and final manipulator configurations, the MPC solver took between 8-10ms to compute the control action for the next time-step. This roughly equates to a nominal 80-120Hz control frequency. Given that time-step used for simulation is 50ms, this MPC controller is more than sufficient for presumed operating frequency of the system. \\
 
-The plots in [Fig.\ref{fig:pose2pose_control_action}] show the steady performance of the controller for a constant reference. It should be noted that the torques of the system never converge to zero. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to the effect of gravity. This requires the controller to offset the command torques inorder to maintain the commanded position. This would not occur if the robot was oriented in the horizontal plane. In addition, for this reason, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working with or against the controller, as a function of the robots initial and goal configurations. \\
+The plots in [Fig.\ref{fig:pose2pose_control_action}] show the evolution of the system under the action of the controller, for the simulation depicted in [Fig.\ref{fig:pose2pose}].
+
+
+for a constant reference. It should be noted that the torques of the system never converge to zero. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to the effect of gravity. This requires the controller to offset the command torques inorder to maintain the commanded position. This would not occur if the robot was oriented in the horizontal plane. In addition, for this reason, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working with or against the controller, as a function of the robots initial and goal configurations. \\
 
 \begin{figure}[ht]%
     \centering
