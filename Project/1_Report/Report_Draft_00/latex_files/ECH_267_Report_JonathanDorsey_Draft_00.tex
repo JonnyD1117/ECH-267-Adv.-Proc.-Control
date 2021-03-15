@@ -6,6 +6,11 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{cancel}
+
+\usepackage{caption}
+% \usepackage{subcaption}
+
+\usepackage{subfig}
 \addbibresource{./citations.bib}
 
 % \graphicspath{ {C:/Users/jonat/Documents/ECH-267-Adv.-Proc.-Control/Project/1_Report/images/}}
@@ -70,7 +75,7 @@ This paper will investigate the use of MPC as a general control scheme and its u
 
 \subsection{Planar RR Robotic Arm}
 
-The manipulator used in this paper is a two link planar robot arm subject to gravity, fig.\ref{RRrobot}, commonly known as a \textbf{RR} (revolute-revolute) robot. This model commonly does not include any rigid body dynamics and treats the robot as a system of point masses directly coupled with massless rods. While this configuration is very simple, it is conceptually simple, easy to derive its core dynamics, and facilitates a more focused study on the planning and control elements of the paper.
+The manipulator used in this paper is a two link planar robot arm subject to gravity, fig.\ref{RRrobot}, commonly known as a \textbf{RR} (revolute-revolute) robot. This model commonly does not include any rigid body dynamics and treats the robot as a system of point masses directly coupled with massless rods. While this configuration is very simple, it is conceptually simple, easy to derive its core dynamics, and facilitates a more focused study on the planning and control elements of the paper. \\
 
 \begin{figure}
     \centering
@@ -166,7 +171,7 @@ By utilizing the \textbf{homogeneous transform}, which describes the frame posit
         P = { }_{B}^{A} T^{B} P
 \end{equation}
 
-DH parameters can be used to define a single transformation from frame $\{ i\}$ to frame $\{ i-1 \}$, by using chaning explicit translations and rotations about specified axes, define using DH parameters. The matrices $R$ and $D$ represent the homogeneous transformation for rotation and translations repsectively, with the subscript of each providing the axis upon which the operation should be performed.
+DH parameters can be used to define a single transformation from frame $\{ i\}$ to frame $\{ i-1 \}$, by chaining explicit translations and rotations about specified axes. The matrices $R$ and $D$ represent the homogeneous transformation for rotation and translations repsectively, with the subscript of each providing the axis upon which the operation should be performed.
 
 $$
 { }_{i}^{i-1} T=R_{X}\left(\alpha_{i-1}\right) D_{X}\left(a_{i-1}\right) R_{Z}\left(\theta_{i}\right) D_{Z}\left(d_{i}\right)
@@ -197,16 +202,20 @@ For puposes of this paper, the robot model only includes physical dynamics of th
 
 As previously mentioned, the model of the robot excludes rigid body effects and only considers the effect of point masses rigidly connected with massless links. Under these assumptions, we can ignore contributions by moments of inertia. This simplifies the process of deriving equations of motion. \\
 
-The Euler-Lagrange Equations are used to derive the explicit dynamics of the system. This variational approach is often more useful and scalable to large and coupled system than classical force and moment balances, since it this method only requires computing the kinetic and potential energies of the system and computing derivatives with respect to generalized coordinates. While equivalent to the Newton-Euler Equations, Lagrange Equations do not require the computing of accelerations.
-
+The Euler-Lagrange Equations are used to derive the explicit dynamics of the system. This variational approach is often more useful and scalable to large and coupled system than classical force and moment balances, since it this method only requires computing the kinetic and potential energies of the system and computing derivatives with respect to generalized coordinates. While equivalent to the Newton-Euler Equations, Lagrange Equations do not require the computing of accelerations. The general form of Lagrange Equations are.
 \begin{equation}
-k_{i}=\frac{1}{2} m_{i} v_{C_{i}}^{T} v_{C_{i}}+\frac{1}{2}^{i} \omega_{i}^{T} C_{i} I_{i}^{i} \omega_{i}
+\frac{d}{d t} \frac{\partial L}{\partial \dot{\boldsymbol{q}_{i}}}-\frac{\partial L}{\partial \boldsymbol{q}_{i}}=\left[\begin{array}{l}
+\tau_{i}
+\end{array}\right]
+ \quad \quad \text{for i} = 1,2,...
 \end{equation}
 
+\noindent Where the lagrangian is the difference between the total kinetic and total potential energy of the system.
 \begin{equation}
-u_{i}=-m_{i}^{0} g^{T}{ }^{0} P_{C_{i}}+u_{r e f_{i}}
+  L = k - u
 \end{equation}
 
+\noindent and where $k$ and $u$ are defined be to...
 \begin{equation}
 k=\sum_{i=1}^{n} k_{i}
 \end{equation}
@@ -215,20 +224,17 @@ k=\sum_{i=1}^{n} k_{i}
 u=\sum_{i=1}^{n} u_{i}
 \end{equation}
 
+It should be noted that when defining the individual potential and kinetic terms, they must be written with resepect to the correct frame of reference $\{ i \}$. This can be easily accomplished by using DH parameter homogeneous transformations, previously defined, to write the velocity or position vector of a particular link of the robot with respect to the correct reference frame.
 \begin{equation}
-  L = k - u
+k_{i}=\frac{1}{2} m_{i} v_{C_{i}}^{T} v_{C_{i}}+\frac{1}{2}^{i} \omega_{i}^{T} C_{i} I_{i}^{i} \omega_{i}
+\end{equation}
+\begin{equation}
+u_{i}=-m_{i}^{0} g^{T}{ }^{0} P_{C_{i}}+u_{r e f_{i}}
 \end{equation}
 
-\begin{equation}
-\frac{d}{d t} \frac{\partial L}{\partial \dot{\boldsymbol{q}}}-\frac{\partial L}{\partial \boldsymbol{q}}=\left[\begin{array}{l}
-\tau_{1} \\
-\tau_{2}
-\end{array}\right]
-\end{equation}
-
+By computing $i$ Lagrange equations, as expressed above, the equations of motion for the system will be determined. While simple, this process depends on the ability of taking derivatives, which for robotic systems can be highly coupled and result in massive expressions. Typically this would be done using a symbolic math libary or by using the itterative form of the Newton-Euler Equations instead.\\
 
 In general, the serially articulated robots with revolute joints will produce equations of motion (EOM) that take the following form.
-
 \begin{equation}
   \tau = M(\Theta)\ddot{\Theta} + V(\Theta, \dot{\Theta}) + G(\Theta) + F(\dot{\Theta})
 \end{equation}
@@ -284,7 +290,7 @@ c_{f} \cdot \dot{\theta}_{2}
 It should be noted for simulation purposes, the equations of motion need to express $\tau$ as the input to the robot and the angular accelerations $\ddot{\Theta}$ as the outputs.
 
 \begin{equation} \label{angular_accel}
-\ddot{\theta}=\operatorname{inv}(M)[\tau-V-G-F]
+\ddot{\theta}=(M^{-1})[\tau-V-G-F]
 \end{equation}
 
 However, expressing the governing equations in this form result in numerical instabilties during simulation which arise from inverting the mass matrix $M(\Theta)$. Since the mass matrix is a function of angular positions $\Theta$, specific configurations can cause the mass matrix to near a singularity, when inverted. If evaluated numerically, the computed value will explode, typically resulting in the value becoming \textbf{INF} or \textbf{NAN}. To avoid this, the value of $\varepsilon$ can be added to the diagonal terms of $M$ to garuntee that the system will never become singular, during inversion.
@@ -306,19 +312,7 @@ While still highly nonlinear, [eq. \ref{robot_ss}] encapsulates the complete dyn
 
 
 \subsection{MPC Formulation}
-The mathematical basis for MPC stems from the standard optimal control problem. However, with a few slight adjustments and relaxations, the formulation for MPC can be
-
-
-\subsection{MPC Assumptions}
-
-\begin{enumerate}
-  \item Internal dynamic model of system exists
-  \item Finite (and receding) prediction horizion
-  \item Piecewise constant input at each time-step \\
-\end{enumerate}
-
-After applying these restrictions to the standard optimal control problem, the mathematical formulation for standard MPC reduces to the following expression.
-
+The mathematical basis for MPC stems from the standard optimal control problem. Under the assumptions that an internal model of the system dynamics exist, that the prediction horizon is finite and proceeds in a receding fashion, the inputs applied to the system, by the controller, are piecewise constant at each time-step, and where the value of the current input is obtained by taking the first value of the optimal input sequence which is obtained by solving the optimization problem at each time-step. This can be written in standard form as...
 \begin{equation}
 \begin{aligned}
 & \min _{n} J_{x}\left(\mathbf{x}_{0}, \mathbf{u}\right)=\sum_{k=0}^{N-1} \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) \\
@@ -331,40 +325,53 @@ After applying these restrictions to the standard optimal control problem, the m
 
 In this formulation, the cost function is only propagated to the end of the prediction horizon $N$, from the current initial state of the system. The first equality constraint restricts future states of the system to be feasible with respect to the system model. The second equality constraints requires the initial state of the solver to be the current initial state of the system, while the final constraints require the inputs and states determined by the solver to be valid elements of feasible input and state sets respectively. \\
 
+It should be further noted that this paper uses the \textbf{Multiple Shooting} implementation of MPC as this approach has shown to produce better results and obtained solutions far faster than the naive single shooting approach. This means that the optimization problem has been lifted into a higher dimensional space by including the each state and input over the prediction horizion as a decision variable for the solver. \\
 
-The particular flavor of MPC used in this project utilized the following quadratic stage cost.
+\subsubsection{Cost Function Design}
+
+The general stage cost, as each time-step of the prediciton horizon utilized in this paper follows the typical quadratic form.
 
 \begin{equation}
   \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) = (x-x_d)Q(x-x_d) + (u-u_d)R(u-u_d)
 \end{equation}
 
-This parameterization stage cost can be further simplified using norms.
-
-
+This parameterization of the stage cost can be further simplified using norm notation.
 \begin{equation}
   \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) = \left\Vert x - x_d \right\Vert^{2}_{Q} + \left\Vert u -u_d \right\Vert^{2}_{R}
 \end{equation}
 
 The quadratic nature of this cost function is eligant in how simple and intuitive it is comprehend as as well how simple it is to tune using the matrices $Q$ and $R$. \\
 
-It should be further noted that this project uses the \textbf{Multiple Shooting} implementation of MPC as this approach has shown to produce better results and obtained solutions far faster than the naive single shooting approach.
+However for the scenario testing \textbf{obstacle avoidance}, it is neccessary to append the origin stage cost with an addition term. By adding an obstacle penalty to the stage cost the controller is incentivized to avoid letting the end effector of the robot get too close the specified object. By specifying circular envelopes around the end effector and the obstacle, it is possible to define the minimum distance between the two object such that they do not approach any closer to each other than the sum of radii which define the circular boundaries.
 
-\subsubsection{Cost Function Design}
+\begin{equation}
+\text{min. dist} = -\sqrt{\left(x-x_{0}\right)^{2}+\left(y-y_{o}\right)^{2}}+\left(r+r_{o}\right) \leq 0
+\end{equation}
 
-2.1 Cost Function Definition
-  2.1.1 Pose to Pose
-  2.1.2 Obstacle Avoidance
+Where $x$ and $y$ constitute the current 2D position of the end effector, while $x_0$ and $y_0$ constitute the \underline{stationary} position of the obstacle. The values of $r$ and $r_0$ define the radii of the circular envelopes enclosing the end effector and obstacle respectively. \\
 
+By using this measure, it is possible to create a penalty such that if the
+\begin{equation}
+\text{C}(P,P_0) = S(max(\text{min. dist}(P, P_0), 0))^2
+\end{equation}
 
-\subsection{Develop Symbolic Model in CasADi}
-3 Define CasADi Model
+Where $S$ is a large positive weight, and $P$ and $P_0$ are the points defining the end effector and obstacle positions respetively. If the inequality is every violated and the minimum distance between the obstacle and end effector is greater than zero, the magnitude of the distance violation will be used as a penalty in the cost function effectively incentivizing the controller to avoid letting the controller and the obstacle become too close to each other. If the inequality holds, then the value of zero will choosen in the $\text{max()}$ function and will not contribute to the cost function. The final stage cost for obstacle avoidance results in. \\
+\begin{equation}
+  \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) = \left\Vert x - x_d \right\Vert^{2}_{Q} + \left\Vert u -u_d \right\Vert^{2}_{R} + C(P,P_0)
+\end{equation}
 
+While crude, this formulation enables the rudimentary form of obstacle avoidance, if the position of the obstacle is known by the controller. One of the conns of using this penalty in the control law is that the controller is not strictly speaking forbidden (constrained) from violating this minimum distance, but rather is only incentivized by a large penalty to not violate the condition. This is a subtle difference, but time restrictions prevented further exploration of more rigorous constraint formulations such as the use of slack variables. \cite{soft_constraints}
 
+\subsection{Controller Development in CasADi}
+In order to solve the optimal control problem, defined above, the CasADi library was utilized to simplify the process of solving optimization problems by use of its symbolic functionality as well as its automatic differentiation, which allow a simple and direct casting of the mathematics into a well structured programming syntax. \\
+
+By leveraging this library and its functionality, it becomes a simple and direct task to cast the MPC formulation into meaning code which can then be feed into a standard optimization solver. For the purposes of this paper, the \textbf{IPOPT} (Interior Point Optimizer) solver was used since it comes prepackaged with CasADi and performs well in a variety of applications.
 
 \subsection{Controller \& Planner Simulation}
-4 Simulate Model \& Model Predictive Controller in Matlab
 
+Once MPC is implemented via CasADi, numerical simulation merely requires using the first optimal input of the solver, at the initial state, applying that input to a discretized system model, computing the resulting states, updating the current state of the controller, and reapplying the solver for the duration of the simulation time.\\
 
+By virtue of using muliple shooting, the decision variable for this MPC formulation not only includes the inputs over the prediction horizon, but also the corresponding optimal states, according to the model. For the purposes of planning (in simulation) it is possible to directly copy the optimal predicted states directly from the solvers solution, at each time-step, and to use these state sequences as the optimal path, over the duration of the simulation.
 
 \subsection{Controller Testing}
 
@@ -387,12 +394,133 @@ It should be further noted that this project uses the \textbf{Multiple Shooting}
 
 \section{Results}
 
+Type results here
+
+
 \subsection{Controller Results}
 
+This section talks about controller results
+
+\subsubsection{Pose-to-Pose}
+
+\begin{figure}[ht]%
+    \centering
+    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{no_obj_path_1} }}%
+    \qquad
+    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{no_obj_path_2} }}%
+    % \caption{2 Figures side by side}%
+    \\
+    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{no_obj_path_3} }}%
+    \qquad
+    \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
+    \caption{Pose-to-Pose control using MPC}%
+    \label{fig:pose2pose}%
+\end{figure}
+
+Control Action and blah blah blah
+
+\begin{figure}[ht]%
+    \centering
+    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/pos} }}%
+    \qquad
+    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/vel} }}%
+    % \caption{2 Figures side by side}%
+    \\
+    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/tor} }}%
+    % \qquad
+    % \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
+    \caption{Nominal MPC Curves: Ang. Position, Ang. Velocity, Torque}%
+    \label{fig:pose2pose_control_action}%
+\end{figure}
+
+\subsubsection{Model/Parameter Mismatch}
+
+Enter Model parameter mismatch here.
+
+\subsubsection{Obstacle Avoidance}
+
+This is obstacle avoidance with MPC
+
+\begin{figure}[ht]%
+    \centering
+    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{OBS_Avoid_TEST/T6/pos} }}%
+    \qquad
+    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{OBS_Avoid_TEST/T6/vel} }}%
+    % \caption{2 Figures side by side}%
+    \\
+    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{OBS_Avoid_TEST/T6/torque} }}%
+    % \qquad
+    % \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
+    \caption{Obstacle Avoidance Control via MPC}%
+    \label{fig:obs_avoid_control_action}%
+\end{figure}
 
 
+\begin{figure}[ht]%
+    \centering
+    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_1} }}%
+    \qquad
+    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_2} }}%
+    % \caption{2 Figures side by side}%
+    \\
+    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_3} }}%
+    \qquad
+    \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{MPC_w_Obs_Avoid/path_final} }}%
+    \caption{Obstacle Avoidance Control System}%
+    \label{fig:obs_avoid_path}%
+\end{figure}
+
+
+
+
+
+
+
+\subsubsection{Infeasible Goal Pose (Constraint Violation)}
+
+\begin{figure}%
+    \centering
+    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{MPC_sys_Constraints_violation/T4_X_init_25_45_0_0_X_ref_260_n15_0_0/pos} }}%
+    \qquad
+    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{MPC_sys_Constraints_violation/T4_X_init_25_45_0_0_X_ref_260_n15_0_0/vel} }}%
+    % \caption{2 Figures side by side}%
+    \\
+    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{MPC_sys_Constraints_violation/T4_X_init_25_45_0_0_X_ref_260_n15_0_0/tor} }}%
+    % \qquad
+    % \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
+    \caption{Infeasible Goal MPC}%
+    \label{fig:infeasible_goal}%
+\end{figure}
 
 \subsection{Planner Results}
+
+\subsubsection{Joint Paths}
+
+\begin{figure}%
+    \centering
+    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{EndEffector_Path/p2p} }}%
+    \qquad
+    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{EndEffector_Path/p2p2} }}%
+    \caption{Nominal System Joint Paths}%
+    \label{fig:joint_path}%
+\end{figure}
+
+\subsubsection{End Effector Paths }
+
+\begin{figure}%
+    \centering
+    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{no_obj_path_1} }}%
+    \qquad
+    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{no_obj_path_2} }}%
+    % \caption{2 Figures side by side}%
+    \\
+    \subfloat[\centering label 3]{{\includegraphics[width=.43\linewidth]{no_obj_path_3} }}%
+    \qquad
+    \subfloat[\centering label 4]{{\includegraphics[width=.43\linewidth]{no_obj_path_final} }}%
+    \caption{Pose-to-Pose control using MPC}%
+    \label{fig:end_eff_paths}%
+\end{figure}
+
 
 
 \section{Discussion}
@@ -451,7 +579,6 @@ The authors would like to thank Mountain Dew and his matress for constant suppor
 \cite{borrelli_predictive_2017}
 \cite{boyd_convex_2004}
 \cite{slotine_applied_1991}
-\cite{soft_constraints}
 
 % \printbibliography
 
