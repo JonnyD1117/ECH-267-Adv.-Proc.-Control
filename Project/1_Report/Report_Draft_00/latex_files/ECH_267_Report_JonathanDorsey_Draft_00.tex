@@ -316,7 +316,7 @@ While still highly nonlinear, [eq. \ref{robot_ss}] encapsulates the complete dyn
 The mathematical basis for MPC stems from the standard optimal control problem. Under the assumptions that an internal model of the system dynamics exist, that the prediction horizon is finite and proceeds in a receding fashion, the inputs applied to the system, by the controller, are piecewise constant at each time-step, and where the value of the current input is obtained by taking the first value of the optimal input sequence which is obtained by solving the optimization problem at each time-step. This can be written in standard form as...
 \begin{equation}
 \begin{aligned}
-& \min _{n} J_{x}\left(\mathbf{x}_{0}, \mathbf{u}\right)=\sum_{k=0}^{N-1} \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) \\
+& \min _{n} J_{x}\left(\mathbf{x}_{0}, \mathbf{u}\right)=\sum_{k=0}^{N-1} \ell\left(\mathbf{x}(k), \mathbf{u}(k)\right) + \ell\left(\mathbf{x}(N), \mathbf{u}(N)\right)\\
 \text { s.t: }: & \mathbf{x}_{\mathbf{n}}(k+1)=\mathbf{f}\left(\mathbf{x}_{\mathbf{n}}(k), \mathbf{u}(k)\right) \\
 & \mathbf{x}_{\mathbf{u}}(0)=\mathbf{x}_{0}, \\
 & \mathbf{u}(k) \in U, \forall k \in[0, N-1] \\
@@ -414,19 +414,15 @@ As anticipated, MPC performed very successfully in the simplest and most direct 
     \label{fig:pose2pose}%
 \end{figure}
 
-On average, over a random sampling of initial and final manipulator configurations, the MPC solver took between 8-10ms to compute the control action for the next time-step. This roughly equates to a nominal 80-120Hz control frequency. Given that time-step used for simulation is 50ms, this MPC controller is more than sufficient for presumed operating frequency of the system. \\
+On average, over a random sampling of initial and final manipulator configurations, the MPC solver took between 8-10ms to compute the control action for the next time-step. This roughly equates to a nominal 80-120Hz control frequency. Given that time-step used for simulation is 50ms, this MPC controller is more than sufficient for presumed operating frequency of the system. The plots in [Fig.\ref{fig:pose2pose_control_action}] show the evolution of the system under the action of the controller, for the simulation depicted in [Fig.\ref{fig:pose2pose}]. \\
 
-The plots in [Fig.\ref{fig:pose2pose_control_action}] show the evolution of the system under the action of the controller, for the simulation depicted in [Fig.\ref{fig:pose2pose}].
+ It should be noted that the torques of the system never converge to zero, even though that would be a desirable. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to gravity. This requires the controller to maintain a bias torque at each of the joints of the robot, to compensate for the effect of gravity. If this same robot was oriented oriented  parallel to the horizontal plane, these bias torques would not be neccessary. \\
 
-
-for a constant reference. It should be noted that the torques of the system never converge to zero. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to the effect of gravity. This requires the controller to offset the command torques inorder to maintain the commanded position. This would not occur if the robot was oriented in the horizontal plane. In addition, for this reason, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working with or against the controller, as a function of the robots initial and goal configurations. \\
+ Additionally, due to gravity, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working for or against the controller. \\
 
 \begin{figure}[ht]%
     \centering
     \subfloat[\centering Angular Position vs Time ]{{\includegraphics[width=.75\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/pos} }}%
-    % \qquad
-    % \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/vel} }}%
-    % \caption{2 Figures side by side}%
     \\
     \subfloat[\centering Torque vs Time ]{{\includegraphics[width=.75\linewidth]{Nominal_MPC/T1_X_init_25_45_0_0_X_ref_180_n45_0_0/tor} }}%
     \caption{Pose-to-Pose MPC Curves:}%
@@ -436,16 +432,12 @@ for a constant reference. It should be noted that the torques of the system neve
 
 \subsubsection{Model/Parameter Mismatch}
 
-
-
-One of the other main results, is the steady state performance of the system during model and system parameter mismatch. For this test, the lengths of each link of the robot are is assumed to be directly measurable and that only the masses of each link are mismatched.\\
-
-The following table investigates the percent error of the steady state performance of the MPC, including a terminal cost.\\
+Another primary result obtained is the impact which Model/Parameter Mismatch has the steady state performance of the controller. During simulation, two seperate sets of masses were parameterized for the MPC model and the simulated system. Similar to the previous result, MPC was setup to perform pose-to-pose control of the robot, with the only difference being the masses used in the controller and in the system. The following table details the percent steady state error witnessed using the standard MPC formulation, including a terminal cost.\\
 
 \begin{table}[ht]\caption{Plant Model Mismatch}
     \centering
     \begin{tabular}{c c c c c}
-          & Mass1 (kg) & Mass2 (kg) & \% SS Error $\theta_1$ & \% SS Error $\theta_2$  \\
+          & Mass 1 (kg) & Mass 2 (kg) & \% Error $\theta_1$ & \% Error $\theta_2$  \\
         \hline\hline
 
         Model Params. & .5 & .25 & &  \\
@@ -464,20 +456,20 @@ The following table investigates the percent error of the steady state performan
 \end{table}
 
 
-For the sake of time, the both masses of the individual links are changed by the same percentage, to roughly approximate measurement or estimation bias when determining the parameter values for the MPC model. This bias is varied beteen 5-30\% to investigate how the system performs, even when the model is vastly different from the actual parameters of the physical system. \\
+For the sake of brevity, only the cases were both masses are changed by the same percentage are included in [Table \ref{table:mismatch}]. This treatment roughly approximates a constant measurement or estimation bias when specifying parameter values. This bias is varied beteen 5-30\% to investigate how the system performs, even when the model is vastly different from the actual parameters of the physical system. \\
 
-From [table.\ref{table:mismatch}] and [fig.\ref{fig:model_param_mismatch}], it can be shown that as the magnitude of the parameterization mismatch is increased, so to is the magnitude of the steady state error.
+It is clear from [Fig.\ref{fig:model_param_mismatch}] that, all else being equal, the mismatch between the system and controller models has the potential to effect the steady state performance of the robot. In fact, [Table.\ref{table:mismatch}] demonstrates that the magnitude of the parameterization mismatch is proportional to the magnitude of the steady state error.
 
 \begin{figure}[ht]%
     \centering
-    \includegraphics[width=.95\linewidth]{Model Param Mismatch/steady_state_pos_error}
+    \includegraphics[width=.98\linewidth]{Model Param Mismatch/steady_state_pos_error}
     \caption{Model Parameter Mismatch: Steady State Solutions}%
     \label{fig:model_param_mismatch}%
 \end{figure}
 
 \subsubsection{Obstacle Avoidance}
 
-One of the more interesting features of using MPC, is the ability to avoid obstacles which other controllers would naively collide with. The performance of the obstacle avoidance witnessed was greatly varied throughout the testing of this. While, in general, obstacle avoidance worked, the success of the controll oftened seemed to be dependent on the relative positions of the robots end effector and the static object being avoided. While there are cases such as in [fig. \ref{fig:obs_avoid_control_action}], where MPC does a fantastic job of avoiding the obstacle, there are many others where the positing of the robot and the object appear to cause the solver to neglect the collision penalty. \\
+Probably the most interesting applications of MPC within this paper, is the use of MPC for obstacle avoidance. The performance of the obstacle avoidance witnessed was greatly varied throughout the testing of this. While, in general, obstacle avoidance worked, the success of the controll oftened seemed to be dependent on the relative positions of the robots end effector and the static object being avoided. While there are cases such as in [fig. \ref{fig:obs_avoid_control_action}], where MPC does a fantastic job of avoiding the obstacle, there are many others where the positing of the robot and the object appear to cause the solver to neglect the collision penalty. \\
 
 Often this behavior is coupled with large command torques that result in large velocity spikes.
 
