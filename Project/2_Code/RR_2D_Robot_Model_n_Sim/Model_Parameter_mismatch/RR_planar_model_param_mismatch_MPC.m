@@ -15,14 +15,13 @@ p.L1 = .25;
 p.L2 = .25; 
 p.g = 9.81;
 
-s = struct ;
-
-per = 1.05;
-s.m1 = .5*per;
-s.m2 = .25*per; 
-s.L1 = .25*per;
-s.L2 = .25*per; 
-s.g = 9.81*per;
+% s = struct ;
+% 
+% s.m1 = .5*per;
+% s.m2 = .25*per; 
+% s.L1 = .25*per;
+% s.L2 = .25*per; 
+% s.g = 9.81*per;
 
 
 % Parameter Percentage Difference
@@ -38,7 +37,7 @@ x_tot_system = [] ;
 
 %
 
-N = 15;
+N = 25;
 T = .1;
 
 % Control Input Saturation Limits
@@ -73,9 +72,9 @@ obj = 0; % Initialize the Objective Func. to zero
 g = [] ; % Initialize the Constraints as Empty 
 
 % Define Loss function Weights on the States and Control Inputs
-Q = zeros(4,4); Q(1,1)=10; Q(2,2) =10 ;Q(3,3) =4 ;Q(4,4) =4 ; % Weighting matrices (states)
-R = .125*eye(2,2); % Weighting matrices (controls)
-Term_cost = zeros(4,4); Term_cost(1,1)=10; Term_cost(2,2) =10 ;Term_cost(3,3) =1 ;Term_cost(4,4) =1 ; % Weighting matrices (states)
+Q = zeros(4,4); Q(1,1)=25; Q(2,2) =25;Q(3,3) =4 ;Q(4,4) =4 ; % Weighting matrices (states)
+R = .5*eye(2,2); % Weighting matrices (controls)
+Term_cost = zeros(4,4); Term_cost(1,1)=15; Term_cost(2,2) =15 ;Term_cost(3,3) =1 ;Term_cost(4,4) =1 ; % Weighting matrices (states)
 
 st = X(:,1); 
 g = [g; (st-P(1:4))]; % Initial Constraint via Defined Initial Condition
@@ -167,14 +166,15 @@ per_list = [1.05; 1.1; 1.15;1.20;1.25;1.30];
 
 for i = 1:1:6
     
+  
     s = struct ;
 
 per = per_list(i);
 s.m1 = .5*per;
 s.m2 = .25*per; 
-s.L1 = .25*per;
-s.L2 = .25*per; 
-s.g = 9.81*per;
+s.L1 = .25*1;
+s.L2 = .25*1; 
+s.g = 9.81;
 
 % SIMULATION LOOP 
 t0 = 0; 
@@ -240,7 +240,7 @@ main_loop = tic;
          q1_dot_0 = q1_dot; 
          q2_dot_0 = q2_dot;   
 
-         x0_sys = [q1_0; q2_0; q1_dot_0; q2_dot_0];  
+         x0_sys = [q1_0; q2_0; q1_dot_0; q2_dot_0];
 
          t(mpc_iter +1) = t0; 
          [t0, x0, u0] = shift(T, t0, x0, u, f);
@@ -264,7 +264,6 @@ main_loop_time = toc(main_loop)
 length(x0_sys)
 
 
-%%
 
 x_p1 = x_tot_system(1:4,:); 
 x_p2 = x_tot_system(5:8,:); 
@@ -272,6 +271,53 @@ x_p3 = x_tot_system(9:12,:);
 x_p4 = x_tot_system(13:16,:);
 x_p5 = x_tot_system(17:20,:);
 x_p6 = x_tot_system(21:24,:);
+% x_p7 = x_tot_system(25:28,:);
+
+
+
+figure()
+hold on 
+subplot(2,1,1)
+hold on
+plot(x_p1(1,:))
+plot(x_p2(1,:))
+plot(x_p3(1,:))
+plot(x_p4(1,:))
+plot(x_p5(1,:))
+plot(x_p6(1,:))
+% plot(x_p7(1,:))
+hold off
+xlabel('Time [samples]')
+ylabel('Theta 1')
+title('Model Parameter Mismatch')
+legend('+5%','+10%','+15%','+20%','+25%','+30%')
+
+subplot(2,1,2)
+hold on
+plot(x_p1(2,:))
+plot(x_p2(2,:))
+plot(x_p3(2,:))
+plot(x_p4(2,:))
+plot(x_p5(2,:))
+plot(x_p6(2,:))
+% plot(x_p7(2,:))
+hold off
+xlabel('Time [samples]')
+ylabel('Theta 2')
+legend('+5%','+10%','+15%','+20%','+25%','+30%')
+hold off
+
+
+x_ss = [pi, -.25*pi];
+
+
+x_1_ss_error = [((x_p1(1,end)- x_ss(1))/x_ss(1))*100;((x_p1(2,end)- x_ss(2))/x_ss(2))*100 ]
+x_2_ss_error = [((x_p2(1,end)- x_ss(1))/x_ss(1))*100;((x_p2(2,end)- x_ss(2))/x_ss(2))*100 ]
+x_3_ss_error = [((x_p3(1,end)- x_ss(1))/x_ss(1))*100;((x_p3(2,end)- x_ss(2))/x_ss(2))*100 ]
+x_4_ss_error = [((x_p4(1,end)- x_ss(1))/x_ss(1))*100;((x_p4(2,end)- x_ss(2))/x_ss(2))*100 ]
+x_5_ss_error = [((x_p5(1,end)- x_ss(1))/x_ss(1))*100;((x_p5(2,end)- x_ss(2))/x_ss(2))*100 ]
+x_6_ss_error = [((x_p6(1,end)- x_ss(1))/x_ss(1))*100;((x_p6(2,end)- x_ss(2))/x_ss(2))*100 ]
+
 
 
 

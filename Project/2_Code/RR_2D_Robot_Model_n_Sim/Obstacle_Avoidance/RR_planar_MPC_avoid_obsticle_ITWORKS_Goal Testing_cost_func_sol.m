@@ -63,7 +63,7 @@ con_ref = Tau_Ref(P(5:6), p);
 % obj_x = -.20;
 % obj_y = .30;
 
-obj_x = -.35;
+obj_x = -.3;
 obj_y = .35;
 
 % obj_x = -.15;
@@ -281,6 +281,7 @@ length(t)*T
 u_cl = u_cl';
 main_loop_time = toc(main_loop)
 
+%%
 figure(3)
 video_path = 'C:\Users\Indy-Windows\Documents\ECH-267-Adv.-Proc.-Control\Project\Report\images\OBS_Avoid_TEST';
 v = VideoWriter(strcat(video_path, fold_name,'\robot_MPC.avi')); 
@@ -328,7 +329,7 @@ end
 
 close(v)
 
-
+%%
 
 main_loop_time = toc(main_loop)
 

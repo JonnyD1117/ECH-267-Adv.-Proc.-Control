@@ -236,7 +236,7 @@ u_{i}=-m_{i}^{0} g^{T}{ }^{0} P_{C_{i}}+u_{r e f_{i}}
 By computing $i$ Lagrange equations, as expressed above, the equations of motion for the system will be determined. While simple, this process depends on the ability of taking derivatives, which for robotic systems can be highly coupled and result in massive expressions. Typically this would be done using a symbolic math libary or by using the itterative form of the Newton-Euler Equations instead.\\
 
 In general, the serially articulated robots with revolute joints will produce equations of motion (EOM) that take the following form.
-\begin{equation}
+\begin{equation}\label{eq:robot_dyn}
   \tau = M(\Theta)\ddot{\Theta} + V(\Theta, \dot{\Theta}) + G(\Theta) + F(\dot{\Theta})
 \end{equation}
 
@@ -337,7 +337,7 @@ The general stage cost, as each time-step of the prediciton horizon utilized in 
 \end{equation}
 
 This parameterization of the stage cost can be further simplified using norm notation.
-\begin{equation}
+\begin{equation}\label{eq:norm_cost}
   \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) = \left\Vert x - x_d \right\Vert^{2}_{Q} + \left\Vert u -u_d \right\Vert^{2}_{R}
 \end{equation}
 
@@ -435,46 +435,55 @@ As to be expected, the use of MPC on this two link robot, under nominal operatin
     \label{fig:pose2pose_control_action}%
 \end{figure}
 
+
+On average the controller took between 8-10ms to compute a solution at each iteration of the solver. This rough equates to around 80-120Hz control frequency for a variety of different initial and end poses of the manipulator, for the simulated system. \\
+
 The plots in [Fig.\ref{fig:pose2pose_control_action}] demonstrate the steady performance of the controller to a constant reference. It should be noted that the torques of the system never converge to zero. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to the effect of gravity. This requires the controller to offset the command torques inorder to maintain the commanded position. This would not occur if the robot was oriented in the horizontal plane. In addition, for this reason, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working with or against the controller, as a function of the robots initial and goal configurations. \\
 
 \subsubsection{Model/Parameter Mismatch}
 
-One of the other main results, is the steady state performance of the system during model and system parameter mismatch. In this situation the predicted model the controller is using for prediction is not correctly matched to the actual system which the controller is controlling. The results from this study are relatively straightforward. \\
+One of the other main results, is the steady state performance of the system during model and system parameter mismatch. For this test, the lengths of each link of the robot are is assumed to be directly measurable and that only the masses of each link are mismatched.
 
-For steady state references, the controller is fairly robust to the parametric uncertainty.
+The following table investigates the percent error of the steady state performance of the regular MPC controller, including a terminal cost.
 
-\begin{table}[ht]\caption{Nonlinear Model Results}
+\begin{table}[ht]\caption{Plant Model Mismatch}
     \centering
     \begin{tabular}{c c c c c}
-          & Mass1 (kg) & Mass2 (kg) & Link1 (m) & Link2 (m)  \\
+          & Mass1 (kg) & Mass2 (kg) & \% SS Error $\theta_1$ & \% SS Error $\theta_2$  \\
         \hline\hline
 
-        Model Params. & .5 & .25 & .25 & .25  \\
+        Model Params. & .5 & .25 & &  \\
         \hline
-        & & System Parameters. & & \\
+        System Params. &  & & &  \\
         \hline
-        (+5\%)  & .525 & .2625 & .2625 & .2625   \\
-        (+10\%) & .55 & .275 & .275 & .275  \\
-        (+15\%) & .575 & .2875 & .2875 & .2875 \\
-        (+20\%) & .6 & .3 & .3 & .3 \\
-        (+25\%) & .625 & .3125 & .3125 & .3125 \\ [1ex]
-        (+30\%) & .65 & .325 & .325 & .325 \\ [1ex]
+        (+5\%)  & .525 & .2625 & 1.14\% & -.59\%   \\
+        (+10\%) & .55 & .275 & 2.28\% & -1.20\% \\
+        (+15\%) & .575 & .2875 & 3.43\% & -1.93\% \\
+        (+20\%) & .6 & .3 & 4.58\% & -2.74\% \\
+        (+25\%) & .625 & .3125 & 5.74\% & -3.63\% \\
+        (+30\%) & .65 & .325 & 6.88\% & -4.59\% \\ [1ex]
 
     \end{tabular}
-    \label{table:nonlin}
+    \label{table:mismatch}
 \end{table}
 
 
+For the sake of time, the both masses of the individual links are changed by the same percentage, to roughly approximate measurement or estimation bias when determining the parameter values for the MPC model. This bias is varied beteen 5-30\% to investigate how the system performs, even when the model is vastly different from the actual parameters of the physical system. \\
+
+As can be seen in [table.\ref{table:mismatch}] as the magnitude of the parameterization mismatch is increased, so to is the magnitude of the steady state error.
+
 \begin{figure}[ht]%
     \centering
-    \includegraphics[width=.95\linewidth]{Model Param Mismatch/per_error_pos}
+    \includegraphics[width=.95\linewidth]{Model Param Mismatch/steady_state_pos_error}
     \caption{Model Parameter Mismatch Steady State Results}%
     \label{fig:model_param_mismatch}%
 \end{figure}
 
 \subsubsection{Obstacle Avoidance}
 
-This is obstacle avoidance with MPC
+One of the more interesting features of using MPC, is the ability to avoid obstacles which other controllers would naively collide with. The performance of the obstacle avoidance witnessed was greatly varied throughout the testing of this. While, in general, obstacle avoidance worked, the success of the controll oftened seemed to be dependent on the relative positions of the robots end effector and the static object being avoided. While there are cases such as in [fig. \ref{fig:obs_avoid_control_action}], where MPC does a fantastic job of avoiding the obstacle, there are many others where the positing of the robot and the object appear to cause the solver to neglect the collision penalty. \\
+
+Often this behavior is coupled with large command torques that result in large velocity spikes.
 
 \begin{figure}[ht]%
     \centering
@@ -546,16 +555,18 @@ This is obstacle avoidance with MPC
 
 \subsection{Control}
 
-0 Fully controllable environment \\
-1 MIMO formulation is intuitive \& easily extended to nonlinear systems (2D-3D)\\
-2 Relatively responsive control authority\\
-3 Respects system constraints (Actuator limits, range of motions)\\
-4 Relatively simple to implement a crude form of obstacle avoidance (cost penalty or extra constriants.)\\
-    4.1 Unreliable time till solution\\
-    4.2 Highly sensitive to obstacle placement\\
-    4.3 Poor tuning can lead to oscilatory behavior\\
-    4.4 Can struggle to converge to final solution even if clear of obstacle (tuning?)\\
-5
+After testing the system, it is clear that MPC is a very straightforward control scheme to apply to robotic systems in free space. With the ability to work on large MIMO systems (e.g. robotic manipulators) is a very intuitive and practical benefit for controller design and implementation. In particular, since most robotic manipulators are sensored and can provide highly accuracy state measurement, without state estimation, MPC is definitely an attractive control strategy when extraneous constraints or limitations are not placed on the system.
+
+However, from the testing performed in this paper, it does appear that the addition of obstacles does significantly complicate the easy of using MPC for control. While there are many configurations of the end effector and the obstacle, that work seamlessly, other required significantly more computation and often failed to guide the end effector around the object, often resulting in very oscillatory behavior or inducing rapid wipping motions of the manipulator, to bypass an object.
+
+This is behavior is likely a result of a poorly design cost functionl. As mentioned previously, the trade-off between constraining the system for colliding with the object versus heavy penalizing the controller if it collides with the object is unclear to the author, and would require deeper research. However, from the simulation data collected, it appears that by implementing a obstacle collision penalty in the stage cost, that the controller \textbf{could} be presented with situations where the penalty incurred is insufficient to prevention collision.
+
+Another aspect about using MPC for obstacle avoidance is the difficulty in tuning the controller such that it could be effectively utilized on a wide number of configurations. This is most notably seen in conditions where the controller actually avoids the desired obstacle, but proceeds to oscillate due to poor tuning.
+
+The last feature of MPC that was covered in this paper is a mismatch between the parameterization used by the controller and by the physical system. As seen in this paper, even with a terminal constraint, when the masses of the robot arm are different from the model used for MPC, the controller does not converge to the desired pose, and exhibits a steady state error, proportional to the magnitude of the mismatch.
+
+This is most likely the result of the estimated reference input. This torque reference is seen in the last term of [eq.\ref{eq:norm_cost}] by the term $u_d$. The reason for this is that the modeled system is used to predict the steady state torques required at the final state, by using [eq.\ref{eq:robot_dyn}]. Since this operation uses the system model, it must also be mismatched, which corresponds to a steady state bias. While this effect can be minimized by tuning the MPC gains, this could produce other undesirable effects like actuator saturation.
+
 
 \subsection{Planning}
 
