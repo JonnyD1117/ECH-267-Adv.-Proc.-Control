@@ -2182,17 +2182,13 @@
     <bcf:datasource type="file" datatype="bibtex">./citations.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
-    <bcf:citekey order="1">soft_constraints</bcf:citekey>
+    <bcf:citekey order="1">armstrong_explicit_1986</bcf:citekey>
     <bcf:citekey order="2">craig_introduction_2005</bcf:citekey>
-    <bcf:citekey order="3">khalil_nonlinear_2002</bcf:citekey>
-    <bcf:citekey order="4">rawlings_model_2017</bcf:citekey>
-    <bcf:citekey order="5">armstrong_explicit_1986</bcf:citekey>
-    <bcf:citekey order="6">ogata_modern_2010</bcf:citekey>
-    <bcf:citekey order="7">meriam_engineering_1993</bcf:citekey>
-    <bcf:citekey order="8">greenwood_advanced_2006</bcf:citekey>
-    <bcf:citekey order="9">borrelli_predictive_2017</bcf:citekey>
-    <bcf:citekey order="10">boyd_convex_2004</bcf:citekey>
-    <bcf:citekey order="11">slotine_applied_1991</bcf:citekey>
+    <bcf:citekey order="3">meriam_engineering_1993</bcf:citekey>
+    <bcf:citekey order="4">greenwood_advanced_2006</bcf:citekey>
+    <bcf:citekey order="5">rawlings_model_2017</bcf:citekey>
+    <bcf:citekey order="6">borrelli_predictive_2017</bcf:citekey>
+    <bcf:citekey order="7">soft_constraints</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

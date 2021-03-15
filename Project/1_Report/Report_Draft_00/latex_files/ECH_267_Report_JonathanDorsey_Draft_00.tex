@@ -47,7 +47,7 @@ filecolor=magenta,
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-  The objective of this project is to implement a simulated \underline{Path Planner and Controller} using Model Predictive Control (MPC) to plan and control the behavior of a 2 degree of freedom (2DOF) robotic arm. The responsibility of the MPC planner will be to generate the `optimal' path and to drive the arm from its current position to the next. This paper, uses the CasADi framework to implement, test, and identify the benefits and limitations of MPC for this robotic arm.
+  The objective of this project is to implement a simulated \underline{Path Planner and Controller} using Model Predictive Control (MPC) to plan and control the behavior of a 2 degree of freedom (2DOF) robotic arm. The responsibility of the MPC planner will be to generate the `optimal' path and to drive the arm from its current position to the next. This paper, uses the CasADi framework to implement, test, and identify the benefits and limitations of MPC as applied to robotic manipulators.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -100,7 +100,7 @@ In general robotic arms are classified as either prismatic (linear motion) or re
     \label{puma560}
 \end{figure}
 
-While the study of high DOF robots is well researched and would be present interesting and complicated scenarios for both control and planning, the scale and complexity of modeling the governing dynamic equations make robots like those in [Fig. \ref{puma560}] impractical for the scope and time restrictions of this paper. This paper, instead, opts to use the dynamically simple RR-robot described above, as its design and test platform for implementing MPC.\\
+While the study of high DOF robots is well researched and would be present interesting and complicated scenarios for both control and planning, the scale and complexity of modeling the governing dynamic equations make robots like those in [Fig. \ref{puma560}] impractical for the scope and time restrictions of this paper. \cite{armstrong_explicit_1986} This paper, instead, opts to use the dynamically simple RR-robot described above, as its design and test platform for implementing MPC.\\
 
 
 
@@ -147,7 +147,8 @@ $$
 { }_{i}^{i-1} T=R_{X}\left(\alpha_{i-1}\right) D_{X}\left(a_{i-1}\right) R_{Z}\left(\theta_{i}\right) D_{Z}\left(d_{i}\right)
 $$
 
-This is a powerful concept which facilitates the analysis of any robot whose joints are based on revolute or prismatic members. \\
+This is a powerful concept which facilitates the analysis of any robot whose joints are based on revolute or prismatic members. \cite{craig_introduction_2005}
+\\
 
 \subsubsection{Forward \& Inverse Kinematics}
 
@@ -170,9 +171,9 @@ The methodology followed in this paper consists of deriving the governing equati
 \subsection{Formulation of Robot Dynamics}
 For puposes of this paper, the robot model only includes physical dynamics of the system and not the dynamics of the actuators. It would be relatively simple to derive the actuator dynamics for a more realistic model of how the system operates, but for the purposes of time and simplicity, it is assumed that the joint motors have perfect torque control. \\
 
-As previously mentioned, the model of the robot excludes rigid body effects and only considers the effect of point masses rigidly connected with massless links. Under these assumptions, we can ignore contributions by moments of inertia. This simplifies the process of deriving equations of motion. \\
+As previously mentioned, the model of the robot excludes rigid body effects and only considers the effect of point masses rigidly connected with massless links. Under these assumptions, we can ignore contributions by moments of inertia. This simplifies the process of deriving equations of motion. \cite{meriam_engineering_1993} \\
 
-The Euler-Lagrange Equations are used to derive the explicit dynamics of the system. This variational approach is often more useful and scalable to large and coupled system than classical force and moment balances, since it this method only requires computing the kinetic and potential energies of the system and computing derivatives with respect to generalized coordinates. While equivalent to the Newton-Euler Equations, Lagrange Equations do not require the computing of accelerations. The general form of Lagrange Equations are.
+The Euler-Lagrange Equations are used to derive the explicit dynamics of the system. This variational approach is often more useful and scalable to large and coupled system than classical force and moment balances, since it this method only requires computing the kinetic and potential energies of the system and computing derivatives with respect to generalized coordinates. While equivalent to the Newton-Euler Equations\cite{greenwood_advanced_2006}, Lagrange Equations do not require the computing of accelerations. The general form of Lagrange Equations are.
 \begin{equation}
 \frac{d}{d t} \frac{\partial L}{\partial \dot{\boldsymbol{q}_{i}}}-\frac{\partial L}{\partial \boldsymbol{q}_{i}}=\left[\begin{array}{l}
 \tau_{i}
@@ -282,7 +283,7 @@ While still highly nonlinear, [eq. \ref{robot_ss}] encapsulates the complete dyn
 
 
 \subsection{MPC Formulation}
-The mathematical basis for MPC stems from the standard optimal control problem. Under the assumptions that an internal model of the system dynamics exist, that the prediction horizon is finite and proceeds in a receding fashion, the inputs applied to the system, by the controller, are piecewise constant at each time-step, and where the value of the current input is obtained by taking the first value of the optimal input sequence which is obtained by solving the optimization problem at each time-step. This can be written in standard form as...
+The mathematical basis for MPC stems from the standard optimal control problem. Under the assumptions that an internal model of the system dynamics exist, that the prediction horizon is finite and proceeds in a receding fashion, the inputs applied to the system, by the controller, are piecewise constant at each time-step, and where the value of the current input is obtained by taking the first value of the optimal input sequence which is obtained by solving the optimization problem at each time-step. \cite{rawlings_model_2017}This can be written in standard form as...
 \begin{equation}
 \begin{aligned}
 & \min _{n} J_{x}\left(\mathbf{x}_{0}, \mathbf{u}\right)=\sum_{k=0}^{N-1} \ell\left(\mathbf{x}(k), \mathbf{u}(k)\right) + \ell\left(\mathbf{x}(N), \mathbf{u}(N)\right)\\
@@ -293,7 +294,8 @@ The mathematical basis for MPC stems from the standard optimal control problem. 
 \end{aligned}
 \end{equation}
 
-In this formulation, the cost function is only propagated to the end of the prediction horizon $N$, from the current initial state of the system. The first equality constraint restricts future states of the system to be feasible with respect to the system model. The second equality constraints requires the initial state of the solver to be the current initial state of the system, while the final constraints require the inputs and states determined by the solver to be valid elements of feasible input and state sets respectively. \\
+
+In this formulation, the cost function is only propagated to the end of the prediction horizon $N$, from the current initial state of the system. The first equality constraint restricts future states of the system to be feasible with respect to the system model. The second equality constraints requires the initial state of the solver to be the current initial state of the system, while the final constraints require the inputs and states determined by the solver to be valid elements of feasible input and state sets respectively. \cite{borrelli_predictive_2017} \\
 
 It should be further noted that this paper uses the \textbf{Multiple Shooting} implementation of MPC as this approach has shown to produce better results and obtained solutions far faster than the naive single shooting approach. This means that the optimization problem has been lifted into a higher dimensional space by including the each state and input over the prediction horizion as a decision variable for the solver. \\
 
@@ -557,30 +559,20 @@ Unlike the most commonly used path planning algorithms (A*, Djikstra, RRT, RRT*,
 Unfortunately, while the usecase of a 2D planar robot used in this paper is not very impressive, predicting and controlling the path which the end effector of a robot takes from one position to another can applied to more complex three dimensional models where discretizing the entire workspace space could be computationally infeasible for the speed or performance required. \\
 
 \section{Conclusion}
-The conclusion goes here.
-
+In closing, this paper has attempted to explore and demonstrate the flexibility of Model Predictive Control in the domain of robotic manipulators. From MIMO control systems, path planning, supervisory control, incorporating system constraints, and avoiding obstacles, MPC is very powerful control scheme that is applicable over an extensive domain of systems, to acheive a wide variety of control objectives.
 
 \section*{Acknowledgment}
 
 
-The authors would like to thank Mountain Dew and his matress for constant support and comfort.
+The author would like to thank Dr. Mathew Ellis for teaching this class and focusing on the application of model predictive control. \\
 
+
+ He is also greatly indebted to Mountain Dew and his matress for their constant support and comfort, over the past quarter.
 
 
 \ifCLASSOPTIONcaptionsoff
   \newpage
 \fi
-
-\cite{craig_introduction_2005}
-\cite{khalil_nonlinear_2002}
-\cite{rawlings_model_2017}
-\cite{armstrong_explicit_1986}
-\cite{ogata_modern_2010}
-\cite{meriam_engineering_1993}
-\cite{greenwood_advanced_2006}
-\cite{borrelli_predictive_2017}
-\cite{boyd_convex_2004}
-\cite{slotine_applied_1991}
 
 \printbibliography
 

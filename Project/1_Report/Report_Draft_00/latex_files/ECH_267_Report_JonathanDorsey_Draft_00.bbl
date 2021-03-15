@@ -127,40 +127,6 @@
       \verb https://public.ebookcentral.proquest.com/choice/publicfullrecord.aspx?p=4913401
       \endverb
     \endentry
-    \entry{boyd_convex_2004}{book}{}
-      \name{author}{2}{}{%
-        {{hash=5cd9791a43b8812be4e3f9d64521947a}{%
-           family={Boyd},
-           familyi={B\bibinitperiod},
-           given={Stephen\bibnamedelima P.},
-           giveni={S\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
-        {{hash=2608d599a0bc2a784c301329a8da5f7b}{%
-           family={Vandenberghe},
-           familyi={V\bibinitperiod},
-           given={Lieven},
-           giveni={L\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Cambridge, UK ; New York}%
-      }
-      \list{publisher}{1}{%
-        {Cambridge University Press}%
-      }
-      \strng{namehash}{51b5c5e76e19784bb7c212d8d9235828}
-      \strng{fullhash}{51b5c5e76e19784bb7c212d8d9235828}
-      \strng{bibnamehash}{51b5c5e76e19784bb7c212d8d9235828}
-      \strng{authorbibnamehash}{51b5c5e76e19784bb7c212d8d9235828}
-      \strng{authornamehash}{51b5c5e76e19784bb7c212d8d9235828}
-      \strng{authorfullhash}{51b5c5e76e19784bb7c212d8d9235828}
-      \field{sortinit}{B}
-      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{isbn}{9780521833783}
-      \field{title}{Convex optimization}
-      \field{year}{2004}
-      \keyw{Mathematical optimization,Convex functions}
-    \endentry
     \entry{craig_introduction_2005}{book}{}
       \name{author}{1}{}{%
         {{hash=57c29b307f6e70b7216c8c696af16b58}{%
@@ -253,36 +219,6 @@
       \field{title}{Soft Constraints And Exact Penalty Functions In Model Predictive Control}
       \field{year}{2000}
     \endentry
-    \entry{khalil_nonlinear_2002}{book}{}
-      \name{author}{1}{}{%
-        {{hash=c687708249e29c8fa3d8d0c0ff1612f9}{%
-           family={Khalil},
-           familyi={K\bibinitperiod},
-           given={Hassan\bibnamedelima K.},
-           giveni={H\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Upper Saddle River, N.J}%
-      }
-      \list{publisher}{1}{%
-        {Prentice Hall}%
-      }
-      \strng{namehash}{c687708249e29c8fa3d8d0c0ff1612f9}
-      \strng{fullhash}{c687708249e29c8fa3d8d0c0ff1612f9}
-      \strng{bibnamehash}{c687708249e29c8fa3d8d0c0ff1612f9}
-      \strng{authorbibnamehash}{c687708249e29c8fa3d8d0c0ff1612f9}
-      \strng{authornamehash}{c687708249e29c8fa3d8d0c0ff1612f9}
-      \strng{authorfullhash}{c687708249e29c8fa3d8d0c0ff1612f9}
-      \field{sortinit}{K}
-      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{edition}{3rd ed}
-      \field{isbn}{9780130673893}
-      \field{title}{Nonlinear systems}
-      \field{year}{2002}
-      \keyw{Nonlinear theories}
-    \endentry
     \entry{meriam_engineering_1993}{book}{}
       \name{author}{2}{}{%
         {{hash=ee68b112a3e131c8752630072bb2a595}{%
@@ -317,37 +253,6 @@
       \field{title}{Engineering mechanics}
       \field{year}{1993}
       \keyw{Mechanics,Applied}
-    \endentry
-    \entry{ogata_modern_2010}{book}{}
-      \name{author}{1}{}{%
-        {{hash=72cb1e667ce543119df1b777c0db24de}{%
-           family={Ogata},
-           familyi={O\bibinitperiod},
-           given={Katsuhiko},
-           giveni={K\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Boston}%
-      }
-      \list{publisher}{1}{%
-        {Prentice-Hall}%
-      }
-      \strng{namehash}{72cb1e667ce543119df1b777c0db24de}
-      \strng{fullhash}{72cb1e667ce543119df1b777c0db24de}
-      \strng{bibnamehash}{72cb1e667ce543119df1b777c0db24de}
-      \strng{authorbibnamehash}{72cb1e667ce543119df1b777c0db24de}
-      \strng{authornamehash}{72cb1e667ce543119df1b777c0db24de}
-      \strng{authorfullhash}{72cb1e667ce543119df1b777c0db24de}
-      \field{sortinit}{O}
-      \field{sortinithash}{ff8d4eeb5101e3cf3809959b3592d942}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{edition}{5th ed}
-      \field{isbn}{9780136156734}
-      \field{series}{Prentice-{Hall} electrical engineering series. {Instrumentation} and controls series}
-      \field{title}{Modern control engineering}
-      \field{year}{2010}
-      \keyw{Automatic control,Control theory}
     \endentry
     \entry{rawlings_model_2017}{book}{}
       \name{author}{3}{}{%
@@ -392,40 +297,6 @@
       \field{shorttitle}{Model predictive control}
       \field{title}{Model predictive control: theory, computation, and design}
       \field{year}{2017}
-    \endentry
-    \entry{slotine_applied_1991}{book}{}
-      \name{author}{2}{}{%
-        {{hash=ca625b2dc2c9110cbe11f1a4f82f8d56}{%
-           family={Slotine},
-           familyi={S\bibinitperiod},
-           given={J.-J.\bibnamedelimi E.},
-           giveni={J\bibinithyphendelim J\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
-        {{hash=56a2cc9043bd27ea8b4615a383f2b778}{%
-           family={Li},
-           familyi={L\bibinitperiod},
-           given={Weiping},
-           giveni={W\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {Englewood Cliffs, N.J}%
-      }
-      \list{publisher}{1}{%
-        {Prentice Hall}%
-      }
-      \strng{namehash}{466346ef27d54efebe359a40730a87d6}
-      \strng{fullhash}{466346ef27d54efebe359a40730a87d6}
-      \strng{bibnamehash}{466346ef27d54efebe359a40730a87d6}
-      \strng{authorbibnamehash}{466346ef27d54efebe359a40730a87d6}
-      \strng{authornamehash}{466346ef27d54efebe359a40730a87d6}
-      \strng{authorfullhash}{466346ef27d54efebe359a40730a87d6}
-      \field{sortinit}{S}
-      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{isbn}{9780130408907}
-      \field{title}{Applied nonlinear control}
-      \field{year}{1991}
-      \keyw{Nonlinear control theory}
     \endentry
   \enddatalist
 \endrefsection
