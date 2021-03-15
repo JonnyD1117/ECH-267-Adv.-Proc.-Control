@@ -16,7 +16,7 @@ p.L2 = .25;
 p.g = 9.81;
 
 N = 15;
-T = .1;
+T = .01;
 
 % Control Input Saturation Limits
 tau_1_max = 10; % N*m
@@ -142,10 +142,10 @@ args.ubx(4*(N+1)+1:2: 4*(N+1) + 2*N,1) = tau_2_max;   % Input Upper Bound TAU2
 
 % SIMULATION LOOP 
 t0 = 0; 
-% x0 = [deg2rad(25); deg2rad(45); 0;0] ;
+x0 = [deg2rad(25); deg2rad(45); 0;0] ;
 % x0 = [deg2rad(-90); deg2rad(0); 0;0] ;
 % x0 = [deg2rad(90); deg2rad(0); 0;0] ;
-x0 = [deg2rad(220); deg2rad(25); 0;0] ;
+% x0 = [deg2rad(220); deg2rad(25); 0;0] ;
 
 
 
@@ -332,14 +332,14 @@ for i=1:1:length(x_list)
    
 end 
 
-figure(4)
-hold on
-plot(x1_traj, y1_traj, 'b')
-plot(x2_traj, y2_traj,'r')
-title("Joint Trajectories")
-xlabel("X-Axis")
-ylabel("Y-Axis")
-legend(["Joint 1"," Joint 2"])
+% figure(4)
+% hold on
+% plot(x1_traj, y1_traj, 'b')
+% plot(x2_traj, y2_traj,'r')
+% title("Joint Trajectories")
+% xlabel("X-Axis")
+% ylabel("Y-Axis")
+% legend(["Joint 1"," Joint 2"])
 
 
 figure(5)
@@ -349,7 +349,30 @@ plot(x2_traj, y2_traj,'r')
 title("Joint Trajectories")
 xlabel("X-Axis")
 ylabel("Y-Axis")
-legend(["Joint 1"," Joint 2"])
+% legend(["Joint 1"," Joint 2", ])
+
+L1 = .25;
+L2 = .25;
+
+
+x_s = [L1*cos(deg2rad(25)) ; L1*cos(deg2rad(25)) + L2*cos(deg2rad(25) + deg2rad(45))];
+y_s = [L1*sin(deg2rad(25)) ; L1*sin(deg2rad(25)) + L2*sin(deg2rad(25) + deg2rad(45))];
+x_e = [L1*cos(deg2rad(180)) ; L1*cos(deg2rad(180)) + L2*cos(deg2rad(180) + deg2rad(-45))];
+y_e = [L1*sin(deg2rad(180)) ; L1*sin(deg2rad(180)) + L2*sin(deg2rad(180) + deg2rad(-45))];
+
+
+plot(x_s(1), y_s(1), '*k')
+plot(x_s(2), y_s(2), '*k')
+plot(x_e(1), y_e(1), '*g')
+plot(x_e(2), y_e(2), '*g')
+
+
+% plot([ 0, x_s(1)], [0, y_s(1)], "k");
+% plot([ x_s(1), x_s(2)], [y_s(1), y_s(2)], "k");
+
+
+
+
 
 %% Splined 
 

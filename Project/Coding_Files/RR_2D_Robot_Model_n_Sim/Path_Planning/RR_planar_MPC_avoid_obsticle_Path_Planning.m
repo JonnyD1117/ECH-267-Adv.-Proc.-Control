@@ -502,7 +502,7 @@ for k = 1:1:length(xxl(1,1,:))
 
 
 
-        pause(.1)
+        pause(.25)
     
         t_counter = t_counter + 1; 
 end 
@@ -566,10 +566,16 @@ for i=1:1:length(x_list)-1
 
 %     plot(x2_path(k,:), y2_path(k,:), 'b') 
     end 
-    
+            hold on 
             plot(x2_path(i,:), y2_path(i,:), 'b') 
+            plot(.2608,.366, '*k')
+            plot(-.45, .2002, '*g')
+%             hold off
+            title('End Effector Path Planner')
+            xlabel('X-Axis')
+            ylabel('Y-Axis')
 
-        plot_robot_with_object(x_vec, y_vec, obj_x, obj_y, x2_ref, y2_ref,x1_ref, y1_ref)
+%         plot_robot_with_object(x_vec, y_vec, obj_x, obj_y, x2_ref, y2_ref,x1_ref, y1_ref)
 %             hold off
 
 %         plot_robot_with_object_with_path_pred(x_vec, y_vec, obj_x, obj_y, x2_ref, y2_ref,x1_ref, y1_ref, x2_path(k,:), y2_path(k,:))
@@ -577,7 +583,7 @@ for i=1:1:length(x_list)-1
 
 %       frame=getframe(gcf); 
 %         writeVideo(v, frame);
-    pause(.25)
+    pause(.35)
     fill([-1-0.2*1 1+0.2*1 1+0.2*1 -1-0.2*1], [-1-0.2*1 -1-0.2*1 1+0.2*1 1+0.2*1], 'w'); % Clears Background
 
     

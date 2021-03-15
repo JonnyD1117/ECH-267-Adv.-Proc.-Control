@@ -498,20 +498,34 @@ However, as previously mentioned, the results sean under the current formulation
 
 \subsection{Planner Results}
 
-The basic premise behind path planning using MPC is to utilize the optimal states over the prediction horizon as a guide to define a continuous path. In this paper, this is accomplished by using the extracting the optimal states, from within in the controller, which are then used to define cubic splines from the inital pose to the final pose. This technique can be applied to either the joint space or the end effector space of the robot, providing several ways in which this path can be utilized. 
+The basic premise behind path planning using MPC is to utilize the optimal states over the prediction horizon as a guide to define a continuous path. In this paper, this is accomplished by using the extracting the optimal states, from within in the controller, which are then used to define cubic splines from the inital pose to the final pose. This technique can be applied to either the joint space or the end effector space of the robot, providing several ways in which this path can be utilized. \\
 
 \subsubsection{Joint Paths}
 
-\begin{figure}%
+
+
+\begin{figure}[ht]
     \centering
-    \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{EndEffector_Path/p2p} }}%
-    \qquad
-    \subfloat[\centering label 2]{{\includegraphics[width=.43\linewidth]{EndEffector_Path/p2p2} }}%
-    \caption{Nominal System Joint Paths}%
+    % \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{joint_path} }}%
+    % \qquad
+    \includegraphics[width=.75\linewidth]{joint_path_1}
+    \caption{Joint Paths }%
     \label{fig:joint_path}%
 \end{figure}
 
 \subsubsection{End Effector Paths }
+
+
+\begin{figure}[ht]
+    \centering
+    % \subfloat[\centering label 1]{{\includegraphics[width=.43\linewidth]{joint_path} }}%
+    % \qquad
+    \includegraphics[width=.75\linewidth]{path_planning/path3_1}
+    \caption{Joint Paths }%
+    \label{fig:effector_path}%
+\end{figure}
+
+
 
 \section{Discussion}
 
