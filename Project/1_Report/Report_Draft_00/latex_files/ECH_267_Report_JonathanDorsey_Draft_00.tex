@@ -62,13 +62,13 @@ Model Predictive Control, Robot Arm, Lagrange Equations, Path Planning, Obsticle
 
 \IEEEPARstart{T}{he} world of robotics is full of constraints, demands, and performance trade-offs that humans handle naturally on a daily basis. Unlike humans, robots require control and planning strategies which are flexibility enough to work around constraints and limitations, while accurately meeting control and performance objectives in uncertain environments. While the emergence of machine learning techniques and methods offers promise of stateoftheart improvements and performance, most robotic systems still demand a more practical and robust planning and control algorithms, capable of offering a compromise between the performance criteria, flexibility to navigate constraints, and amount of computational power required to compute valid control commands in real-time. \\
 
-In the world of robot manipulators, tasks can range from relatively simple and coarse motions to extremely complex and detailed actions. One common control strategy which has seen great success, in robotics, in recent years is Model Predictive Control (MPC). MPC is an optimal control methodology which solves the a given optimal control problem (OCP) in a receding fashion, over a finite horizon. While these controllers are far more sophisticated than standard classical or modern control strategies, the increased complexity and computation can be applied to a wider class of control problems. This flexibility in natively handling constraints as well as naturally extending to nonlinear and multiple-input-multiple-output-systems makes MPC an attractive candidate control methodology for the vast world of robotics where tasks can range from autonomous mobile vehicles to robotic manipulators. While MPC has the obvious conns of requiring an approximate solution to an optimization problem, at each time step, the benefits which this methodology offers often make it a viable solution even with the added computationally expense. \\
+Nowhere is this evident, than the domain of robotic manipulation, where tasks can range from relatively simple and coarse motions to extremely complex and detailed actions. One common control strategy which has seen great success, in robotics, in recent years is Model Predictive Control (MPC). MPC is an optimal control methodology which solves a given optimal control problem (OCP) in a receding fashion, over a finite horizon, providing far superior robustness to classical optimal control algorithms. While these controllers are far more sophisticated than standard classical or modern control strategies, the increased complexity and computation can be applied to a wider class of control problems. This flexibility includes handling constraints (both system and performance based) as well as naturally extending to nonlinear and multiple-input-multiple-output-systems makes MPC an attractive candidate control methodology for the vast world of robotics where tasks can range from autonomous mobile vehicles to robotic manipulators. While MPC possess obvious computational overhead, the benefits which this methodology offers often make it the most viable or practical solution to implement. \\
 
-While control is an important aspect of modern robotics, it is often more valuable to have an understanding of the intent or future actions which an autonomous system believes it should take, to accomplish a goal. In general, this problem is known as \textbf{path planning}, and is an important part of modern robotics research. Many modern path planning approaches use a vast array of different planning paradigms, such as discretization, graph, probablistic, and heuristic methods which have all shown great promise, and present there own unique benefits and limitations. Often in the more general case of motion planning, it is desirable to not only control the position, but also the velocity and acceleration of a system, in both space and time. However, for the purpose of this paper, only the more restricted case of path planning (e.g. position planning) will be considered.  \\
+While control is an important aspect of modern robotics, it is often more valuable to have an understanding of the intent or future actions which an autonomous system believes it should take, to accomplish a goal. In general, this problem is known as \textbf{path planning}, and is an important part of modern robotics research. Many modern path planning approaches use a vast array of different planning paradigms, such as discretization, graph based, probablistic, and heuristic methods which have all shown great promise, and all present there own unique set of benefits and trade-offs. Often in the more general case of motion planning, it is desirable to not only control the position, but also the velocity and acceleration of a system, in both space and time. However, for the purpose of this paper, only the more restricted case of path planning (e.g. position planning) will be considered.  \\
 
-To this point, another possible method for path planning is the use of MPC, as a optimal path planner. MPC has the potential to provide much of the same functionality as other planning strategies by implementing desireable behavior into a cost function or functional constraints. The ability to leverage and model predictive controller as a path planning with practically no changes to its implementation as a controller also offers an opportunity for systems using MPC to obtain some path planning capabilities for free.   \\
+To this end, another possible method for path planning is the use of MPC, as a optimal path planner. MPC has the potential to provide much of the same functionality as other planning strategies by implementing desirable behavior into a cost function or functional constraints. The ability to leverage and model predictive controller as a path planning with practically no changes to its implementation as a controller also offers an opportunity for systems using MPC to obtain some path planning capabilities for free.   \\
 
-While MPC has been received enormous amounts of research across many fields, including  robotics, many of the applications in robotics focus MPC on mobile robotics such as drones and autonomous vehicles, with significantly less attention focused on the application of MPC as a controller or a planner for robotic manipulators.
+While MPC has been received enormous amounts of research across many fields, including  robotics, many of the applications in robotics focus MPC on mobile robotics such as drones and autonomous vehicles, with significantly less attention focused on the application of MPC as a controller or a planner for robotic manipulation tasks.
 
 \section{Problem Statement}
 
@@ -76,7 +76,7 @@ This paper will investigate the use of MPC as a general control scheme and its u
 
 \subsection{Planar RR Robotic Arm}
 
-The manipulator used in this paper is a two link planar robot arm subject to gravity, fig.\ref{RRrobot}, commonly known as a \textbf{RR} (revolute-revolute) robot. This model commonly does not include any rigid body dynamics and treats the robot as a system of point masses directly coupled with massless rods. While this configuration is very simple, it is conceptually simple, easy to derive its core dynamics, and facilitates a more focused study on the planning and control elements of the paper. \\
+The manipulator used in this paper is a two link planar robot arm subject to gravity, fig.\ref{RRrobot}, commonly known as a \textbf{RR} (revolute-revolute) robot. This model commonly does not include any rigid body dynamics and accordingly treats the robot as a system of point masses directly coupled with massless rods. While this configuration is conceptually simple, it possesses the benefit of having easily derived dynamics equations of motion, and facilitates a more focused study on the planning and control elements of the paper. \\
 
 \begin{figure}
     \centering
@@ -100,7 +100,7 @@ In general robotic arms are classified as either prismatic (linear motion) or re
     \label{puma560}
 \end{figure}
 
-While the study of high DOF robots is well researched and would be present interesting and complicated scenarios for both control and planning, the scale and complexity of modeling the governing dynamic equations make robots like those in [Fig. \ref{puma560}] impractical for the scope and time restrictions of this paper. \cite{armstrong_explicit_1986} This paper, instead, opts to use the dynamically simple RR-robot described above, as its design and test platform for implementing MPC.\\
+While the study of high DOF robots is well researched and and presents opportunities for interesting and nuanced scenarios for both control and planning, the scale and complexity of modeling the governing dynamic equations make robots like those in [Fig. \ref{puma560}] impractical for the scope and time restrictions of this paper. \cite{armstrong_explicit_1986} This paper, instead, opts to use the dynamically simple RR-robot described above, as its design and test platform for implementing MPC.\\
 
 
 
@@ -277,13 +277,11 @@ By evaluting [eq.\ref{angular_accel}], it is possible to write the nonlinear sta
 \end{array}
 \end{equation}
 
-Where $ \ddot{\theta}_{1}$ and $\ddot{\theta}_{2}$ are defined in APPENDIX???????????.
-
-While still highly nonlinear, [eq. \ref{robot_ss}] encapsulates the complete dynamics of the robot. This formulation can be directly used for numerical simulatation and for use in developing the constraints neccessary for model predictive controller.
+While still highly nonlinear, [eq. \ref{robot_ss}] encapsulates the complete dynamics of the robot. This formulation can be directly used for numerical simulatation and for use in developing the a suitable model predictive controller.
 
 
 \subsection{MPC Formulation}
-The mathematical basis for MPC stems from the standard optimal control problem. Under the assumptions that an internal model of the system dynamics exist, that the prediction horizon is finite and proceeds in a receding fashion, the inputs applied to the system, by the controller, are piecewise constant at each time-step, and where the value of the current input is obtained by taking the first value of the optimal input sequence which is obtained by solving the optimization problem at each time-step. \cite{rawlings_model_2017}This can be written in standard form as...
+The mathematical basis for MPC stems from the standard optimal control problem. Under the assumptions that an internal model of the system dynamics exist, that the prediction horizon is finite and proceeds in a receding fashion, the inputs applied to the system, by the controller, are piecewise constant at each time-step, and where the value of the current input is obtained by taking the first value of the optimal input sequence which is obtained by solving the optimization problem at each time-step, \cite{rawlings_model_2017}the standard formulation for MPC can can be written as...
 \begin{equation}
 \begin{aligned}
 & \min _{n} J_{x}\left(\mathbf{x}_{0}, \mathbf{u}\right)=\sum_{k=0}^{N-1} \ell\left(\mathbf{x}(k), \mathbf{u}(k)\right) + \ell\left(\mathbf{x}(N), \mathbf{u}(N)\right)\\
@@ -301,7 +299,7 @@ It should be further noted that this paper uses the \textbf{Multiple Shooting} i
 
 \subsubsection{Cost Function Design}
 
-The general stage cost, as each time-step of the prediciton horizon utilized in this paper follows the typical quadratic form.
+The general stage cost, at each time-step of the prediciton horizon utilized in this paper follows the typical quadratic form.
 
 \begin{equation}
   \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) = (x-x_d)Q(x-x_d) + (u-u_d)R(u-u_d)
@@ -314,9 +312,9 @@ This parameterization of the stage cost can be further simplified using norm not
 
 The quadratic nature of this cost function is eligant in how simple and intuitive it is comprehend as as well how simple it is to tune using the matrices $Q$ and $R$. \\
 
-However for the scenario testing \textbf{obstacle avoidance}, it is neccessary to append the origin stage cost with an addition term. By adding an obstacle penalty to the stage cost the controller is incentivized to avoid letting the end effector of the robot get too close the specified object. By specifying circular envelopes around the end effector and the obstacle, it is possible to define the minimum distance between the two objects such that they do not approach any closer to each other than the sum of radii which define the circular boundaries. This can be expressed mathematically by computing the euclidean distance between the obstacle and the end effector.
+However for the scenario testing \textbf{obstacle avoidance}, it is neccessary to append the origin stage cost with an addition term. By adding an obstacle penalty to the stage cost, the controller is incentivized to avoid letting the end effector of the robot get too close the specified object. By defining circular envelopes around the end effector and the obstacle, it is possible to define the minimum distance between the two objects such that they do not approach any closer to each other than the sum of radii which define the circular boundaries. This can be expressed mathematically by computing the euclidean distance between the obstacle and the end effector.
 
-\begin{equation}
+\begin{equation}\label{eq:obs_avoid_constraint}
 \text{min. dist} = -\sqrt{\left(x-x_{0}\right)^{2}+\left(y-y_{o}\right)^{2}}+\left(r+r_{o}\right) \leq 0
 \end{equation}
 
@@ -327,7 +325,7 @@ By using this measure, it is possible to create a penalty such that if the
 \text{C}(P,P_0) = S(max(\text{min. dist}(P, P_0), 0))^2
 \end{equation}
 
-Where $S$ is a large positive weight, and $P$ and $P_0$ are the points defining the end effector and obstacle positions respetively. If the inequality is every violated and the minimum distance between the obstacle and end effector is greater than zero, the magnitude of the distance violation will be used as a penalty in the cost function effectively incentivizing the controller to avoid letting the controller and the obstacle become too close to each other. If the inequality holds, then the value of zero will choosen in the $\text{max()}$ function and will not contribute to the cost function. The final stage cost for obstacle avoidance results in. \\
+Where $S$ is a large positive weight, and $P$ and $P_0$ are the points defining the end effector and obstacle positions respetively. If the inequality in \ref{eq:obs_avoid_constraint}is ever violated and the minimum distance between the obstacle and end effector is smaller than the defined boundaries, the magnitude of the distance violation will be used as a penalty in the cost function. This effectively incentivizes the controller to avoid letting the controller and the obstacle become too close to each other. If the inequality holds, then the value of zero will choosen in the $\text{max()}$ function and will not contribute to the cost function. The final stage cost for obstacle avoidance results in. \\
 \begin{equation}
   \ell\left(\mathbf{x}_{\mathbf{v}}(k), \mathbf{u}(k)\right) = \left\Vert x - x_d \right\Vert^{2}_{Q} + \left\Vert u -u_d \right\Vert^{2}_{R} + C(P,P_0)
 \end{equation}
@@ -341,26 +339,26 @@ By leveraging this library and its functionality, it becomes a simple and direct
 
 \subsection{Controller \& Planner Simulation}
 
-Once MPC is implemented via CasADi, numerical simulation merely requires using the first optimal input of the solver, at the initial state, applying that input to a discretized system model, computing the resulting states, updating the current state of the controller, and reapplying the solver for the duration of the simulation time.\\
+Once MPC is implemented via CasADi, numerical simulation merely requires using the first optimal input of the solver, at the initial state, applied to the input of a discretized system model, computing the resulting states, updating the current state of the controller, and reapplying the solver for the duration of the simulation time.\\
 
 By virtue of using muliple shooting, the decision variable for this MPC formulation not only includes the inputs over the prediction horizon, but also the corresponding optimal states, according to the model. For the purposes of planning (in simulation) it is possible to directly copy the optimal predicted states directly from the solvers solution, at each time-step, and to use these state sequences as the optimal path, over the duration of the simulation.
 
 \subsection{Controller Testing}
 
-Since the first objective of this paper is to test the efficacy of MPC, there are several interesting scenarios which are of general interest when evaluating how effective MPC based control is, on this type of system. \\
+Since the first objective of this paper is to test the efficacy of MPC, in control of robotic manipulation tasks, there are several interesting scenarios which are of general interest when evaluating how effective MPC based control is, on this type of system. \\
 
 \subsubsection{Pose-to-Pose Control}
 The primary task of any controller is to drive the system from its initial condition to a desirable end result. For MPC on a robotic arm, this is equivalent to determining whether MPC can guide the robot from any initial pose (position and orientation) to any other arbitrary feasible pose without driving the system in to actuator saturation, or causing the system to violate any constraints or performance objectives. To test this in simulation, MPC will be used to control both of the actuated links independently of each other, to achieved the desired final pose.\\
 
 \subsubsection{Model/Parameter Mismatch}
-An important characteristic of any controller is its robustness to uncertainty. Since MPC makes heavy use of a system model for prediction, one important test is to determine how MPC performs when the system being controlled and the model used in the controller a mismatched. To test this in simulation, the system and controller models are intentionally mismatched, such that the system states are continually used to update the controller.\\
+An important characteristic of any controller is its robustness to uncertainty. Since MPC makes heavy use of a system model for prediction, one important test is to determine how MPC performs when the system being controlled and the model used in the controller are mismatched. To test this in simulation, the system and controller models are intentionally mismatched, such that the system states are continually used to update the controller.\\
 
 \subsubsection{Obstacle Avoidance}
 In robotics and autonomous systems, it is often desireable to design a system that is capable of intelligently using sensory data to predicted the best way to acheive its objective, without external intervention. For robotic manipulators, a common task is for the end effector to avoid collisions with obstacle in its workspace. This paper will test the ability of MPC to avoid obstacle by tailoring the cost function to maintain specified working distance way from a static object in its path.
 
 \subsection{Planner Testing}
 
-The second primary objective of this paper is to implement MPC such that the state predictions can be used to plan the path which the end effector takes, from one pose to another. While this paper will not go into depth about the application of path planning for robotic manipulators, it intends to cover how to obtain a continuous path from discrete state predictions supplied by MPC for simple motion from one feasible pose to another, as well the simple obstacle avoidance metioned above.
+The second objective of this paper is to implement MPC such that the state predictions can be used to plan the path which the end effector takes, from one pose to another. While this paper will not go into depth about the application of path planning for robotic manipulators, it intends to cover how to obtain a continuous path from discrete state predictions supplied by MPC for simple motion from one feasible pose to another, as well the simple obstacle avoidance metioned above.
 
 \section{Results}
 
@@ -387,7 +385,7 @@ As anticipated, MPC performed very successfully in the simplest and most direct 
 
 On average, over a random sampling of initial and final manipulator configurations, the MPC solver took between 8-10ms to compute the control action for the next time-step. This roughly equates to a nominal 80-120Hz control frequency. Given that time-step used for simulation is 50ms, this MPC controller is more than sufficient for presumed operating frequency of the system. The plots in [Fig.\ref{fig:pose2pose_control_action}] show the evolution of the system under the action of the controller, for the simulation depicted in [Fig.\ref{fig:pose2pose}]. \\
 
- It should be noted that the torques of the system never converge to zero, even though that would be a desirable. This behavior is due to the fact this RR-robot is standing in the vertical plane and is subject to gravity. This requires the controller to maintain a bias torque at each of the joints of the robot, to compensate for the effect of gravity. If this same robot was oriented oriented  parallel to the horizontal plane, these bias torques would not be neccessary. \\
+ It should be noted that the torques of the system never converge to zero, even though that would be a desirable. This behavior is due to the fact this RR-robot is represented as residing in the vertical plane and is subject to gravity. This requires the controller to maintain a bias torque at each of the joints of the robot, to compensate for the effect of gravity. If this same robot was oriented  parallel to the horizontal plane, these bias torques would not be neccessary. \\
 
  Additionally, due to gravity, certain configurations of initial and goal positions will cause cause the actuator effort to increase or decrease due to the force of gravity working for or against the controller. \\
 
@@ -443,7 +441,7 @@ From the results in [Fig.\ref{fig:model_param_mismatch}], all else being equal, 
 
 Probably the most interesting application and results obtained from this paper, concern the use of MPC for obstacle avoidance. It was slightly disappointing to see that, as a whole, the performance of obstacle avoidance greatly varied greatly throughout simulated testing.
 
-While the controller was successfully able to avoid objects which were directly in the most convient path between the initial state and the goal, many of these trials resulted in oscillatory behavior of robot, theoretical collisions between the end effector and the obstacle, and/or the robot never reaching its desire final pose. Even with static objects, the success of the controller oftened appeared predicated on the relative positions of the end effector and the nearest object. \\
+While the controller was successfully able to avoid objects which were directly in the most convient path between the initial state and the goal, many of these trials resulted in oscillatory behavior of robot, theoretical collisions between the end effector and the obstacle, and/or the inability of the manipulator to reaching its desired final pose. Even with static objects, the success of the controller often appeared predicated on the relative positions of the end effector and the nearest object. \\
 
 \begin{figure}[ht]%
     \centering
@@ -458,7 +456,7 @@ While the controller was successfully able to avoid objects which were directly 
     \label{fig:obs_avoid_path}%
 \end{figure}
 
-In [Fig.\ref{fig:obs_avoid_path}], the robot arm can be seen circumventing the red static object, in its path. However, it should be noted that the initial state prediction horizon (seen as black *) violates the collision penalty, and that it is only as the robot nears the obstacle that MPC reroutes the predicted path. This behavior corresponds to the increasing penalty which the cost function enforces as the distance between the robot and the object gets smaller. Due to this behavior, it is believed that the formulation of obstacle avoidance as part of the cost function and not an explicit constraint on the optimization problem, which MPC is runnings is at least part of the reason that obstacle avoidance was finicky and severly inconsistent.
+In [Fig.\ref{fig:obs_avoid_path}], the robot arm can be seen circumventing the red static object, in its path. However, it should be noted that the initial state prediction horizon (seen as black *) violates the collision penalty, and that it is only as the robot nears the obstacle that MPC reroutes the predicted path. This behavior corresponds to the increasing penalty which the cost function enforces as the distance between the robot and the object gets smaller. Due to this behavior, it is believed that the formulation of obstacle avoidance as part of the cost function and not an explicit constraint on the optimization problem, is at least part of the reason that obstacle avoidance was finicky and inconsistent.
 
 One side effect of this delayed action to prevent collision is that, typically, this sudden rerouting is often accompanied by large commanded torques. While not an explicit problem, these large torques often result in significant velocity pikes. Depending on the application of the robot, these sudden movements may not be undesirable. \\
 
@@ -537,9 +535,9 @@ While functionally very similar to the joint paths, the end effector path define
 
 \subsection{Control}
 
-After testing the system, it is clear that MPC is a very straightforward control scheme to apply to robotic systems in free space. With the ability to work on large MIMO systems (e.g. robotic manipulators) is a very intuitive and practical benefit for controller design and implementation. In particular, since most robotic manipulators are sensored and can provide highly accuracy state measurement, without state estimation, MPC is definitely an attractive control strategy when extraneous constraints or limitations are not placed on the system.
+After testing the system, it is clear that MPC is a very straightforward control scheme to apply to robotic systems in free space. With the ability to work on large MIMO systems (e.g. robotic manipulators) is a very intuitive and practical benefit for controller design and implementation. In particular, since most robotic manipulators are sensored and can provide highly accurate state measurements, without state estimation, MPC is definitely an attractive control strategy when extraneous constraints or limitations are not placed on the system.
 
-However, from the testing performed in this paper, it does appear that the addition of obstacles does significantly complicate the easy of using MPC for control. While there are many configurations of the end effector and the obstacle, that work seamlessly, other required significantly more computation and often failed to guide the end effector around the object, often resulting in very oscillatory behavior or inducing rapid wipping motions of the manipulator, to bypass an object.
+However, from the testing performed in this paper, it does appear that the addition of obstacles does significantly complicate the ease of using MPC for control. While there are many configurations of the end effector and the obstacle, that work seamlessly, others required significantly more computation and often failed to guide the end effector around the object, often resulting in very oscillatory behavior or inducing rapid wipping motions of the manipulator, to bypass an object.
 
 This is behavior is likely a result of a poorly design cost function. As mentioned previously, the trade-off between constraining the system for colliding with the object versus heavy penalizing the controller if it collides with the object is unclear to the author, and would require deeper research. However, from the simulation data collected, it appears that by implementing a obstacle collision penalty in the stage cost, that the controller \textbf{could} be presented with situations where the penalty incurred is insufficient to prevention collision.
 
@@ -547,7 +545,7 @@ Another aspect about using MPC for obstacle avoidance is the difficulty in tunin
 
 The last feature of MPC that was covered in this paper is a mismatch between the parameterization used by the controller and by the physical system. As seen in this paper, even with a terminal constraint, when the masses of the robot arm are different from the model used for MPC, the controller does not converge to the desired pose, and exhibits a steady state error, proportional to the magnitude of the mismatch.
 
-This is most likely the result of the estimated reference input. This torque reference is seen in the last term of [eq.\ref{eq:norm_cost}] by the term $u_d$. The reason for this is that the modeled system is used to predict the steady state torques required at the final state, by using [eq.\ref{eq:robot_dyn}]. Since this operation uses the system model, it must also be mismatched, which corresponds to a steady state bias. While this effect can be minimized by tuning the MPC gains, this could produce other undesirable effects like actuator saturation.
+This is most likely the result of the estimated reference input. This torque reference is seen in the last term of [eq.\ref{eq:norm_cost}] by the input $u_d$. The reason for this is that the modeled system is used to predict the steady state torques required at the final state, by using [eq.\ref{eq:robot_dyn}], for gravity compensation. Since this operation uses the system model, it must also be mismatched, which corresponds to a steady state bias. While this effect can be minimized by tuning the MPC gains, this could produce other undesirable effects like actuator saturation.
 
 
 \subsection{Planning}
@@ -564,10 +562,10 @@ In closing, this paper has attempted to explore and demonstrate the flexibility 
 \section*{Acknowledgment}
 
 
-The author would like to thank Dr. Mathew Ellis for teaching this class and focusing on the application of model predictive control. \\
+The author would like to thank Dr. Mathew Ellis for teaching this class and helping to troubleshoot and implement model predictive control from scratch. \\
 
 
- He is also greatly indebted to Mountain Dew and his matress for their constant support and comfort, over the past quarter.
+ The author would also like to thank Mountain Dew and his matress for their constant support and comfort, over the past quarter.
 
 
 \ifCLASSOPTIONcaptionsoff
